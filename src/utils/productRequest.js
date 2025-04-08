@@ -3,23 +3,23 @@ import prisma from "../config/prisma.js";
 //GET PRODUCTS DATA
 export const getProductData = async function (req, res, getAll) {
 
-    let product;
+    let products;
     if (getAll) {
-        product = await prisma.products.findMany();//GET ALL DATA
+        products = await prisma.products.findMany();//GET ALL DATA
     } else {
         const productID = parseInt(req.params.id);
-        product = await prisma.products.findUnique({ where: { id: productID } });//GET  DATA BY ID
+        products = await prisma.products.findUnique({
+            where: { id: productID },
+            include: {
+                CartProducts: true,
+            }
+        });
     }
     //Check for Data
-    if (!product) {
+    if (!products) {
         let message;
-        getAll ? message = "Product doesn't Exists." : message = "Requested Product doesn't Exists.";
+        getAll ? message = "Product's Model is Empty" : message = "Product doesn't Exists.";
         throw new Error(message);
     }
-    return product;
+    return products;
 }
-
-// //UPDATE PRODUCT-DATA
-// export const updateProductData = async function () {
-
-// }

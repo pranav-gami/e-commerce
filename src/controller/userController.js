@@ -13,7 +13,7 @@ export const addUser = async (req, res) => {
 }
 
 //GET ALL PRODUCT-CONTROLLER
-export const showUsers = async (req, res) => {
+export const showAllUsers = async (req, res) => {
     try {
         const user = await getUserData(req, res, true);
         res.status(200).json({ success: true, data: user });
@@ -41,10 +41,9 @@ export const updateUser = async (req, res) => {
             return res.status(500).json({ success: false, message: "User you are trying to Update is not Found!!" });
         }
         const { username, email, password } = req.body;
-        const encryptPassword = await bcrypt.hash(password, 5);
         const user = await prisma.user.update({
             where: { id: userID },
-            data: { username, email, password: encryptPassword }
+            data: { username, email, password: await bcrypt.hash(password, 5) }
         })
         res.status(200).json({ success: true, data: user });
     } catch (error) {

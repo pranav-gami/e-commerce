@@ -1,12 +1,14 @@
 import { Router } from "express";
-import { addCategory, getCatagories, getCatagoryById, updateCategory, deleteCategory } from "../controller/categoryController.js";
+import { addCategory, getAllCatagories, getCatagoryById, updateCategory, deleteCategory } from "../controller/categoryController.js";
+import { validateParamsID, validateCategoryData } from "../validation/validation.js";
+import { verifyToken } from "../middleware/verifyAuth.js";
 
 const router = Router();
 
-router.post("/addCategory", addCategory);
-router.get("/getCategories", getCatagories);
-router.get("/getCategory/:id", getCatagoryById);
-router.put("/updateCategory/:id", updateCategory);
-router.delete("/deleteCategory/:id", deleteCategory);
+router.post("/addCategory",validateCategoryData, addCategory);
+router.get("/getAllCategories", getAllCatagories);
+router.get("/getCategory/:id", validateParamsID, getCatagoryById);
+router.put("/updateCategory/:id", validateParamsID, validateCategoryData, updateCategory);
+router.delete("/deleteCategory/:id", validateParamsID, deleteCategory);
 
 export default router;

@@ -13,7 +13,7 @@ export const addCategory = async (req, res) => {
 }
 
 //GET ALL CATEGORY-CONTROLLER
-export const getCatagories = async (req, res) => {
+export const getAllCatagories = async (req, res) => {
     try {
         const categories = await getCategoryData(req, res, true);
         res.status(200).json({ success: true, data: categories });

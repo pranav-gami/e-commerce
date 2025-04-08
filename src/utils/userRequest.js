@@ -1,14 +1,17 @@
 import prisma from "../config/prisma.js";
 import bcrypt from "bcrypt";
 
-//CREATE USER WITH ENCRyPT PASSWORD
+//CREATE USER WITH ENCRYPT PASSWORD
 export const createUser = async function (data) {
     const { username, email, password } = data;
-    const encryptPassword = await bcrypt.hash(password, 5);
-    // console.log(encryptPassword);
+    let user = await prisma.user.findUnique({ where: { email } });
+    // console.log(user);
+    if (user) {
+        throw new Error("User Already Exists");
+    }
     return await prisma.user.create({
         data: {
-            username, email, password: encryptPassword
+            username, email, password: await bcrypt.hash(password, 5)
         }
     })
 }
@@ -25,7 +28,7 @@ export const getUserData = async function (req, res, getAll) {
     //Check for Data
     if (!user) {
         let message;
-        getAll ? message = "User doesn't Exists." : message = "Requested user not Found.";
+        getAll ? message = "User Model is Empty" : message = "User doesn't Found.";
         throw new Error(message);
     }
     return user;
