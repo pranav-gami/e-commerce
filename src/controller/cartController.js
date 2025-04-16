@@ -8,6 +8,9 @@ export const addCart = async (req, res) => {
         if (!user) {
             throw new Error("Cart can't be created, because UserId does't Exists")
         }
+        if (await prisma.cart.findUnique({ where: req.body.userId })) {
+            throw new Error("Cart already Exists");
+        }
         const cart = await prisma.cart.create({ data: req.body });
         res.status(200).json({ success: true, data: cart });
     }

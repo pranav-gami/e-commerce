@@ -1,0 +1,9 @@
+
+<svg width="180" height="50" viewBox="0 0 180 50" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="50" rx="8" fill="#111827"/>
+  <g>
+    <text x="15" y="32" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" font-weight="bold">
+      🛍️ E-Commerce
+    </text>
+  </g>
+</svg>

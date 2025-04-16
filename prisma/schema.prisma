@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model Products {
   id          Int           @id @default(autoincrement())
   title       String        @db.VarChar(255)
@@ -22,7 +27,6 @@ model Products {
   category    Category      @relation(fields: [categoryID], references: [id])
   image       String        @db.VarChar(255)
   CartProduct CartProduct[]
-  // OrderItems  OrderItems[]
 
   @@map("product")
 }
@@ -30,6 +34,7 @@ model Products {
 model Category {
   id           Int        @id @default(autoincrement())
   categoryName String     @unique @db.VarChar(255)
+  image        String     @db.VarChar(255)
   products     Products[]
 
   @@map("category")
@@ -41,6 +46,7 @@ model User {
   email    String  @unique @db.VarChar(50)
   password String  @db.VarChar(100)
   isActive Boolean @default(false)
+  role     Role    @default(USER)
   cart     Cart?
 
   @@map("user")
@@ -75,30 +81,18 @@ model order {
   cart        Cart     @relation(fields: [userId], references: [id])
   totalamount Int
   orderDate   DateTime @default(now())
-  status      String   @default("penidng")
+  status      String   @default("Pending")
   Payment     Payment?
 
   @@map("Order")
 }
-
-// model OrderItems {
-//   id        Int      @id @default(autoincrement())
-//   orderId   Int?
-//   order     order?   @relation(fields: [orderId], references: [id])
-//   productId Int
-//   quantity  Int
-//   product   Products @relation(fields: [productId], references: [id])
-//   subTotal  Float
-
-//   @@map("OrderItems")
-// }
 
 model Payment {
   id            Int      @id @default(autoincrement())
   orderId       Int      @unique
   order         order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   amount        Int
-  paymentMethod String   @default("pending")
+  paymentMethod String   @default("COD") //CASH ON DELIVERY
   paidAt        DateTime @default(now())
 
   @@map("Payment")

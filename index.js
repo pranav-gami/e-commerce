@@ -1,27 +1,36 @@
 import express from "express";
-import productRouter from "./src/routes/productRoute.js";
-import categoryRouter from "./src/routes/categoryRoute.js";
-import userRouter from "./src/routes/userRoute.js";
-import cartRouter from "./src/routes/cartRoutes.js";
-import authRouter from "./src/routes/authRoutes.js";
-import cartProductRouter from "./src/routes/cartProductsRoutes.js";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import expressEjsLayouts from "express-ejs-layouts";
 
-dotenv.config();
+import apiRouter from "./src/routes/apiRoutes.js";
+import viewRouter from "./src/routes/viewRoutes.js";
 
 const app = express();
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.set("view engine", "ejs");
+app.use(expressEjsLayouts);
+
+app.set("layout", "layouts/main");
+app.set("views", path.join(__dirname, "src", "views"));
+
 app.use(express.json());
 
-//Defining Diffrent Routes 
-app.use("/login", authRouter);
-app.use("/products", productRouter);
-app.use("/category", categoryRouter);
-app.use("/user", userRouter);
-app.use("/cart", cartRouter);
-app.use("/cartProducts", cartProductRouter);
+// API AND VIEWS ROUTES
+app.use("/api", apiRouter);
+app.use("/", viewRouter);
 
 app.get("/health", (req, res) => {
-    res.send("server is up and running...");
-})
+  res.send("server is up and running...");
+});
 
-app.listen(process.env.PORT, () => { console.log(`Server is Running at:3000.`) });
+app.listen(process.env.PORT, () => {
+  console.log(`Server is Running at:3000.`);
+});
