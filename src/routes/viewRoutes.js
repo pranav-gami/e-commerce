@@ -13,7 +13,7 @@ router.get("/signup", (req, res) => {
   res.render("pages/signUp", { layout: false });
 });
 
-router.get("/", (req, res) => {
+router.get("/", verifyToken, (req, res) => {
   res.render("index", {
     styles: `<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
             <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
@@ -28,7 +28,7 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/products", (req, res) => {
+router.get("/products", verifyToken, authorizeRole("ADMIN"), (req, res) => {
   res.render("pages/products", {
     styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
     scripts: `
@@ -43,7 +43,7 @@ router.get("/products", (req, res) => {
   });
 });
 
-router.get("/categories", (req, res) => {
+router.get("/categories", verifyToken, authorizeRole("ADMIN"), (req, res) => {
   res.render("pages/categories", {
     styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
     scripts: `
@@ -56,7 +56,7 @@ router.get("/categories", (req, res) => {
   });
 });
 
-router.get("/profile", (req, res) => {
+router.get("/profile", verifyToken, (req, res) => {
   res.render("pages/profile", {
     styles: `
 	    <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
@@ -66,5 +66,22 @@ router.get("/profile", (req, res) => {
         <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>`,
   });
 });
+
+router.get(
+  "/products/addproduct",
+  verifyToken,
+  authorizeRole("ADMIN"),
+  (req, res) => {
+    res.render("pages/addProduct", {
+      styles: `
+	    <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
+      scripts: `
+      <script src="assets/js/custom/apps/ecommerce/catalog/save-product.js"></script>`,
+      vendor: `
+	    <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
+	    <script src="assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>`,
+    });
+  }
+);
 
 export default router;

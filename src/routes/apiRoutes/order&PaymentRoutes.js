@@ -15,23 +15,11 @@ import { authorizeRole } from "../../middleware/authoriseRole.js";
 
 const router = Router();
 
-router.post(
-  "/placeOrder",
-  verifyToken,
-  authorizeRole("USER"),
-  validateOrderCredentials,
-  placeOrder
-);
+router.post("/placeOrder", verifyToken, validateOrderCredentials, placeOrder);
 
 router.get("/orders", verifyToken, authorizeRole("ADMIN"), showAllOrders);
 
-router.get(
-  "/orders/:id",
-  verifyToken,
-  authorizeRole("USER"),
-  validateParamsID,
-  showOrdersByUserId
-);
+router.get("/orders/:id", verifyToken, validateParamsID, showOrdersByUserId);
 
 router.patch(
   "/updateOrder",

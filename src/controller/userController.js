@@ -45,10 +45,10 @@ export const updateUser = async (req, res) => {
         message: "User you are trying to Update is not Found!!",
       });
     }
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
     const user = await prisma.user.update({
       where: { id: userID },
-      data: { username, email, password: await bcrypt.hash(password, 5) },
+      data: { username, email, password: await bcrypt.hash(password, 5), role },
     });
     res.status(200).json({ success: true, data: user });
   } catch (error) {

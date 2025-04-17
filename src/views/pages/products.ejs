@@ -192,7 +192,7 @@
                         <!--end::Select2-->
                     </div>
                     <!--begin::Add product-->
-                    <a href="../../demo1/dist/apps/ecommerce/catalog/add-product.html" class="btn btn-primary">Add
+                    <a href="/products/addProduct" class="btn btn-primary">Add
                         Product</a>
                     <!--end::Add product-->
                 </div>
@@ -214,10 +214,11 @@
                                         value="1" />
                                 </div>
                             </th>
-                            <th class="min-w-200px">Product</th>
+                            <th class="min-w-150px">Product</th>
                             <th class="text-end min-w-70px">Description</th>
-                            <th class="text-end min-w-100px">Price</th>
-                            <th class="text-end min-w-100px">Category</th>
+                            <th class="text-end min-w-70px">Price</th>
+                            <th class="text-end min-w-100px">Ratings</th>
+                            <th class="text-end min-w-80px">Category</th>
                             <th class="text-end min-w-70px">Actions</th>
                         </tr>
                         <!--end::Table row-->
@@ -346,6 +347,10 @@
                     <div class="mb-3">
                         <label for="edit_categoryID" class="form-label">Category ID</label>
                         <input type="number" class="form-control" id="edit_categoryID" name="categoryID" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_rating" class="form-label">Rating</label>
+                        <input type="number" class="form-control" id="edit_rating" name="rating" required />
                     </div>
                     <div class="mb-3">
                         <label for="edit_image" class="form-label">Image</label>

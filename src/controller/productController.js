@@ -4,7 +4,7 @@ import { getProductData } from "../utils/productRequest.js";
 //ADD PRODUCT-CONTROLLER
 export const addProduct = async (req, res) => {
   try {
-    const { title, price, description, categoryID } = req.body;
+    const { title, price, description, categoryID, rating } = req.body;
     const image = req.file ? req.file.filename : null;
     const product = await prisma.products.create({
       data: {
@@ -12,6 +12,7 @@ export const addProduct = async (req, res) => {
         price: parseFloat(price),
         description,
         categoryID: parseInt(categoryID),
+        rating: parseInt(rating),
         image,
       },
     });
@@ -41,6 +42,18 @@ export const showProductById = async (req, res) => {
   }
 };
 
+export const getProductCount = async (req, res) => {
+  try {
+    const categoryID = parseInt(req.params.id);
+    const count = await prisma.products.count({
+      where: { categoryID },
+    });
+    res.status(200).json({ success: true, data: count });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 //UPDATE PRODUCT-CONTROLLER
 export const updateProduct = async (req, res) => {
   try {
@@ -54,7 +67,7 @@ export const updateProduct = async (req, res) => {
         message: "Product you are trying to Update is not Found!!",
       });
     }
-    const { title, price, description, categoryID } = req.body;
+    const { title, price, description, categoryID, rating } = req.body;
     const image = req.file ? req.file.filename : null;
     const product = await prisma.products.update({
       where: { id: productID },
@@ -64,6 +77,7 @@ export const updateProduct = async (req, res) => {
         description,
         categoryID: parseInt(categoryID),
         image,
+        rating: parseInt(rating),
       },
     });
     res.status(200).json({ success: true, data: product });

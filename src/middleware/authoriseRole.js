@@ -5,7 +5,7 @@ export const authorizeRole = (requiredRole) => {
     if (!req.user || req.user.role !== requiredRole) {
       return res.status(403).json({
         success: false,
-        message: `Access denied: ${requiredRole} can only add category!!`,
+        message: `Access denied: ${requiredRole} can only Add!!`,
       });
     }
     next();

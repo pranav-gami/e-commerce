@@ -28,7 +28,7 @@ cartProductRouter.get("/getAllCarts", verifyToken, getAllCartsData);
 cartProductRouter.get(
   "/getCartByUserId/:id",
   verifyToken,
-  authorizeRole("USER"),
+  authorizeRole("ADMIN"),
   validateParamsID,
   getProductsByUserID
 );

@@ -3,6 +3,7 @@ import {
   addProduct,
   showAllProducts,
   showProductById,
+  getProductCount,
   deleteProduct,
   updateProduct,
 } from "../../controller/productController.js";
@@ -19,7 +20,7 @@ const router = Router();
 router.post(
   "/addProduct",
   verifyToken,
-  // authorizeRole("ADMIN"),
+  authorizeRole("ADMIN"),
   upload.single("image"),
   validatepProductData,
   addProduct
@@ -28,10 +29,12 @@ router.get("/getAllProducts", verifyToken, showAllProducts);
 
 router.get("/getProduct/:id", validateParamsID, showProductById);
 
+router.get("/getProductByCategoryId/:id", validateParamsID, getProductCount);
+
 router.put(
   "/updateProduct/:id",
   verifyToken,
-  // authorizeRole("ADMIN"),
+  authorizeRole("ADMIN"),
   validateParamsID,
   upload.single("image"),
   validatepProductData,
@@ -41,7 +44,7 @@ router.put(
 router.delete(
   "/deleteProduct/:id",
   verifyToken,
-  // authorizeRole("ADMIN"),
+  authorizeRole("ADMIN"),
   validateParamsID,
   deleteProduct
 );

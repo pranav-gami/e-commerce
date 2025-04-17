@@ -3,11 +3,13 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import expressEjsLayouts from "express-ejs-layouts";
+import cookieParser from "cookie-parser";
 
 import apiRouter from "./src/routes/apiRoutes.js";
 import viewRouter from "./src/routes/viewRoutes.js";
 
 const app = express();
+app.use(cookieParser());
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);

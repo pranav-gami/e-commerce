@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 //CREATE USER WITH ENCRYPT PASSWORD
 export const createUser = async function (data) {
   let user;
-  const { username, email, password } = data;
+  const { username, email, password, role } = data;
   user = await prisma.user.findUnique({ where: { email } });
   if (user) {
     throw new Error("User Already Exists");
@@ -14,6 +14,7 @@ export const createUser = async function (data) {
       username,
       email,
       password: await bcrypt.hash(password, 5),
+      role,
     },
   });
   await prisma.cart.create({

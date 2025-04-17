@@ -19,25 +19,20 @@ const router = Router();
 router.post(
   "/addCategory",
   verifyToken,
-  // authorizeRole("ADMIN"),
+  authorizeRole("ADMIN"),
   upload.single("image"),
   validateCategoryData,
   addCategory
 );
 
-router.get(
-  "/getAllCategories",
-  verifyToken,
-  // authorizeRole("ADMIN"),
-  getAllCatagories
-);
+router.get("/getAllCategories", verifyToken, getAllCatagories);
 
 router.get("/getCategory/:id", verifyToken, validateParamsID, getCatagoryById);
 
 router.put(
   "/updateCategory/:id",
   verifyToken,
-  // authorizeRole("ADMIN"),
+  authorizeRole("ADMIN"),
   validateParamsID,
   upload.single("image"),
   validateCategoryData,
@@ -47,7 +42,7 @@ router.put(
 router.delete(
   "/deleteCategory/:id",
   verifyToken,
-  // authorizeRole("ADMIN"),
+  authorizeRole("ADMIN"),
   validateParamsID,
   deleteCategory
 );

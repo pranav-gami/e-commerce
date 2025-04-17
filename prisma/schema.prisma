@@ -27,6 +27,7 @@ model Products {
   category    Category      @relation(fields: [categoryID], references: [id])
   image       String        @db.VarChar(255)
   CartProduct CartProduct[]
+  rating      Int           @default(2) @db.SmallInt
 
   @@map("product")
 }

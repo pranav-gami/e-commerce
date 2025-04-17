@@ -51,7 +51,7 @@ export const updateCategory = async (req, res) => {
     const { categoryName } = req.body;
     const image = req.file ? req.file.filename : null;
     const category = await prisma.category.update({
-      where: { categoryID },
+      where: { id: categoryID },
       data: {
         categoryName,
         image,

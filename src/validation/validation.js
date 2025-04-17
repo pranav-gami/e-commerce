@@ -45,6 +45,7 @@ const userSchema = Joi.object({
       "string.pattern.base":
         "Password should contains 8-12 characters having atleast one uppercase, lowercase, digit & special character(@,$,*)",
     }),
+  role: Joi.string().valid("ADMIN", "USER").default("USER"),
 });
 
 export const validateUserData = (req, res, next) => {
@@ -63,6 +64,7 @@ const productSchema = Joi.object({
   price: Joi.number().positive().required(),
   description: Joi.string().required(),
   categoryID: Joi.number().integer().positive().required(),
+  rating: Joi.number().integer().min(1).max(5).required(),
 });
 
 export const validatepProductData = (req, res, next) => {
@@ -71,12 +73,13 @@ export const validatepProductData = (req, res, next) => {
       .status(400)
       .json({ success: false, message: "Image is required." });
   }
-  const { title, price, description, categoryID } = req.body;
+  const { title, price, description, categoryID, rating } = req.body;
   const { error } = productSchema.validate({
     title,
     price: parseFloat(price),
     description,
     categoryID: parseInt(categoryID),
+    rating: parseInt(rating),
   });
   if (error) {
     return res

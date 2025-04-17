@@ -17,12 +17,7 @@ const router = Router();
 
 router.post("/addUser", validateUserData, addUser);
 router.get("/getAllUsers", verifyToken, authorizeRole("ADMIN"), showAllUsers);
-router.get(
-  "/getUser/:id",
-  validateParamsID,
-  verifyToken,
-  showUserById
-);
+router.get("/getUser/:id", validateParamsID, verifyToken, showUserById);
 router.put("/updateUser/:id", validateParamsID, validateUserData, updateUser);
 router.delete("/deleteUser/:id", validateParamsID, deleteUser);
 
