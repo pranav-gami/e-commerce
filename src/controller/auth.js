@@ -41,4 +41,23 @@ export const loginUser = async (req, res) => {
 };
 
 //Logout-CONTROLLER
-// export const logoutUser = async (req, res) => {};
+export const logoutUser = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(200).json({
+      success: true,
+      message: "User already logged out.",
+    });
+  }
+  // Clear the cookie
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "helloAdmin",
+    sameSite: "lax",
+    path: "/",
+  });
+  return res.status(200).json({
+    success: true,
+    message: "User logged out and cookie cleared.",
+  });
+};

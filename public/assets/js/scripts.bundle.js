@@ -4638,56 +4638,191 @@ KTUtil.onDOMContentLoaded(function () {
 });
 
 // DYANAMICALLY ADDING CATEGORIES TO THE SIDEBAR
-var KTDynamicCategories = (function () {
-  var container = document.querySelector(".categories_list");
+// var KTDynamicCategories = (function () {
+//   var container = document.querySelector(".categories_list");
 
-  // Fetch category data from the backend API
-  var fetchCategories = async function () {
-    try {
-      const token = localStorage.getItem("token");
+//   // Fetch category data from the backend API
+//   var fetchCategories = async function () {
+//     try {
+//       const token = localStorage.getItem("token");
 
-      const response = await fetch("api/category/getAllCategories", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // force quotes to stay
-        },
-      });
-      const data = await response.json();
-      // If response is wrapped in an object, extract the array
-      const categories = Array.isArray(data) ? data : data.data;
+//       const response = await fetch("api/category/getAllCategories", {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`, // force quotes to stay
+//         },
+//       });
+//       const data = await response.json();
+//       // If response is wrapped in an object, extract the array
+//       const categories = Array.isArray(data) ? data : data.data;
 
-      renderCategories(categories);
-    } catch (error) {
-      console.error("Error loading categories:", error);
+//       renderCategories(categories);
+//     } catch (error) {
+//       console.error("Error loading categories:", error);
+//     }
+//   };
+
+//   // Render category HTML and insert into sidebar
+//   const renderCategories = function (categories) {
+//     container.innerHTML = "";
+//     categories.forEach((category) => {
+//       var item = document.createElement("div");
+//       item.classList.add("menu-item");
+//       item.innerHTML = `
+//                 <a class="menu-link" href="" data-category_id=${category.id}>
+//                     <span class="menu-bullet">
+//                         <span class="bullet bullet-dot"></span>
+//                     </span>
+//                     <span class="menu-title">${category.categoryName}</span>
+//                 </a>
+//             `;
+//       container.appendChild(item);
+//     });
+//   };
+
+//   return {
+//     init: function () {
+//       if (!container) return;
+//       fetchCategories();
+//     },
+//   };
+// })();
+
+// KTUtil.onDOMContentLoaded(function () {
+//   KTDynamicCategories.init();
+// });
+
+KTUtil.onDOMContentLoaded(function () {
+  const menuItems = document.querySelectorAll(
+    "#kt_app_sidebar_menu_wrapper .menu-link"
+  );
+
+  function clearActiveStates() {
+    menuItems.forEach((link) => {
+      link.classList.remove("active");
+      const item = link.closest(".menu-item");
+      if (item) item.classList.remove("here", "show");
+    });
+  }
+
+  function activateLink(link) {
+    link.classList.add("active");
+    const item = link.closest(".menu-item");
+    if (item) {
+      item.classList.add("here", "show");
+
+      // Open parent menu-items for nested links
+      let parent = item.parentElement;
+      while (parent && !parent.classList.contains("app-sidebar-menu")) {
+        if (parent.classList.contains("menu-sub")) {
+          const parentItem = parent.closest(".menu-item");
+          if (parentItem) {
+            parentItem.classList.add("here", "show");
+          }
+        }
+        parent = parent.parentElement;
+      }
     }
-  };
+  }
 
-  // Render category HTML and insert into sidebar
-  const renderCategories = function (categories) {
-    container.innerHTML = "";
-    categories.forEach((category) => {
-      var item = document.createElement("div");
-      item.classList.add("menu-item");
-      item.innerHTML = `
-                <a class="menu-link" href="" data-category_id=${category.id}>
-                    <span class="menu-bullet">
-                        <span class="bullet bullet-dot"></span>
-                    </span>
-                    <span class="menu-title">${category.categoryName}</span>
-                </a>
-            `;
-      container.appendChild(item);
+  const currentPath = window.location.pathname.toLowerCase();
+
+  let bestMatch = null;
+  let maxMatchLength = 0;
+
+  menuItems.forEach((link) => {
+    let linkHref = link.getAttribute("href");
+    if (!linkHref) return;
+
+    const fullLinkHref = new URL(
+      linkHref,
+      window.location.origin
+    ).pathname.toLowerCase();
+
+    // Match if current path starts with menu link path
+    if (currentPath.startsWith(fullLinkHref)) {
+      if (fullLinkHref.length > maxMatchLength) {
+        bestMatch = link;
+        maxMatchLength = fullLinkHref.length;
+      }
+    }
+  });
+
+  if (bestMatch) {
+    clearActiveStates();
+    activateLink(bestMatch);
+  }
+});
+
+// LOGOUT FUNCTIONALITY
+
+var KTLogoutGeneral = (function () {
+  const logoutButtons = document.querySelectorAll(
+    ".menu-link[href='/admin/login'], .logoutBtn"
+  );
+
+  const handleLogout = function () {
+    logoutButtons.forEach((btn) => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+          text: "Are you sure you want to sign out?",
+          icon: "warning",
+          showCancelButton: true,
+          buttonsStyling: false,
+          confirmButtonText: "Yes, sign out",
+          cancelButtonText: "Cancel",
+          customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: "btn btn-active-light",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch("/api/auth/logout", {
+              method: "POST",
+              credentials: "include",
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                const user = JSON.parse(localStorage.getItem("user"));
+                const userId = user.id;
+                fetch(`http://localhost:3000/api/user/updateStatus/${userId}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${data.token}`,
+                  },
+                  body: JSON.stringify({ status: "offline" }),
+                })
+                  .then((res) => res.json())
+                  .then((statusData) => {
+                    console.log("User status updated:", statusData);
+                  })
+                  .catch((err) => {
+                    console.error("Status update failed:", err);
+                  });
+
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = "/admin/login";
+              })
+              .catch((err) => {
+                console.error("Logout failed", err);
+                Swal.fire("Oops!", "Logout failed. Try again.", "error");
+              });
+          }
+        });
+      });
     });
   };
-
   return {
     init: function () {
-      if (!container) return;
-      fetchCategories();
+      handleLogout();
     },
   };
 })();
 
 KTUtil.onDOMContentLoaded(function () {
-  KTDynamicCategories.init();
+  KTLogoutGeneral.init();
 });

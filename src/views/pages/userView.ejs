@@ -1,0 +1,237 @@
+<!--begin::Toolbar-->
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <!--begin::Toolbar container-->
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+        <!--begin::Page title-->
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <!--begin::Title-->
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">View User
+                Details</h1>
+            <!--end::Title-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Home</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">User Management</li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">Users</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+    </div>
+    <!--end::Toolbar container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Content-->
+<div id="kt_app_content" data-user-id=<%=userId %> class="app-content flex-column-fluid">
+    <!--begin::Content container-->
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        <!--begin::Layout-->
+        <div class="d-flex flex-column flex-lg-row">
+            <!--begin::Sidebar-->
+            <div class="flex-column flex-lg-row-auto w-lg-250px w-xl-350px mb-10">
+                <!--begin::Card-->
+                <div class="card mb-5 mb-xl-8">
+                    <!--begin::Card body-->
+                    <div class="card-body">
+                        <!--begin::Summary-->
+                        <!--begin::User Info-->
+                        <div class="d-flex flex-center flex-column py-5">
+                            <!--begin::Avatar-->
+                            <!--begin::Avatar-->
+                            <div class="symbol symbol-75px symbol-circle">
+                                <div class="symbol-label fs-3 bg-light-warning text-warning username-initial">D</div>
+                            </div>
+                            <!--end::Avatar-->
+                            <!--begin::Name-->
+                            <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3 username">Emma
+                                Smith</a>
+                            <!--end::Name-->
+                            <!--begin::Position-->
+                            <div class="mb-9">
+                                <!--begin::Badge-->
+                                <div class="badge badge-lg badge-light-primary d-inline role">Admin</div>
+                                <!--begin::Badge-->
+                            </div>
+                            <!--end::Position-->
+                        </div>
+                        <!--end::User Info-->
+                        <!--end::Summary-->
+                        <div class="separator"></div>
+                        <!--begin::Details content-->
+                        <div id="kt_user_view_details" class="collapse show">
+                            <div class="pb-5 fs-6">
+                                <!--begin::Details item-->
+                                <div class="fw-bold mt-5">Email</div>
+                                <div class="text-gray-600">
+                                    <a href="#" class="text-gray-600 text-hover-primary email">info@keenthemes.com</a>
+                                </div>
+                                <!--begin::Details item-->
+                                <!--begin::Details item-->
+                                <div class="fw-bold mt-5">Address</div>
+                                <div class="text-gray-600 address">101 Collin Street,
+                                    <br />Melbourne 3000 VIC
+                                    <br />Australia
+                                </div>
+                                <!--begin::Details item-->
+                                <!--begin::Details item-->
+                                <div class="fw-bold mt-5">Language</div>
+                                <div class="text-gray-600 language">English</div>
+                                <!--begin::Details item-->
+                            </div>
+                        </div>
+                        <!--end::Details content-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Sidebar-->
+            <!--begin::Content-->
+            <div class="flex-lg-row-fluid ms-lg-15">
+                <!--begin:::Tabs-->
+                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8">
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                            href="#kt_user_view_overview_tab">Overview</a>
+                    </li>
+                    <!--end:::Tab item-->
+                    <!--begin:::Tab item-->
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                            href="#kt_user_view_overview_security">Cart Details</a>
+                    </li>
+                    <!--end:::Tab item-->
+                </ul>
+                <!--end:::Tabs-->
+                <!--begin:::Tab content-->
+                <div class="tab-content" id="myTabContent">
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
+                        <!--begin::Card-->
+                        <div class="card card-flush mb-6 mb-xl-9">
+                            <!--begin::Card header-->
+                            <div class="card-header mt-6">
+                                <!--begin::Card title-->
+                                <div class="card-title flex-column">
+                                    <h2 class="mb-1">User's Details</h2>
+                                    <div class="fs-6 fw-semibold text-muted"></div>
+                                </div>
+                                <!--end::Card title-->
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body p-9 pt-4">
+                                <div class="table-responsive">
+                                    <!--begin::Table-->
+                                    <table class="table align-middle table-row-dashed gy-5"
+                                        id="kt_table_users_login_session">
+                                        <!--begin::Table body-->
+                                        <tbody class="fs-6 fw-semibold text-gray-600">
+                                            <tr>
+                                                <td>Username</td>
+                                                <td class="username">Abc/td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email</td>
+                                                <td class="email">smith@kpmg.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Is Active??</td>
+                                                <td class="isAcitve">YES</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Role</td>
+                                                <td class="role">Administrator</td>
+                                            </tr>
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--end:::Tab pane-->
+                    <!--begin:::Tab pane-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_security" role="tabpanel">
+                        <!--begin::Card-->
+                        <div class="card pt-4 mb-6 mb-xl-9">
+                            <!--begin::Card header-->
+                            <div class="card-header border-0">
+                                <!--begin::Card title-->
+                                <div class="card-title">
+                                    <h2>Cart Details</h2>
+                                </div>
+                                <!--end::Card title-->
+                            </div>
+                            <!--end::Card header-->
+
+                            <!--begin::Card body-->
+                            <div class="card-body pt-0 pb-5">
+                                <!--begin::Table wrapper-->
+                                <div class="table-responsive">
+                                    <table class="table table-row-dashed align-middle gs-0 gy-4">
+                                        <thead>
+                                            <tr class="fw-bold text-muted bg-light">
+                                                <th class="min-w-150px">Product Name</th>
+                                                <th class="min-w-100px">Quantity</th>
+                                                <th class="min-w-100px">Price</th>
+                                                <th class="min-w-100px">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cart-details-body">
+                                            <tr>
+                                                <td>Hp laptop</td>
+                                                <td>1</td>
+                                                <td>₹57,999</td>
+                                                <td>₹57,999</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="fw-bold text-muted d-done">
+                                                <td colspan="3" class="text-end">Total</td>
+                                                <td id="cart-total">₹0</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!--end::Table wrapper-->
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+
+                    <!--end:::Tab pane-->
+                </div>
+                <!--end:::Tab content-->
+            </div>
+            <!--end::Content-->
+        </div>
+        <!--end::Layout-->
+        <!--end::Modals-->
+    </div>
+    <!--end::Content container-->
+</div>
+<!--end::Content-->

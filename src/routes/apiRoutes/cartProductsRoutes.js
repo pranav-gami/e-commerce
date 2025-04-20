@@ -24,11 +24,15 @@ cartProductRouter.post(
   validateCartProductData,
   addProductToCart
 );
-cartProductRouter.get("/getAllCarts", verifyToken, getAllCartsData);
+cartProductRouter.get(
+  "/getAllCarts",
+  verifyToken,
+  authorizeRole("ADMIN"),
+  getAllCartsData
+);
 cartProductRouter.get(
   "/getCartByUserId/:id",
   verifyToken,
-  authorizeRole("ADMIN"),
   validateParamsID,
   getProductsByUserID
 );

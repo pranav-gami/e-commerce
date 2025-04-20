@@ -50,11 +50,11 @@ var KTProfileGeneral = (function () {
           emailElement.textContent = userData.email || "N/A";
         }
 
-        // var allowChangesElement = document.querySelector(".canchange");
-        // if (allowChangesElement) {
-        //   allowChangesElement.textContent =
-        //     userData.role == "ADMIN" ? "Yes" : "No";
-        // }
+        var allowChangesElement = document.querySelector(".canchange");
+        if (allowChangesElement) {
+          allowChangesElement.textContent =
+            userData.role == "ADMIN" ? "Yes" : "No";
+        }
       }
 
       // Sticky navigation for profile page (keeping this if needed)

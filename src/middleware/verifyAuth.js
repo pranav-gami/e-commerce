@@ -5,9 +5,7 @@ export const verifyToken = (req, res, next) => {
   const cookieToken = req.cookies?.token;
   const token = authHeaderToken || cookieToken;
   if (!token) {
-    return res
-      .status(401)
-      .json({ success: false, message: "No token provided!!" });
+    return res.redirect("/admin/login?error=login_required");
   }
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);

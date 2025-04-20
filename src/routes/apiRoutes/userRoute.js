@@ -5,6 +5,7 @@ import {
   showUserById,
   updateUser,
   deleteUser,
+  updateUserStatus,
 } from "../../controller/userController.js";
 import {
   validateParamsID,
@@ -19,6 +20,7 @@ router.post("/addUser", validateUserData, addUser);
 router.get("/getAllUsers", verifyToken, authorizeRole("ADMIN"), showAllUsers);
 router.get("/getUser/:id", validateParamsID, verifyToken, showUserById);
 router.put("/updateUser/:id", validateParamsID, validateUserData, updateUser);
-router.delete("/deleteUser/:id", validateParamsID, deleteUser);
+router.put("/updateStatus/:id", validateParamsID, updateUserStatus);
+router.delete("/deleteUser/:id", verifyToken, validateParamsID, deleteUser);
 
 export default router;

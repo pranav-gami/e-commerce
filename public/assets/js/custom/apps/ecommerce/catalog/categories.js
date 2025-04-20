@@ -119,7 +119,7 @@ var KTAppEcommerceCategories = (function () {
           </td>
           <td>
             <div class="d-flex">
-              <a href="#" class="symbol symbol-50px">
+              <a href="" class="symbol symbol-50px">
                 <span class="symbol-label" style="background-image: url(assets/media/products/${category.image}); background-size: cover;"></span>
               </a>
               <div class="ms-5">
@@ -128,16 +128,25 @@ var KTAppEcommerceCategories = (function () {
               </div>
             </div>
           </td>
-          <td><div class="badge badge-light-success">${productCount}</div></td>
+          <td class="text-center"><div class="badge badge-light-success">${productCount}</div></td>
           <td class="text-end">
-            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+            <a href="" class="btn btn-sm btn-light btn-active-light-primary"
                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-              <span class="svg-icon svg-icon-5 m-0">...</span>
+              <span class="svg-icon svg-icon-5 m-0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 
+                    8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 
+                    12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 
+                    8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 
+                    13.0468 11.4343 12.7344Z" fill="currentColor"/>
+              </svg>
+              </span>
             </a>
             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                  data-kt-menu="true">
               <div class="menu-item px-3">
-                <a href="#" class="menu-link px-3 edit-category-btn" data-categoryid="${category.id}">Edit</a>
+                <a href="/admin/editcategory/${category.id}" class="menu-link px-3 edit-category-btn" data-categoryid="${category.id}">Edit</a>
               </div>
               <div class="menu-item px-3">
                 <a href="#" class="menu-link px-3" data-kt-ecommerce-category-filter="delete_row" data-categoryid="${category.id}">Delete</a>
@@ -196,123 +205,3 @@ var KTAppEcommerceCategories = (function () {
 KTUtil.onDOMContentLoaded(function () {
   KTAppEcommerceCategories.init();
 });
-
-let originalCategoryData = null;
-
-// Edit modal logic
-document.addEventListener("click", async function (e) {
-  const editBtn = e.target.closest(".edit-category-btn");
-  if (editBtn) {
-    e.preventDefault();
-    const categoryId = editBtn.getAttribute("data-categoryid");
-    if (!categoryId) return;
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch(`api/category/getCategory/${categoryId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const result = await response.json();
-      if (!result.success) {
-        return Swal.fire("Error", "Failed to load category details", "error");
-      }
-
-      originalCategoryData = result.data;
-      document.getElementById("category_modal_title").textContent =
-        "Edit Category";
-      document.getElementById("category_id").value = originalCategoryData.id;
-      document.getElementById("category_name").value =
-        originalCategoryData.categoryName;
-
-      const preview = document.getElementById("category_image_preview");
-      preview.src = `assets/media/products/${originalCategoryData.image}`;
-      preview.style.display = "block";
-
-      new bootstrap.Modal(
-        document.getElementById("kt_modal_add_category")
-      ).show();
-    } catch (error) {
-      console.error("Error fetching category:", error);
-      Swal.fire("Error", "Something went wrong!", "error");
-    }
-  }
-});
-
-// Edit Submit Handler (Updated Like Product Logic)
-document
-  .getElementById("category_submit_btn")
-  .addEventListener("click", async function (e) {
-    e.preventDefault();
-
-    const categoryID = originalCategoryData.id;
-    const categoryName = document.getElementById("category_name").value.trim();
-    const imageInput = document.getElementById("category_image");
-
-    const formData = new FormData();
-    formData.append(
-      "categoryName",
-      categoryName || originalCategoryData.categoryName
-    );
-
-    if (imageInput.files.length > 0) {
-      const selectedFile = imageInput.files[0];
-      const allowedTypes = ["image/jpeg", "image/jpg"];
-      if (!allowedTypes.includes(selectedFile.type)) {
-        return Swal.fire({
-          text: "Only JPG or JPEG images are allowed.",
-          icon: "error",
-        });
-      }
-      formData.append("image", selectedFile);
-    } else {
-      try {
-        const imageUrl = `assets/media/products/${originalCategoryData.image}`;
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], originalCategoryData.image, {
-          type: blob.type,
-        });
-        formData.append("image", file);
-      } catch (error) {
-        return Swal.fire({
-          text: "Failed to fetch original image.",
-          icon: "error",
-        });
-      }
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `api/category/updateCategory/${categoryID}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.message);
-      }
-
-      Swal.fire({
-        text: "Category updated successfully!",
-        icon: "success",
-        confirmButtonText: "Ok, reload page",
-      }).then(() => {
-        window.location.reload();
-      });
-    } catch (error) {
-      Swal.fire({
-        text: error.message || "Error updating category.",
-        icon: "error",
-      });
-    }
-  });

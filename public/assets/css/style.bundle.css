@@ -60322,3 +60322,13 @@ html:not([data-theme=dark]) {
         color: #fff !important
     }
 }
+
+#kt_app_main_content.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+#kt_app_main_content.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+}

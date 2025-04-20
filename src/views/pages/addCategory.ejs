@@ -1,0 +1,119 @@
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+                Category Form</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="/admin/dashboard" class="text-muted text-hover-primary">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">eCommerce</li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Admin</li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Add Category</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        <form id="kt_category_add_form" class="form d-flex flex-column flex-lg-row"
+            data-kt-redirect="/admin/categories">
+            <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+                <div class="card card-flush py-4">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Upload Image</h2>
+                        </div>
+                    </div>
+                    <div class="card-body text-center pt-0">
+                        <style>
+                            .image-input-placeholder {
+                                background-image: url('assets/media/svg/files/blank-image.svg');
+                            }
+
+                            [data-theme="dark"] .image-input-placeholder {
+                                background-image: url('assets/media/svg/files/blank-image-dark.svg');
+                            }
+                        </style>
+                        <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3"
+                            data-kt-image-input="true">
+                            <div class="image-input-wrapper w-150px h-150px" id="categoryImageWrapper"></div>
+                            <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change image">
+                                <i class="bi bi-pencil-fill fs-7"></i>
+                                <input type="file" name="avatar" id="categoryImageUpload" accept=".jpg, .jpeg" />
+                                <input type="hidden" name="avatar_remove" />
+                            </label>
+                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel image">
+                                <i class="bi bi-x fs-2"></i>
+                            </span>
+                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove image">
+                                <i class="bi bi-x fs-2"></i>
+                            </span>
+                        </div>
+                        <div class="text-muted fs-7">Set the category image. Only *.jpg and *.jpeg files are allowed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-n2">
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                            href="#kt_category_add_general">Add Category Details</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="kt_category_add_general" role="tab-panel">
+                        <div class="d-flex flex-column gap-7 gap-lg-10">
+                            <div class="card card-flush py-4">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <h2>Basic Category Information</h2>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <div class="mb-10 fv-row">
+                                        <label class="required form-label">Category Name</label>
+                                        <input type="text" name="category_name" class="form-control mb-2"
+                                            placeholder="Enter category name" />
+                                        <div class="text-muted fs-7">The category name should be unique and descriptive.
+                                        </div>
+                                    </div>
+                                    <div class="mb-10 fv-row">
+                                        <label class="form-label">Category Description</label>
+                                        <textarea name="category_description" class="form-control mb-2"
+                                            placeholder="Short description (optional)"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" id="kt_category_add_submit" class="btn btn-primary">
+                        <span class="indicator-label">Add Category</span>
+                        <span class="indicator-progress">Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                    <a href="#" id="kt_category_add_cancel" class="btn btn-light me-5">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -79,7 +79,7 @@ model CartProduct {
 model order {
   id          Int      @id @default(autoincrement())
   userId      Int
-  cart        Cart     @relation(fields: [userId], references: [id])
+  cart        Cart     @relation(fields: [userId], references: [id], onDelete: Cascade)
   totalamount Int
   orderDate   DateTime @default(now())
   status      String   @default("Pending")

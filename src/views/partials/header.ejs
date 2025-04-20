@@ -23,7 +23,7 @@
         <!--end::sidebar mobile toggle-->
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="/" class="d-lg-none">
+            <a href="/admin/dashboard" class="d-lg-none">
                 <img alt="Logo" src="assets/media/logos/default-small.svg" class="h-30px" />
             </a>
         </div>
@@ -64,7 +64,7 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item p-0 m-0">
                                                     <!--begin:Menu link-->
-                                                    <a href="/" class="menu-link active">
+                                                    <a href="/admin/dashboard" class="menu-link active">
                                                         <span
                                                             class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">
                                                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -99,8 +99,7 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item p-0 m-0">
                                                     <!--begin:Menu link-->
-                                                    <a href="../../demo1/dist/dashboards/ecommerce.html"
-                                                        class="menu-link">
+                                                    <a href="/admin/dashboard" class="menu-link">
                                                         <span
                                                             class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">
                                                             <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm002.svg-->
@@ -136,8 +135,7 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item p-0 m-0">
                                                     <!--begin:Menu link-->
-                                                    <a href="../../demo1/dist/dashboards/projects.html"
-                                                        class="menu-link">
+                                                    <a href="/admin/products" class="menu-link">
                                                         <span
                                                             class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">
                                                             <!--begin::Svg Icon | path: icons/duotune/abstract/abs045.svg-->
@@ -155,9 +153,9 @@
                                                             <!--end::Svg Icon-->
                                                         </span>
                                                         <span class="d-flex flex-column">
-                                                            <span class="fs-6 fw-bold text-gray-800">Projects</span>
-                                                            <span class="fs-7 fw-semibold text-muted">Tasts,
-                                                                graphs & charts</span>
+                                                            <span class="fs-6 fw-bold text-gray-800">Products</span>
+                                                            <span class="fs-7 fw-semibold text-muted">List products &
+                                                                Manage Products</span>
                                                         </span>
                                                     </a>
                                                     <!--end:Menu link-->
@@ -170,8 +168,7 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item p-0 m-0">
                                                     <!--begin:Menu link-->
-                                                    <a href="../../demo1/dist/dashboards/online-courses.html"
-                                                        class="menu-link">
+                                                    <a href="/admin/categories" class="menu-link">
                                                         <span
                                                             class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">
                                                             <!--begin::Svg Icon | path: icons/duotune/art/art002.svg-->
@@ -189,10 +186,9 @@
                                                             <!--end::Svg Icon-->
                                                         </span>
                                                         <span class="d-flex flex-column">
-                                                            <span class="fs-6 fw-bold text-gray-800">Online
-                                                                Courses</span>
-                                                            <span class="fs-7 fw-semibold text-muted">Student
-                                                                progress</span>
+                                                            <span class="fs-6 fw-bold text-gray-800">Categories</span>
+                                                            <span class="fs-7 fw-semibold text-muted">Categories &
+                                                                Manage Categories</span>
                                                         </span>
                                                     </a>
                                                     <!--end:Menu link-->
@@ -206,13 +202,11 @@
                                         <!--begin:Landing-->
                                         <div class="d-flex flex-stack flex-wrap flex-lg-nowrap gap-2 mx-5">
                                             <div class="d-flex flex-column me-5">
-                                                <div class="fs-6 fw-bold text-gray-800">Landing Page
-                                                    Template</div>
-                                                <div class="fs-7 fw-semibold text-muted">Onpe page landing
-                                                    template with pricing & others</div>
+                                                <div class="fs-6 fw-bold text-gray-800">Explore Products</div>
+                                                <div class="fs-7 fw-semibold text-muted">View all products and can
+                                                    manage it.</div>
                                             </div>
-                                            <a href="../../demo1/dist/landing.html"
-                                                class="btn btn-sm btn-primary fw-bold">Explore</a>
+                                            <a href="/admin/products" class="btn btn-sm btn-primary fw-bold">Explore</a>
                                         </div>
                                         <!--end:Landing-->
                                     </div>
@@ -221,13 +215,13 @@
                                     <div class="menu-more bg-light col-lg-4 py-3 px-3 py-lg-6 px-lg-6 rounded-end">
                                         <!--begin:Heading-->
                                         <h4 class="fs-6 fs-lg-4 text-gray-800 fw-bold mt-3 mb-3 ms-4">More
-                                            Dashboards</h4>
+                                            Functionality</h4>
                                         <!--end:Heading-->
                                         <!--begin:Menu item-->
                                         <div class="menu-item p-0 m-0">
                                             <!--begin:Menu link-->
-                                            <a href="../../demo1/dist/dashboards/social.html" class="menu-link py-2">
-                                                <span class="menu-title">Social</span>
+                                            <a href="/admin/products/add" class="menu-link py-2">
+                                                <span class="menu-title">Add Product</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
@@ -235,8 +229,17 @@
                                         <!--begin:Menu item-->
                                         <div class="menu-item p-0 m-0">
                                             <!--begin:Menu link-->
-                                            <a href="../../demo1/dist/dashboards/delivery.html" class="menu-link py-2">
-                                                <span class="menu-title">Delivery</span>
+                                            <a href="/admin/categories/add" class="menu-link py-2">
+                                                <span class="menu-title">Add Category</span>
+                                            </a>
+                                            <!--end:Menu link-->
+                                        </div>
+                                        <!--end:Menu item-->
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item p-0 m-0">
+                                            <!--begin:Menu link-->
+                                            <a href="/admin/users" class="menu-link py-2">
+                                                <span class="menu-title">Manage Users</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
@@ -315,7 +318,7 @@
                                                 <div class="fs-7 fw-semibold text-muted">Customize, preview
                                                     and export</div>
                                             </div>
-                                            <a href="/" class="btn btn-sm btn-primary fw-bold">Try Builder</a>
+                                            <a href="" class="btn btn-sm btn-primary fw-bold">Try Builder</a>
                                         </div>
                                         <!--end:Layout Builder-->
                                     </div>
@@ -348,9 +351,7 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link"
-                                    href="https://preview.keenthemes.com/html/metronic/docs/base/utilities"
-                                    target="blank"
+                                <a class="menu-link" href="" target="blank"
                                     title="Check out over 200 in-house components, plugins and ready for use solutions"
                                     data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                     data-bs-placement="right">
@@ -377,9 +378,9 @@
                             <!--begin:Menu item-->
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link" href="https://preview.keenthemes.com/html/metronic/docs"
-                                    target="blank" title="Check out the complete documentation" data-bs-toggle="tooltip"
-                                    data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                                <a class="menu-link" href="" target="blank" title="Check out the complete documentation"
+                                    data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                    data-bs-placement="right">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/abstract/abs027.svg-->
                                         <span class="svg-icon svg-icon-3">
@@ -400,32 +401,6 @@
                                 <!--end:Menu link-->
                             </div>
                             <!--end:Menu item-->
-                            <!--begin:Menu item-->
-                            <div class="menu-item">
-                                <!--begin:Menu link-->
-                                <a class="menu-link"
-                                    href="https://preview.keenthemes.com/html/metronic/docs/getting-started/changelog"
-                                    target="blank">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/coding/cod003.svg-->
-                                        <span class="svg-icon svg-icon-3">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M16.95 18.9688C16.75 18.9688 16.55 18.8688 16.35 18.7688C15.85 18.4688 15.75 17.8688 16.05 17.3688L19.65 11.9688L16.05 6.56876C15.75 6.06876 15.85 5.46873 16.35 5.16873C16.85 4.86873 17.45 4.96878 17.75 5.46878L21.75 11.4688C21.95 11.7688 21.95 12.2688 21.75 12.5688L17.75 18.5688C17.55 18.7688 17.25 18.9688 16.95 18.9688ZM7.55001 18.7688C8.05001 18.4688 8.15 17.8688 7.85 17.3688L4.25001 11.9688L7.85 6.56876C8.15 6.06876 8.05001 5.46873 7.55001 5.16873C7.05001 4.86873 6.45 4.96878 6.15 5.46878L2.15 11.4688C1.95 11.7688 1.95 12.2688 2.15 12.5688L6.15 18.5688C6.35 18.8688 6.65 18.9688 6.95 18.9688C7.15 18.9688 7.35001 18.8688 7.55001 18.7688Z"
-                                                    fill="currentColor" />
-                                                <path opacity="0.3"
-                                                    d="M10.45 18.9687C10.35 18.9687 10.25 18.9687 10.25 18.9687C9.75 18.8687 9.35 18.2688 9.55 17.7688L12.55 5.76878C12.65 5.26878 13.25 4.8687 13.75 5.0687C14.25 5.1687 14.65 5.76878 14.45 6.26878L11.45 18.2688C11.35 18.6688 10.85 18.9687 10.45 18.9687Z"
-                                                    fill="currentColor" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title">Changelog v8.1.5</span>
-                                </a>
-                                <!--end:Menu link-->
-                            </div>
-                            <!--end:Menu item-->
                         </div>
                         <!--end:Menu sub-->
                     </div>
@@ -439,7 +414,7 @@
                 <!--begin::Theme mode-->
                 <div class="app-navbar-item ms-1 ms-lg-3">
                     <!--begin::Menu toggle-->
-                    <a href="#"
+                    <a href=""
                         class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
                         data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"
                         data-kt-menu-placement="bottom-end">
@@ -503,7 +478,7 @@
                         data-kt-menu="true" data-kt-element="theme-mode-menu">
                         <!--begin::Menu item-->
                         <div class="menu-item px-3 my-0">
-                            <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
+                            <a href="" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
                                 <span class="menu-icon" data-kt-element="icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen060.svg-->
                                     <span class="svg-icon svg-icon-3">
@@ -546,7 +521,7 @@
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-3 my-0">
-                            <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
+                            <a href="" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
                                 <span class="menu-icon" data-kt-element="icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen061.svg-->
                                     <span class="svg-icon svg-icon-3">
@@ -574,7 +549,7 @@
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-3 my-0">
-                            <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
+                            <a href="" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
                                 <span class="menu-icon" data-kt-element="icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen062.svg-->
                                     <span class="svg-icon svg-icon-3">
@@ -621,7 +596,7 @@
                                         <span
                                             class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2 role">Pro</span>
                                     </div>
-                                    <a href="#"
+                                    <a href=""
                                         class="fw-semibold text-muted text-hover-primary fs-7 email">max@kt.com</a>
                                 </div>
                                 <!--end::Username-->
@@ -633,19 +608,13 @@
                         <!--end::Menu separator-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
-                            <a href="/profile" class="menu-link px-5">My
+                            <a href="/admin/profile" class="menu-link px-5">My
                                 Profile</a>
                         </div>
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5 my-1">
-                            <a href="" class="menu-link px-5">Account
-                                Settings</a>
-                        </div>
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
                         <div class="menu-item px-5">
-                            <a href="/login" class="menu-link px-5">Sign Out</a>
+                            <a href="/admin/login" class="menu-link px-5">Sign Out</a>
                         </div>
                         <!--end::Menu item-->
                     </div>

@@ -109,7 +109,7 @@ var KTSignupGeneral = (function () {
                                 '[name="confirm-password"]'
                               ).value = "");
                             var i = e.getAttribute("data-kt-redirect-url");
-                            i && (location.href = "/login"); // ✅ redirect if success
+                            i && (location.href = "admin/login"); // ✅ redirect if success
                           }
                         });
                       } else {
