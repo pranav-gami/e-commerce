@@ -24,10 +24,10 @@ model Products {
   price       Float
   description String        @db.VarChar(255)
   categoryID  Int
-  category    Category      @relation(fields: [categoryID], references: [id])
+  category    Category      @relation(fields: [categoryID], references: [id], onDelete: Cascade)
   image       String        @db.VarChar(255)
   CartProduct CartProduct[]
-  rating      Int           @default(2) @db.SmallInt
+  rating      Float         @default(2.0)
 
   @@map("product")
 }
@@ -49,6 +49,8 @@ model User {
   isActive Boolean @default(false)
   role     Role    @default(USER)
   cart     Cart?
+  city     String  @db.VarChar(50)
+  phone    String  @db.VarChar(10)
 
   @@map("user")
 }

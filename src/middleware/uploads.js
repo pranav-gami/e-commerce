@@ -4,7 +4,15 @@ import path from "path";
 //STORAGE OBJECT
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/assets/media/products");
+    let folder = "";
+    if (req.originalUrl.includes("/user")) {
+      folder = "users";
+    } else if (req.originalUrl.includes("/products")) {
+      folder = "products";
+    } else if (req.originalUrl.includes("/category")) {
+      folder = "categories";
+    }
+    cb(null, `public/assets/media/${folder}`);
   },
   filename: function (req, file, cb) {
     const uniqueName = `${Date.now()}-${file.originalname}`;

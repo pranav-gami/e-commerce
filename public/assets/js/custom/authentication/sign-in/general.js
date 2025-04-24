@@ -1,25 +1,27 @@
 "use strict";
-var KTSigninGeneral = (function () {
-  var e, t, i;
+
+var KTSigninUser = (function () {
+  var form, submitButton, validator;
+
   return {
     init: function () {
-      e = document.querySelector("#kt_sign_in_form");
-      t = document.querySelector("#kt_sign_in_submit");
+      form = document.querySelector("#kt_sign_in_form");
+      submitButton = document.querySelector("#kt_sign_in_submit");
 
-      i = FormValidation.formValidation(e, {
+      validator = FormValidation.formValidation(form, {
         fields: {
           email: {
             validators: {
               regexp: {
                 regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Please enter a valid email-address",
+                message: "Please enter a valid email address",
               },
               notEmpty: { message: "Email address is required" },
             },
           },
           password: {
             validators: {
-              notEmpty: { message: "The password is required" },
+              notEmpty: { message: "Password is required" },
             },
           },
         },
@@ -33,11 +35,20 @@ var KTSigninGeneral = (function () {
         },
       });
 
-      const errorMessage = document.body.dataset.errorMessage;
+      let errorMessage = document.body.dataset.errorMessage;
+      let err;
       console.log(errorMessage);
+      if (errorMessage == "only_user") {
+        err = "Only User can access this Pages!!";
+      } else if (errorMessage == "only_admin") {
+        err = "Only Admin can access this Pages!!";
+      }
+      if (errorMessage == "login_required") {
+        err = "You must Login to access this Page!";
+      }
       if (errorMessage !== "undefined" && errorMessage.trim() !== "") {
         Swal.fire({
-          text: "You must login to visit this Page!!",
+          text: err,
           icon: "warning",
           buttonsStyling: false,
           confirmButtonText: "Ok, got it!",
@@ -45,23 +56,23 @@ var KTSigninGeneral = (function () {
         });
       }
 
-      // 🔐 Handle login button click
-      t.addEventListener("click", function (n) {
-        n.preventDefault();
-        i.validate().then(function (i) {
-          if (i === "Valid") {
-            t.setAttribute("data-kt-indicator", "on");
-            t.disabled = true;
+      submitButton.addEventListener("click", function (e) {
+        e.preventDefault();
 
-            fetch("api/auth/login", {
+        validator.validate().then(function (status) {
+          if (status === "Valid") {
+            submitButton.setAttribute("data-kt-indicator", "on");
+            submitButton.disabled = true;
+
+            const email = form.querySelector('[name="email"]').value;
+            const password = form.querySelector('[name="password"]').value;
+
+            fetch("/api/auth/user/login", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({
-                email: e.querySelector('[name="email"]').value,
-                password: e.querySelector('[name="password"]').value,
-              }),
+              body: JSON.stringify({ email, password }),
             })
               .then((res) => res.json())
               .then((data) => {
@@ -69,28 +80,19 @@ var KTSigninGeneral = (function () {
                   localStorage.setItem("token", data.token);
                   localStorage.setItem("user", JSON.stringify(data.user));
 
-                  //Call updateStatus API
-                  const userId = data.user.id;
-                  fetch(
-                    `http://localhost:3000/api/user/updateStatus/${userId}`,
-                    {
-                      method: "PUT",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${data.token}`,
-                      },
-                    }
-                  )
-                    .then((res) => res.json())
-                    .then((statusData) => {
-                      console.log("User status updated:", statusData);
-                    })
-                    .catch((err) => {
-                      console.error("Status update failed:", err);
-                    });
+                  // Update user's status
+                  fetch(`/api/user/updateStatus/${data.user.id}`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${data.token}`,
+                    },
+                  }).catch((err) =>
+                    console.error("Status update failed:", err)
+                  );
 
-                  t.removeAttribute("data-kt-indicator");
-                  t.disabled = false;
+                  submitButton.removeAttribute("data-kt-indicator");
+                  submitButton.disabled = false;
 
                   Swal.fire({
                     text: "You have successfully logged in!",
@@ -98,13 +100,10 @@ var KTSigninGeneral = (function () {
                     buttonsStyling: false,
                     confirmButtonText: "Ok, got it!",
                     customClass: { confirmButton: "btn btn-primary" },
-                  }).then(function (t) {
-                    if (t.isConfirmed) {
-                      e.querySelector('[name="email"]').value = "";
-                      e.querySelector('[name="password"]').value = "";
-                      var redirectUrl = e.getAttribute("data-kt-redirect-url");
-                      if (redirectUrl) location.href = redirectUrl;
-                      else location.href = "/admin/dashboard";
+                  }).then(function (result) {
+                    if (result.isConfirmed) {
+                      form.reset();
+                      window.location.href = "/primestore";
                     }
                   });
                 } else {
@@ -115,8 +114,8 @@ var KTSigninGeneral = (function () {
                     confirmButtonText: "Ok, got it!",
                     customClass: { confirmButton: "btn btn-primary" },
                   });
-                  t.removeAttribute("data-kt-indicator");
-                  t.disabled = false;
+                  submitButton.removeAttribute("data-kt-indicator");
+                  submitButton.disabled = false;
                 }
               })
               .catch((error) => {
@@ -128,12 +127,12 @@ var KTSigninGeneral = (function () {
                   confirmButtonText: "Ok, got it!",
                   customClass: { confirmButton: "btn btn-primary" },
                 });
-                t.removeAttribute("data-kt-indicator");
-                t.disabled = false;
+                submitButton.removeAttribute("data-kt-indicator");
+                submitButton.disabled = false;
               });
           } else {
             Swal.fire({
-              text: "Please fix the errors in the form and try again.",
+              text: "Please fill required fileds to Login",
               icon: "error",
               buttonsStyling: false,
               confirmButtonText: "Ok, got it!",
@@ -143,7 +142,7 @@ var KTSigninGeneral = (function () {
         });
       });
 
-      // 👁️ Password visibility toggle
+      // Password visibility toggle
       const passwordInput = document.querySelector('input[name="password"]');
       const toggleBtn = document.querySelector(
         '[data-kt-password-meter-control="visibility"]'
@@ -162,6 +161,7 @@ var KTSigninGeneral = (function () {
     },
   };
 })();
+
 KTUtil.onDOMContentLoaded(function () {
-  KTSigninGeneral.init();
+  KTSigninUser.init();
 });

@@ -4552,16 +4552,13 @@ var KTUserMenu = (function () {
       const nameSpan = document.querySelector(".usermenu .user-name");
       if (usernameElement) {
         nameSpan.textContent = user.username || "User";
-        //SETTING UP ROLE
-        // const roleBadge = usernameElement.querySelector(".role");
-        // if (roleBadge) roleBadge.textContent = user.role || "Member";
       }
 
       //Set Email
-      const emailElement = document.querySelector(".email");
+      const emailElement = document.querySelector(".headeremail");
       if (emailElement) {
         emailElement.textContent = user.email || "";
-        emailElement.href = `mailto:${user.email}`;
+        emailElement.href = "";
       }
 
       const roleElement = document.querySelector(".role");
@@ -4569,11 +4566,11 @@ var KTUserMenu = (function () {
         roleElement.textContent = user.role || "ADMIN";
       }
 
-      // Set avatar images
-      // const avatarImgs = document.querySelectorAll("img[src*='avatars']");
-      // avatarImgs.forEach(img => {
-      //   img.src = user.avatar || "assets/media/avatars/default.jpg";
-      // });
+      // Set Avatar Text
+      const avatar = document.querySelectorAll(".header_username-initial");
+      avatar.forEach((avt) => {
+        avt.textContent = user.username?.charAt(0).toUpperCase();
+      });
     }
   };
   // Public methods
@@ -4789,11 +4786,6 @@ var KTLogoutGeneral = (function () {
                 const userId = user.id;
                 fetch(`http://localhost:3000/api/user/updateStatus/${userId}`, {
                   method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${data.token}`,
-                  },
-                  body: JSON.stringify({ status: "offline" }),
                 })
                   .then((res) => res.json())
                   .then((statusData) => {

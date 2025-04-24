@@ -8,8 +8,12 @@ var KTProfileGeneral = (function () {
       // MANIPULATING USER DATA(PROFILE SECTION)
       if (userData) {
         const nameElement = document.querySelector(".formname");
+        const avatar = document.querySelectorAll(".username-initial");
         if (nameElement) {
           nameElement.textContent = userData.username || "Max Smith";
+          avatar.forEach((avt) => {
+            avt.textContent = userData.username?.charAt(0).toUpperCase();
+          });
         }
 
         const emailEle = document.querySelector(".formemail");
@@ -26,7 +30,7 @@ var KTProfileGeneral = (function () {
 
         const addressElement = document.querySelector(".formaddress");
         if (addressElement) {
-          addressElement.textContent = userData.address || "Ahemdabad,Gujrat";
+          addressElement.textContent = userData.city || "Ahemdabad,Gujrat";
         }
 
         // FORM SECTION DATA MANIPULATE
@@ -42,7 +46,7 @@ var KTProfileGeneral = (function () {
 
         const contactPhoneElement = document.querySelector(".contact");
         if (contactPhoneElement) {
-          contactPhoneElement.textContent = userData.phone || "+91 9876543210";
+          contactPhoneElement.textContent = userData.phone || "";
         }
 
         const emailElement = document.querySelector(".emailId");

@@ -12,7 +12,7 @@ export const addProduct = async (req, res) => {
         price: parseFloat(price),
         description,
         categoryID: parseInt(categoryID),
-        rating: parseInt(rating),
+        rating: parseFloat(rating),
         image,
       },
     });
@@ -77,7 +77,7 @@ export const updateProduct = async (req, res) => {
         description,
         categoryID: parseInt(categoryID),
         image,
-        rating: parseInt(rating),
+        rating: parseFloat(rating),
       },
     });
     res.status(200).json({ success: true, data: product });

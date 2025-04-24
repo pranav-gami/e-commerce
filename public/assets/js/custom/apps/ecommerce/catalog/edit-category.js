@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       nameInput.value = originalCategory.categoryName || "";
 
       // Preview image
-      const imgUrl = `/assets/media/products/${originalCategory.image}`;
+      const imgUrl = `/assets/media/categories/${originalCategory.image}`;
       imageWrapper.style.backgroundImage = `url('${imgUrl}')`;
     } catch (err) {
       console.error(err);
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       formData.append("image", imageFile);
     } else {
       try {
-        const imageUrl = `/assets/media/products/${originalCategory.image}`;
+        const imageUrl = `/assets/media/categories/${originalCategory.image}`;
         const imageRes = await fetch(imageUrl);
         const blob = await imageRes.blob();
         const file = new File([blob], originalCategory.image, {

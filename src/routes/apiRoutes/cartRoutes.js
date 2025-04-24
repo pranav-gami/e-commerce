@@ -18,7 +18,7 @@ const router = Router();
 router.post(
   "/addCart",
   verifyToken,
-  authorizeRole("USER"),
+  // authorizeRole("USER"),
   validateCartCredentials,
   addCart
 );
@@ -26,7 +26,7 @@ router.get("/getAllCarts", verifyToken, getAllCart);
 router.get(
   "/getCartByUserid/:id",
   verifyToken,
-  authorizeRole("ADMIN"),
+  // authorizeRole("ADMIN"),
   validateParamsID,
   getCartByUserId
 );
@@ -40,7 +40,7 @@ router.put(
 router.delete(
   "/deleteCart/:id",
   verifyToken,
-  authorizeRole("USER"),
+  // authorizeRole("USER"),
   validateParamsID,
   deleteCartbyCartId
 );

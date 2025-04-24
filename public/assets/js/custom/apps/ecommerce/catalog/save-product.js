@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       categorySelect.innerHTML = `<option></option>`;
       categories.forEach((category) => {
         const option = document.createElement("option");
-        option.value = category.id; // ID will be sent to backend
+        option.value = category.id;
         option.textContent = category.categoryName;
         categorySelect.appendChild(option);
       });
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.warn("No categories found.");
     }
 
-    // ✅ Form Submission Handler
+    //Form Submission Handler
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
 
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         .querySelector('input[name="product_description"]')
         .value.trim();
       const price = form.querySelector('input[name="price"]').value.trim();
-      const ratings = form.querySelector('input[name="ratings"]').value.trim();
+      const ratings = form.querySelector('input[name="ratings"]').value;
       const categoryID = categorySelect.value;
 
       // Validate fields

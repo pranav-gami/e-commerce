@@ -16,8 +16,7 @@ const KTUserViewDetails = (function () {
     document.querySelector(".isAcitve").textContent = data.isActive
       ? "YES"
       : "NO";
-    document.querySelector(".address").textContent =
-      "C-707, PNTC Building\nAhmedabad";
+    document.querySelector(".address").textContent = data.city;
 
     document.querySelectorAll(".email").forEach((el) => {
       el.textContent = data.email;
@@ -30,6 +29,8 @@ const KTUserViewDetails = (function () {
     document.querySelectorAll(".isAcitve").forEach((el) => {
       el.textContent = data.isActive ? "YES" : "NO";
     });
+
+    document.querySelector(".phone").textContent = data.phone;
   };
 
   // Fetch and load user details from API

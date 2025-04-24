@@ -46,6 +46,11 @@ const userSchema = Joi.object({
         "Password should contains 8-12 characters having atleast one uppercase, lowercase, digit & special character(@,$,*)",
     }),
   role: Joi.string().valid("ADMIN", "USER").default("USER"),
+  city: Joi.string(),
+  phone: Joi.string()
+    .length(10)
+    .pattern(/^[0-9]+$/)
+    .required(),
 });
 
 export const validateUserData = (req, res, next) => {
@@ -64,7 +69,7 @@ const productSchema = Joi.object({
   price: Joi.number().positive().required(),
   description: Joi.string().required(),
   categoryID: Joi.number().integer().positive().required(),
-  rating: Joi.number().integer().min(1).max(5).required(),
+  rating: Joi.number().min(1).max(5).required(),
 });
 
 export const validatepProductData = (req, res, next) => {
@@ -79,7 +84,7 @@ export const validatepProductData = (req, res, next) => {
     price: parseFloat(price),
     description,
     categoryID: parseInt(categoryID),
-    rating: parseInt(rating),
+    rating: parseFloat(rating),
   });
   if (error) {
     return res
@@ -128,7 +133,7 @@ export const validateCartCredentials = (req, res, next) => {
 
 //VALIDATION FOR CART-PRODUCTS SCHEMA
 const cartProductSchema = Joi.object({
-  cartId: Joi.number().integer(),
+  userId: Joi.number().integer(),
   productId: Joi.number().integer(),
   quantity: Joi.number().integer().min(1),
 });
@@ -189,7 +194,7 @@ const updateOrderSchema = Joi.object({
 });
 
 export const validateUpdateCredentials = (req, res, next) => {
-  const { error } = orderSchema.validate(req.body);
+  const { error } = updateOrderSchema.validate(req.body);
   if (error) {
     return res
       .status(400)

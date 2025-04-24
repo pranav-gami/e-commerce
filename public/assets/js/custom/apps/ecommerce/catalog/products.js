@@ -5,22 +5,58 @@ var KTAppEcommerceProducts = (function () {
   let dataTable;
   let allProducts = [];
 
+  // GENERATE RATINGS STARS
   function generateRatingStars(rating) {
     let starsHTML = "";
-    for (let i = 0; i < 5; i++) {
+
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.2;
+    const totalStars = 5;
+
+    const starSVG = (fillColor) => `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="${fillColor}" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.1359 4.48359C11.5216 3.82132 12.4784 3.82132 12.8641 4.48359L15.011 8.16962C15.1523 8.41222 15.3891 8.58425 15.6635 8.64367L19.8326 9.54646C20.5816 9.70867 20.8773 10.6186 20.3666 11.1901L17.5244 14.371C17.3374 14.5803 17.2469 14.8587 17.2752 15.138L17.7049 19.382C17.7821 20.1445 17.0081 20.7069 16.3067 20.3978L12.4032 18.6777C12.1463 18.5645 11.8537 18.5645 11.5968 18.6777L7.69326 20.3978C6.99192 20.7069 6.21789 20.1445 6.2951 19.382L6.7248 15.138C6.75308 14.8587 6.66264 14.5803 6.47558 14.371L3.63339 11.1901C3.12273 10.6186 3.41838 9.70867 4.16744 9.54646L8.3365 8.64367C8.61089 8.58425 8.84767 8.41222 8.98897 8.16962L11.1359 4.48359Z"/>
+      </svg>
+    `;
+
+    // Full Stars
+    for (let i = 0; i < fullStars; i++) {
       starsHTML += `
-        <div class="rating-label ${i < rating ? "checked" : ""}">
-          <span class="svg-icon svg-icon-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M11.1359 4.48359C11.5216 3.82132 12.4784 3.82132 12.8641 4.48359L15.011 8.16962C15.1523 8.41222 15.3891 8.58425 15.6635 8.64367L19.8326 9.54646C20.5816 9.70867 20.8773 10.6186 20.3666 11.1901L17.5244 14.371C17.3374 14.5803 17.2469 14.8587 17.2752 15.138L17.7049 19.382C17.7821 20.1445 17.0081 20.7069 16.3067 20.3978L12.4032 18.6777C12.1463 18.5645 11.8537 18.5645 11.5968 18.6777L7.69326 20.3978C6.99192 20.7069 6.21789 20.1445 6.2951 19.382L6.7248 15.138C6.75308 14.8587 6.66264 14.5803 6.47558 14.371L3.63339 11.1901C3.12273 10.6186 3.41838 9.70867 4.16744 9.54646L8.3365 8.64367C8.61089 8.58425 8.84767 8.41222 8.98897 8.16962L11.1359 4.48359Z" fill="currentColor" />
-            </svg>
+        <div class="rating-label checked">
+          <span class="svg-icon svg-icon-2 text-warning">
+            ${starSVG("currentColor")}
           </span>
         </div>`;
     }
+
+    // Half Star (visually aligned)
+    if (hasHalfStar) {
+      starsHTML += `
+        <div class="rating-label checked half" style="position: relative; width: 24px; height: 24px">
+          <span class="svg-icon svg-icon-2 text-muted" style="position: absolute; top: 15%; left: 0;">
+            ${starSVG("#ccc")}
+          </span>
+          <span class="svg-icon svg-icon-2 text-warning" style="position: absolute; top: 15%; left: 0; clip-path: inset(0 50% 0 0);">
+            ${starSVG("currentColor")}
+          </span>
+        </div>`;
+    }
+
+    // Empty Stars
+    const remainingStars = totalStars - fullStars - (hasHalfStar ? 1 : 0);
+    for (let i = 0; i < remainingStars; i++) {
+      starsHTML += `
+        <div class="rating-label">
+          <span class="svg-icon svg-icon-2 text-muted">
+            ${starSVG("#ccc")}
+          </span>
+        </div>`;
+    }
+
     return starsHTML;
   }
 
+  // RENDER PRODUCTS
   const renderProductRow = (product) => {
     return `
       <tr>
@@ -43,7 +79,7 @@ var KTAppEcommerceProducts = (function () {
             <div class="ms-5">
               <a href="admin/editproduct/${
                 product.id
-              }" class="text-gray-800 text-hover-primary fs-5 fw-bold"
+              }" class="text-gray-800 text-hover-primary fs-5 fw-bold text-truncate d-inline-block"  style="max-width:150px"
                  data-kt-ecommerce-product-filter="product_name">${
                    product.title
                  }</a>
@@ -51,7 +87,9 @@ var KTAppEcommerceProducts = (function () {
           </div>
         </td>
         <td class="text-end pe-0">
-          <span class="fw-bold ms-3">${product.description}</span>
+          <span class="fw-bold ms-3 text-truncate d-inline-block" style="max-width:180px">${
+            product.description
+          }</span>
         </td>
         <td class="text-end pe-0">${product.price}₹</td>
         <td class="text-end pe-0 ms-5" data-order=${product.rating}>
@@ -93,6 +131,7 @@ var KTAppEcommerceProducts = (function () {
       </tr>`;
   };
 
+  // DELETE EVENT
   const handleDeleteRows = () => {
     tableElement
       .querySelectorAll('[data-kt-ecommerce-product-filter="delete_row"]')
@@ -194,7 +233,7 @@ var KTAppEcommerceProducts = (function () {
     );
     if (searchInput) {
       searchInput.addEventListener("keyup", function (event) {
-        dataTable.search(event.target.value).draw();
+        dataTable.column(1).search(event.target.value).draw();
       });
     }
 

@@ -1,0 +1,74 @@
+<div class="product__container getId" id="product_box" data-user-id=<%=userId %>>
+    <!-- Cart Details -->
+    <div class="container">
+        <div class="product__box">
+            <div class="product__main">
+                <h2 class="feature__title">Cart Products</h2>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="custom__table-header">
+                            <tr>
+                                <th class="text-start" style="width: 15%; padding-left: 30px;"></th>
+                                <th class="text-start" style="width: 25%;">Product Name</th>
+                                <th class="text-center" style="width: 15%;">Price</th>
+                                <th class="text-center" style="width: 15%;">Quantity</th>
+                                <th class="text-center" style="width: 15%;">Subtotal</th>
+                                <th class="text-center" style="width: 15%;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-body">
+                            <!-- Demo -->
+                            <!-- <tr>
+                                <td class="text-start" style="padding-left: 30px;">
+                                    <img src="/assets/media/products/TommyTshirt.jpeg" width="70"
+                                        style="border-radius: 5px;" alt="Product" />
+                                </td>
+                                <td class="text-start"></td>
+                                <td class="text-center">$23.00</td>
+                                <td class="text-center">
+                                    <div class="input-group quantity-group" style="max-width: 130px; margin: auto;">
+                                        <button class="btn btn-outline-secondary btn-sm decrease">−</button>
+                                        <input type="text" class="form-control text-center quantity-input"
+                                            placeholder="1" readonly />
+                                        <button class="btn btn-outline-secondary btn-sm increase">+</button>
+                                    </div>
+                                </td>
+                                <td class="text-center item-subtotal">$00.00</td>
+                                <td class="text-center">
+                                    <button class="remove-btn">Remove</button>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-footer mt-3">
+                    <div class="cart-summary text-end">
+                        <p class="cart-total">Grand Total: <span id="total">₹00.00</span></p>
+                        <button class="checkout__btn">CHECKOUT</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Trending Items -->
+    <div class="product__container" id="product_box">
+        <div class="container">
+            <div class="product__box">
+                <div class="product__main">
+                    <h2 class="feature__title">Top Rated & Trending</h2>
+                    <div class="header__main-input" style="margin-bottom: 10px;">
+                        <input type="text" class="header__search-field product_search-field"
+                            placeholder="Search for Products..." />
+                        <button class="header__search-btn">
+                            <ion-icon name="search-outline"></ion-icon>
+                        </button>
+                    </div>
+                    <div class="product__menu">
+                        <!-- RENDER PROODUCTS HERE.. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

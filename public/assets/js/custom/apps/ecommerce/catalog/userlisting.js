@@ -159,6 +159,15 @@ var KTAppUserList = (function () {
     });
   };
 
+  const searchInput = document.querySelector(
+    '[data-kt-ecommerce-user-filter="search"]'
+  );
+  if (searchInput) {
+    searchInput.addEventListener("keyup", (e) => {
+      dataTable.column(1).search(e.target.value).draw();
+    });
+  }
+
   return {
     init: function () {
       tableElement = document.querySelector("#kt_table_users");

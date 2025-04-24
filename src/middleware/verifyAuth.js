@@ -1,9 +1,8 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  const authHeaderToken = req.headers.authorization?.split(" ")[1];
   const cookieToken = req.cookies?.token;
-  const token = authHeaderToken || cookieToken;
+  const token = cookieToken;
   if (!token) {
     return res.redirect("/admin/login?error=login_required");
   }

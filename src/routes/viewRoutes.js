@@ -4,40 +4,46 @@ import { authorizeRole } from "../middleware/authoriseRole.js";
 
 const router = Router();
 
-// ROUTES FOR DIFFRENT PAGES
+// ROUTES FOR DIFFRENT PAGES OF ADMIN
 router.get("/admin/login", (req, res) => {
   const errorType = req.query.error;
   let errorMessage = "";
 
   if (errorType === "login_required") {
-    errorMessage = "You must be logged in to access that page.";
-  } else if (errorType === "") {
-    errorMessage = "Your session has expired. Please log in again.";
+    errorMessage = "login_required";
+  } else if (errorType === "only_admin") {
+    errorMessage = "only_admin";
+  }
+  if (errorType === "only_user") {
+    errorMessage = "only_user";
   }
   res.render("pages/signIn", { layout: false, errorMessage });
 });
 
+// SIGNUP PAGE ROUTE
 router.get("/signup", (req, res) => {
   res.render("pages/signUp", { layout: false });
 });
 
-router.get("/admin/dashboard", verifyToken, (req, res) => {
-  res.render("index", {
-    styles: `<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-            <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
-    scripts: `
+router.get(
+  "/admin/dashboard",
+  verifyToken,
+  authorizeRole("ADMIN"),
+  (req, res) => {
+    res.render("index", {
+      styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
+      scripts: `
         <script src="assets/js/widgets.bundle.js"></script>
 		    <script src="assets/js/custom/widgets.js"></script>
-    `,
-    vendor: `
-        <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
-		    <script src="assets/plugins/custom/vis-timeline/vis-timeline.bundle.js"></script>
-    `,
-  });
-});
+`,
+      vendor: `
+        <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>`,
+    });
+  }
+);
 
 router.get("/admin/users", verifyToken, authorizeRole("ADMIN"), (req, res) => {
-  res.render("pages/userListing", {
+  res.render("pages/admin/userListing", {
     styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
     scripts: `
         <script src="assets/js/custom/apps/ecommerce/catalog/userlisting.js"></script>
@@ -56,7 +62,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/userView", {
+    res.render("pages/admin/userView", {
       userId: req.params.id,
       styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
       scripts: `
@@ -77,7 +83,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/products", {
+    res.render("pages/admin/products", {
       styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
       scripts: `
         <script src="assets/js/custom/apps/ecommerce/catalog/products.js"></script>
@@ -97,7 +103,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/categories", {
+    res.render("pages/admin/categories", {
       styles: `<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
       scripts: `
 		<script src="assets/js/custom/apps/ecommerce/catalog/categories.js"></script>
@@ -111,7 +117,7 @@ router.get(
 );
 
 router.get("/admin/profile", verifyToken, (req, res) => {
-  res.render("pages/profile", {
+  res.render("pages/admin/profile", {
     styles: `
 	    <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
     scripts: `
@@ -126,7 +132,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/addProduct", {
+    res.render("pages/admin/addProduct", {
       styles: `
 	    <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
       scripts: `
@@ -142,7 +148,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/addCategory", {
+    res.render("pages/admin/addCategory", {
       styles: `
 	    <link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
       scripts: `
@@ -159,7 +165,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/editProduct", {
+    res.render("pages/admin/editProduct", {
       productId: req.params.id,
       styles: `
 	    <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
@@ -177,7 +183,7 @@ router.get(
   verifyToken,
   authorizeRole("ADMIN"),
   (req, res) => {
-    res.render("pages/editCategory", {
+    res.render("pages/admin/editCategory", {
       categoryId: req.params.id,
       styles: `
 	    <link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />`,
@@ -190,4 +196,44 @@ router.get(
   }
 );
 
+//ROUTES FOR USER
+
+//USER LOGIN PAGE ROUTE
+router.get("/user/login", (req, res) => {
+  const errorType = req.query.error;
+  let errorMessage = "";
+
+  if (errorType === "login_required") {
+    errorMessage = "Login Required!!";
+  } else if (errorType === "only_admin") {
+    errorMessage = "only_admin";
+  }
+  if (errorType === "only_user") {
+    errorMessage = "only_user";
+  }
+  res.render("pages/signInUser", { layout: false, errorMessage });
+});
+
+// MAIN PAGE
+router.get("/primestore", verifyToken, authorizeRole("USER"), (req, res) => {
+  res.render("pages/users/ecommerce", {
+    layout: "layouts/userLayout",
+    scripts: `
+    <script src="/assets/js/custom/apps/ecommerce/customers/userHome.js" defer></script>`,
+  });
+});
+
+router.get(
+  "/primestore/cart/:id",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/userCart", {
+      userId: req.params.id,
+      layout: "layouts/userLayout",
+      scripts: `
+      <script src="/assets/js/custom/apps/ecommerce/customers/userCart.js" defer></script>`,
+    });
+  }
+);
 export default router;

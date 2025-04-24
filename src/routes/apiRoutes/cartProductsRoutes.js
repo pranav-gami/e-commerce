@@ -20,7 +20,6 @@ const cartProductRouter = Router();
 cartProductRouter.post(
   "/addProduct",
   verifyToken,
-  authorizeRole("USER"),
   validateCartProductData,
   addProductToCart
 );
@@ -40,14 +39,14 @@ cartProductRouter.put(
   "/updateCartProduct/:id",
   verifyToken,
   validateParamsID,
-  authorizeRole("USER"),
+  // authorizeRole("USER"),
   validateCartProductUpdates,
   updateCartProductDetails
 );
 cartProductRouter.delete(
   "/deleteCartProduct/:id",
   verifyToken,
-  authorizeRole("USER"),
+  // authorizeRole("USER"),
   validateParamsID,
   deleteCartItems
 );
