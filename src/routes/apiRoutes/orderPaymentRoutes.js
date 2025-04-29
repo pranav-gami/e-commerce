@@ -9,7 +9,7 @@ import {
   showAllOrders,
   showOrdersByUserId,
   updateOrderStatus,
-} from "../../controller/order&PaymentController.js";
+} from "../../controller/orderPaymentController.js";
 import { verifyToken } from "../../middleware/verifyAuth.js";
 import { authorizeRole } from "../../middleware/authoriseRole.js";
 

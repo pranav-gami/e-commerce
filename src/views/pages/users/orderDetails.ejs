@@ -1,0 +1,33 @@
+<!-- CODE FOR ORDER ITEMS  IN SECTION OF CHECKOUT DIV -->
+
+<div class="ordered-item-box">
+    <img src="product-image.jpg" alt="Product Image" class="product-thumb" />
+    <span class="delivery-text">
+        Estimated delivery by <strong>27 Apr 2025</strong>
+    </span>
+</div>
+
+.ordered-item-box {
+display: flex;
+align-items: center;
+gap: 15px;
+padding: 15px 0;
+border-bottom: 1px dashed #ddd;
+}
+
+.product-thumb {
+width: 50px;
+height: 50px;
+object-fit: cover;
+border-radius: 5px;
+}
+
+.delivery-text {
+font-size: 14px;
+color: #333;
+}
+
+.delivery-text strong {
+font-weight: bold;
+color: #2d2d2d;
+}

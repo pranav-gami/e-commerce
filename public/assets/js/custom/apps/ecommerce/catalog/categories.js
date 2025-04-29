@@ -35,15 +35,9 @@ var KTAppEcommerceCategories = (function () {
 
       if (confirm.isConfirmed) {
         try {
-          const token = localStorage.getItem("token");
           const response = await fetch(
             `api/category/deleteCategory/${categoryId}`,
-            {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
+            { method: "DELETE" }
           );
 
           const result = await response.json();
@@ -96,7 +90,7 @@ var KTAppEcommerceCategories = (function () {
     }
   };
 
-  // ✅ Load categories
+  // Load categories
   const loadCategories = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -151,6 +145,9 @@ var KTAppEcommerceCategories = (function () {
             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                  data-kt-menu="true">
               <div class="menu-item px-3">
+                <a href="" class="menu-link px-3 add-subcategory-btn" data-categoryid="${category.id}">Subcategories</a>
+              </div>
+              <div class="menu-item px-3">
                 <a href="/admin/editcategory/${category.id}" class="menu-link px-3 edit-category-btn" data-categoryid="${category.id}">Edit</a>
               </div>
               <div class="menu-item px-3">
@@ -167,6 +164,225 @@ var KTAppEcommerceCategories = (function () {
     } catch (error) {
       console.error("Error loading categories:", error);
     }
+  };
+
+  // SUBCATEGORY MANAGEMENTS
+  const subcategoryHandlers = async () => {
+    let currentCategoryId = null;
+    let subcategories = [];
+    const modal = new bootstrap.Modal(
+      document.getElementById("manageSubcategoriesModal")
+    );
+    const subcategoryTableBody = document.getElementById(
+      "subcategoryTableBody"
+    );
+    const addBtn = document.getElementById("addSubcategoryForm");
+    const newSubNameInput = document.getElementById("newSubName");
+
+    // Event Delegation: Handle click on all future subcategory buttons
+    document.body.addEventListener("click", async (e) => {
+      const btn = e.target.closest(".add-subcategory-btn");
+      if (!btn) return;
+      e.preventDefault();
+      currentCategoryId = btn.getAttribute("data-categoryid");
+      await loadSubcategories(currentCategoryId);
+      modal.show();
+    });
+
+    // Load subcategories from API
+    async function loadSubcategories(categoryId) {
+      try {
+        const res = await fetch(
+          `/api/subcategory/getSubcategories/${categoryId}`
+        );
+        const data = await res.json();
+        subcategories = data.data || [];
+        renderSubcategories();
+      } catch (err) {
+        console.error("Error loading subcategories", err);
+        Swal.fire("Error", err.message || "Failed to get subcategory", "error");
+      }
+    }
+
+    // Render subcategories of that Category
+    function renderSubcategories() {
+      subcategoryTableBody.innerHTML = "";
+
+      if (subcategories.length === 0) {
+        subcategoryTableBody.innerHTML = `<tr><td colspan="3" class="text-center">No subcategories found.</td></tr>`;
+        return;
+      }
+
+      subcategories.forEach((sub, index) => {
+        const row = document.createElement("tr");
+        row.classList.add("align-middle;");
+        row.innerHTML = `
+          <td class="align-middle text-center" style="width: 50px;">${
+            index + 1
+          }</td>
+          <td class="align-middle" style="min-width: 300px;">
+            <input type="text" class="form-control form-control-sm" value="${
+              sub.name
+            }" data-id="${sub.id}" />
+          </td>
+          <td class="align-middle text-center" style="width: 160px;">
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-primary btn-sm me-1 update-subcategory-btn" data-id="${
+                sub.id
+              }">Edit</button>
+              <button class="btn btn-danger btn-sm delete-subcategory-btn" data-id="${
+                sub.id
+              }">Delete</button>
+            </div>
+          </td>
+        `;
+        subcategoryTableBody.appendChild(row);
+      });
+    }
+
+    // Add new  Subcategory Handler
+    addBtn.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = newSubNameInput.value.trim();
+      try {
+        const res = await fetch("/api/subcategory/addsubcategory", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, categoryId: currentCategoryId }),
+        });
+        const result = await res.json();
+        if (result.success) {
+          subcategories.push(result.data);
+          newSubNameInput.value = "";
+          Swal.fire({
+            text: `Subcategory ${name} successfully added!!`,
+            icon: "success",
+            buttonsStyling: false,
+            confirmButtonText: "Ok, got it!",
+            customClass: { confirmButton: "btn fw-bold btn-primary" },
+          });
+          renderSubcategories();
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (err) {
+        Swal.fire("Error", err.message, "error");
+      }
+    });
+
+    //Edit & Delete Handler for Subcategories
+    subcategoryTableBody.addEventListener("click", async (e) => {
+      const editBtn = e.target.closest(".update-subcategory-btn");
+      const deleteBtn = e.target.closest(".delete-subcategory-btn");
+      if (editBtn) {
+        const id = editBtn.getAttribute("data-id");
+        const input = subcategoryTableBody.querySelector(
+          `input[data-id="${id}"]`
+        );
+        const newName = input.value.trim();
+        try {
+          const exists = subcategories.find((sub) => sub.name == newName);
+          if (exists) {
+            Swal.fire({
+              text: `Subcategory ${newName} is already Exists!`,
+              icon: "info",
+              buttonsStyling: false,
+              confirmButtonText: "Ok,got it!",
+              customClass: {
+                confirmButton: "btn fw-bold btn-primary",
+              },
+            });
+          } else {
+            const res = await fetch(
+              `/api/subcategory/updateSubcategory/${id}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  name: newName,
+                  categoryId: currentCategoryId,
+                }),
+              }
+            );
+            const result = await res.json();
+            if (!result.success) {
+              throw new Error(result.message);
+            } else {
+              subcategories = subcategories.filter(
+                (s) => s.id !== parseInt(id)
+              );
+              subcategories.push(result.data);
+              renderSubcategories();
+              Swal.fire({
+                text: `Updated successfully added!!`,
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: { confirmButton: "btn fw-bold btn-primary" },
+              });
+            }
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", err.message, "error");
+        }
+      }
+
+      if (deleteBtn) {
+        const id = deleteBtn.getAttribute("data-id");
+        const confirm = await Swal.fire({
+          text: `Are you sure you want to delete?`,
+          icon: "warning",
+          showCancelButton: true,
+          buttonsStyling: false,
+          confirmButtonText: "Yes, delete!",
+          cancelButtonText: "No, cancel",
+          customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary",
+          },
+        });
+        if (confirm.isConfirmed) {
+          try {
+            const res = await fetch(`/api/subcategory/deleteSubategory/${id}`, {
+              method: "DELETE",
+            });
+            const result = await res.json();
+            if (result.success) {
+              subcategories = subcategories.filter(
+                (s) => s.id !== parseInt(id)
+              );
+              renderSubcategories();
+              Swal.fire({
+                text: `Deleted Successfully!`,
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: { confirmButton: "btn fw-bold btn-primary" },
+              });
+            } else {
+              Swal.fire("Error", "Failed to delete Subcategory!", "error");
+            }
+          } catch (err) {
+            Swal.fire(
+              "Error",
+              err.message || "Failed to delete Subcategory",
+              "error"
+            );
+          }
+        } else {
+          Swal.fire({
+            text: `Not deleted!`,
+            icon: "info",
+            buttonsStyling: false,
+            confirmButtonText: "Ok,got it!",
+            customClass: {
+              confirmButton: "btn fw-bold btn-primary",
+            },
+          });
+        }
+      }
+    });
   };
 
   return {
@@ -188,7 +404,7 @@ var KTAppEcommerceCategories = (function () {
         ],
       });
 
-      // 🔁 Reinitialize menus on page change (fix for issue)
+      // Reinitialize menus on page change (fix for issue)
       $(tableElement).on("draw.dt", function () {
         setTimeout(() => {
           KTMenu.init();
@@ -208,6 +424,7 @@ var KTAppEcommerceCategories = (function () {
 
       handleDeleteRows();
       loadCategories();
+      subcategoryHandlers();
     },
   };
 })();

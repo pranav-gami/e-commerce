@@ -1,36 +1,31 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const form = document.querySelector("form");
-  const categorySelect = document.getElementById("categorySelect");
+  const subcategorySelect = document.getElementById("subcategorySelect");
   const imageInput = document.querySelector("#imageUpload");
   const imageWrapper = document.querySelector("#imageWrapper");
-  const token = localStorage.getItem("token");
 
   try {
-    const res = await fetch("/api/category/getAllCategories", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const res = await fetch("/api/subcategory/getAllSubcategories");
     const data = await res.json();
-    const categories = data.data;
+    const subcategories = data.data;
 
-    if (data.success && Array.isArray(categories)) {
-      categorySelect.innerHTML = `<option></option>`;
-      categories.forEach((category) => {
+    if (data.success && Array.isArray(subcategories)) {
+      subcategorySelect.innerHTML = `<option></option>`;
+      subcategories.forEach((sub) => {
         const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.categoryName;
-        categorySelect.appendChild(option);
+        option.value = sub.id;
+        option.textContent = sub.name;
+        option.setAttribute("data-category-id", sub.categoryId);
+        subcategorySelect.appendChild(option);
       });
 
-      if ($(categorySelect).data("select2")) {
-        $(categorySelect).select2("destroy").select2();
+      if ($(subcategorySelect).data("select2")) {
+        $(subcategorySelect).select2("destroy").select2();
       } else {
-        $(categorySelect).select2();
+        $(subcategorySelect).select2();
       }
     } else {
-      console.warn("No categories found.");
+      console.warn("No Subcategories found.");
     }
 
     //Form Submission Handler
@@ -45,15 +40,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         .value.trim();
       const price = form.querySelector('input[name="price"]').value.trim();
       const ratings = form.querySelector('input[name="ratings"]').value;
-      const categoryID = categorySelect.value;
+      const subcategoryId = subcategorySelect.value;
+      const categoryID =
+        subcategorySelect.selectedOptions[0].dataset.categoryId;
 
-      // Validate fields
+      // Validate-fields
       if (
         !name ||
         !description ||
         !price ||
         !ratings ||
         !categoryID ||
+        !subcategoryId ||
         imageInput.files.length === 0
       ) {
         Swal.fire({
@@ -70,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       formData.append("price", price);
       formData.append("rating", ratings);
       formData.append("categoryID", categoryID);
+      formData.append("subcategoryId", subcategoryId);
       formData.append("image", imageInput.files[0]);
 
       try {
@@ -91,8 +90,8 @@ document.addEventListener("DOMContentLoaded", async function () {
               window.location.href = redirectUrl;
             } else {
               form.reset();
-              categorySelect.value = "";
-              $(categorySelect).val(null).trigger("change");
+              s.value = "";
+              $(subcategorySelect).val(null).trigger("change");
               imageWrapper.style.backgroundImage = "";
               imageWrapper.classList.add("image-input-empty");
             }

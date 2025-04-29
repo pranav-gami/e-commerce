@@ -70,6 +70,7 @@ const productSchema = Joi.object({
   description: Joi.string().required(),
   categoryID: Joi.number().integer().positive().required(),
   rating: Joi.number().min(1).max(5).required(),
+  subcategoryId: Joi.number().integer().positive().required(),
 });
 
 export const validatepProductData = (req, res, next) => {
@@ -78,13 +79,15 @@ export const validatepProductData = (req, res, next) => {
       .status(400)
       .json({ success: false, message: "Image is required." });
   }
-  const { title, price, description, categoryID, rating } = req.body;
+  const { title, price, description, categoryID, rating, subcategoryId } =
+    req.body;
   const { error } = productSchema.validate({
     title,
     price: parseFloat(price),
     description,
     categoryID: parseInt(categoryID),
     rating: parseFloat(rating),
+    subcategoryId: parseInt(subcategoryId),
   });
   if (error) {
     return res
@@ -107,6 +110,26 @@ export const validateCategoryData = (req, res, next) => {
   }
   const { categoryName } = req.body;
   const { error } = categorySchema.validate({ categoryName });
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: error.details[0].message });
+  }
+  next();
+};
+
+//VALIDATION FOR CATEGORY SCHEMA
+const subcategorySchema = Joi.object({
+  name: Joi.string(),
+  categoryId: Joi.number().positive().required(),
+});
+
+export const validateSubcategoryData = (req, res, next) => {
+  const { name, categoryId } = req.body;
+  const { error } = subcategorySchema.validate({
+    name,
+    categoryId: parseInt(categoryId),
+  });
   if (error) {
     return res
       .status(400)

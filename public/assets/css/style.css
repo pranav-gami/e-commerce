@@ -93,6 +93,71 @@ button {
     background: white;
 }
 
+/* CUSTOM SWEET-ALERT */
+
+.swal2-popup-custom {
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.swal2-popup {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    border-radius: 0.65rem;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    max-width: 32rem;
+}
+
+.swal2-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #181c32;
+    margin-bottom: 1rem;
+}
+
+.swal2-html-container {
+    font-size: 1.075rem;
+    color: #5e6278;
+    margin-bottom: 1.5rem;
+}
+
+.swal2-icon {
+    margin-bottom: 1rem;
+}
+
+.swal2-actions {
+    gap: 0.75rem;
+}
+
+.swal2-confirm {
+    background-color: #f1416c;
+    color: #fff;
+    border-radius: 0.475rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 1rem;
+    border: none;
+}
+
+.swal2-confirm:hover {
+    background-color: #d92f52;
+}
+
+.swal2-cancel {
+    background-color: #f5f8fa;
+    color: #7e8299;
+    border-radius: 0.475rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 1rem;
+    border: none;
+}
+
+.swal2-cancel:hover {
+    background-color: #e4e6ef;
+}
+
 /* OVERLAY */
 
 .overlay {
@@ -256,21 +321,20 @@ button {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    gap: 7px;
+    gap: 10px;
 }
 
 .profile__data-btns a {
-    padding: 5px 10px;
-    background-color: #ff7a8a;
-    font-size: 1rem;
+    padding: 3px 7px;
+    font-size: 1.1rem;
     color: white;
+    background-color: #ff7b9c;
     transition: all 0.3s ease;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .profile__data-btns a:hover {
-    color: #ff8f9c;
-    background-color: #454545;
+    background-color: #fd6a8f;
 }
 
 .symbol-circle {
@@ -293,14 +357,18 @@ button {
     justify-self: left;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #454545;
+    color: #6b6b6b;
+}
+
+.login_username:hover {
+    color: #303030;
 }
 
 .login_useremail {
     justify-self: left;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #454545;
+    color: #6b6b6b;
 }
 
 .header__main-btn {
@@ -318,7 +386,7 @@ button {
     position: absolute;
     top: 0;
     right: 0;
-    font-size: 12px;
+    font-size: 10px;
     height: 15px;
     width: 15px;
     color: white;
@@ -375,7 +443,16 @@ button {
     width: 100%;
 }
 
-.menubar__dropdown-categories {
+.header__menubar-item.active {
+    color: #ff8f9c;
+}
+
+.header__menubar-item.active::after {
+    border-bottom: 2px;
+}
+
+
+.header__menubar-item.active .menubar__dropdown-categories {
     position: absolute;
     top: 100%;
     background-color: white;
@@ -1213,8 +1290,36 @@ footer {
 
 /* USER CART PAGE */
 
+.cart_section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.cart__data {
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    padding: 10px 0;
+}
+
 .quantity-group {
     max-width: 100px;
+}
+
+.goto_cartBtn {
+    display: flex;
+    justify-self: center;
+    border: none;
+    background-color: rgb(131, 214, 131);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 8px 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease-in;
+    cursor: pointer;
 }
 
 .quantity-group button {
@@ -1233,7 +1338,6 @@ footer {
     padding: 10px;
     padding-right: 20px !important;
     border-top: 2px solid #ddd;
-    border-bottom: 2px solid #ddd;
 }
 
 .cart-summary p {
@@ -1241,7 +1345,9 @@ footer {
 }
 
 .cart-total {
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #454545;
 }
 
 .cartheader {
@@ -1255,7 +1361,7 @@ footer {
 }
 
 .remove-btn {
-    background-color: rgb(252, 112, 112);
+    background-color: #ff6189;
     color: white;
     font-size: 0.9rem;
     font-weight: 600;
@@ -1267,7 +1373,7 @@ footer {
 }
 
 .remove-btn:hover {
-    background-color: rgb(254, 76, 76);
+    background-color: #f22b5d;
 }
 
 .cartproduct__title,
@@ -1291,7 +1397,7 @@ table thead.custom__table-header th {
 }
 
 .checkout__btn {
-    background-image: radial-gradient(at top left, #f85a6d 0%, #ff8f9c 100%);
+    background-image: radial-gradient(at top left, #ff4f7c 0%, #fc698e 100%);
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
@@ -1306,5 +1412,222 @@ table thead.custom__table-header th {
 
 .checkout__btn:hover {
     transform: translateY(0px);
-    background-image: radial-gradient(at top left, #ff8f9c 0%, #f85a6d 100%);
+    background-image: radial-gradient(at top left, #fc698e 0%, #ff4f7c 100%);
+}
+
+/* Checkout Section */
+
+.cart-summary-container {
+    max-width: 350px;
+    border: 1px solid #eaeaea;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.summary_title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #454545 !important;
+}
+
+.donation-section {
+    margin-bottom: 20px;
+}
+
+.donation-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.donation-buttons button {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.link-text {
+    color: #ff4f7c;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.price-details h5 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+    color: #454545;
+}
+
+.discount {
+    color: green;
+}
+
+.free-text {
+    color: green;
+    font-weight: bold;
+}
+
+.free-shipping-note {
+    color: #999;
+    font-size: 12px;
+}
+
+.total-amount {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-weight: 500;
+    color: #454545;
+}
+
+.place-order-btn {
+    margin-top: 20px;
+    background-image: radial-gradient(at top left, #fe89a7 0%, #ff4f7c 100%);
+    color: white;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.place-order-btn:hover {
+    background-image: radial-gradient(at top left, #ff4f7c 0%, #fe89a7 100%);
+}
+
+/* .place-order-btn::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #ff4f7c;
+    transition: width 0.3s ease;
+    z-index: -1;
+}
+
+.place-order-btn:hover::after {
+    width: 100%;
+} */
+
+/* PRODUCT VIEW PAGE */
+
+.product__view {
+    margin-bottom: 50px !important;
+}
+
+.product-image img {
+    max-height: 500px;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: gray;
+    margin-left: 10px;
+}
+
+.discount {
+    color: red;
+    margin-left: 10px;
+}
+
+/* PRODUCT VIEW CSS */
+
+.product-img-box {
+    width: 320px;
+    height: 320px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Pink Button */
+.btn-pink {
+    background-color: #ff5c8d;
+    color: #fff;
+    border: none;
+}
+
+.btn-pink:hover {
+    background-color: #e04b7a;
+}
+
+.Indi_product-title {
+    font-size: 2rem;
+}
+
+.product-subtitle {
+    font-size: 1.2rem;
+}
+
+/*  EMPTY CART DESIGN */
+
+#empty-cart img {
+    max-width: 100px;
+    animation: float 1.5s infinite ease-in-out;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.cart-summary-container {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.emptyCart-btn {
+    font-size: 1rem;
+    margin-top: 50px;
+    color: #ff4f7c;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ff4f7c;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.emptyCart-btn:hover {
+    color: white;
+    background-color: #ff4f7c;
 }

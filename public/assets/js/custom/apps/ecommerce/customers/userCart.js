@@ -1,29 +1,21 @@
 "use strict";
+import {
+  updateCartCount,
+  fetchCartItems,
+} from "../../../utilities/cartProduct/cartUtils.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   const cartBody = document.getElementById("cart-body");
+  const cartContainer = document.querySelector(".cartContainer");
+  const emptyCart = document.getElementById("empty-cart");
   const totalElement = document.getElementById("total");
-  const userId = parseInt(document.querySelector(".getId").dataset.userId);
 
-  async function fetchCartItems() {
-    try {
-      const res = await fetch(`/api/cartProducts/getCartByUserId/${userId}`);
-      const data = await res.json();
-      if (data.success) {
-        renderCartItems(data.data);
-      } else {
-        Swal.fire("Error", "Failed to fetch cart items.", "error");
-        console.error("Failed to fetch cart items.");
-      }
-    } catch (error) {
-      Swal.fire(
-        "Error",
-        "Something went wrong while fetching cart items.",
-        "error"
-      );
-      console.error("Error fetching cart items:", error);
-    }
-  }
+  // CART SUMMARY ELEMENTS
+  const summaryTotalEle = document.querySelector(".summary_total");
+  const discountEle = document.querySelector(".summary_discount");
+  const finalTotalEle = document.querySelector(".final_total");
+
+  const userId = parseInt(document.querySelector(".getId").dataset.userId);
 
   async function updateCartQuantity(productId, quantity) {
     try {
@@ -64,6 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!data.success) {
         Swal.fire("Error", "Failed to delete product from cart.", "error");
         console.error("Failed to delete cart product");
+      } else {
+        updateCartCount();
       }
     } catch (error) {
       Swal.fire(
@@ -78,51 +72,63 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderCartItems(cartItems) {
     cartBody.innerHTML = "";
     let grandTotal = 0;
-    if (cartItems.length != 0) {
+    const discount = 100;
+    const platformFees = 20;
+
+    if (cartItems.length !== 0) {
+      cartContainer.classList.remove("d-none");
+      emptyCart.classList.add("d-none");
+
       cartItems.forEach((item, index) => {
         const subtotal = item.product.price * item.quantity;
         grandTotal += subtotal;
 
         const row = document.createElement("tr");
         row.innerHTML = `
-      <td class="text-start" style="padding-left: 30px;">
-        <img src="/assets/media/products/${
-          item.product.image
-        }" width="70" height="70" style="border-radius: 5px;" alt="Product" />
-      </td>
-      <td class="text-start"><span class="cartproduct__title text-truncate d-inline-block" style="max-width:200px">${
-        item.product.title
-      }</span></td>
-      <td class="text-center cartproduct__price"><span class="cartproduct__price">₹ ${item.product.price.toFixed(
-        2
-      )}</span></td>
-      <td class="text-center">
-        <div class="input-group quantity-group" style="max-width: 130px; margin: auto;">
-          <button class="btn btn-outline-secondary btn-sm decrease" data-index="${index}" data-productid=${
+          <td class="text-start" style="padding-left: 30px;">
+            <img src="/assets/media/products/${
+              item.product.image
+            }" width="70" height="70" style="border-radius: 5px;" alt="Product" />
+          </td>
+          <td class="text-start"><span class="cartproduct__title text-truncate d-inline-block" style="max-width:150px">${
+            item.product.title
+          }</span></td>
+          <td class="text-center cartproduct__price"><span class="cartproduct__price">₹ ${item.product.price.toFixed(
+            2
+          )}</span></td>
+          <td class="text-center">
+            <div class="input-group quantity-group" style="max-width: 130px; margin: auto;">
+              <button class="btn btn-outline-secondary btn-sm decrease" data-index="${index}" data-productid=${
           item.productId
         }>−</button>
-          <input type="text" class="form-control text-center quantity-input" value="${
-            item.quantity
-          }" readonly />
-          <button class="btn btn-outline-secondary btn-sm increase" data-index="${index}" data-productid=${
+              <input type="text" class="form-control text-center quantity-input" value="${
+                item.quantity
+              }" readonly />
+              <button class="btn btn-outline-secondary btn-sm increase" data-index="${index}" data-productid=${
           item.productId
         }>+</button>
-        </div>
-      </td>
-      <td class="text-center item-subtotal"><span class="cartproduct__subtotal">₹ ${subtotal.toFixed(
-        2
-      )}</span></td>
-      <td class="text-center">
-        <button class="remove-btn btn btn-sm btn-outline-dark" data-index="${index}">Remove</button>
-      </td>
-    `;
+            </div>
+          </td>
+          <td class="text-center item-subtotal"><span class="cartproduct__subtotal">₹ ${subtotal.toFixed(
+            2
+          )}</span></td>
+          <td class="text-center">
+            <button class="remove-btn btn btn-sm btn-outline-dark" data-index="${index}">Remove</button>
+          </td>
+        `;
         cartBody.appendChild(row);
       });
+
       totalElement.textContent = `₹ ${grandTotal.toFixed(2)}`;
+      summaryTotalEle.textContent = `₹ ${grandTotal.toFixed(2)}`;
+      discountEle.textContent = `- ₹${discount.toFixed(2)}`;
+      const finaltotal = grandTotal - discount + platformFees;
+      finalTotalEle.textContent = `₹ ${finaltotal.toFixed(2)}`;
+
       attachEventListeners(cartItems);
     } else {
-      cartBody.innerHTML =
-        "<p style='font-size:1.5rem ;display:flex; width=100%; justify-content: center;align-items:center; margin-top:20px;grid-column: span 5'>Not found!!</p>";
+      cartContainer.classList.add("d-none");
+      emptyCart.classList.remove("d-none");
     }
   }
 
@@ -163,8 +169,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  fetchCartItems();
+  fetchCartItems().then((data) => {
+    renderCartItems(data);
+  });
 
+  // --- Optional product suggestions and search section (unchanged logic) ---
   function generateRatingStars(rating) {
     let starsHTML = "";
     const fullStars = Math.floor(rating);
@@ -196,14 +205,15 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await res.json();
       allProducts = data.data;
       toprated = data.data.filter((product) => product.rating >= 4);
-      renderProducts(toprated);
+      await renderProducts(toprated);
     } catch (err) {
       Swal.fire("Error", "Failed to fetch product list.", "error");
       console.error("Failed to fetch products", err);
     }
   }
 
-  function renderProducts(products) {
+  async function renderProducts(products) {
+    const cartData = await fetchCartItems();
     if (!products.length) {
       productContainer.innerHTML =
         "<p style='font-size:1.5rem ;display:flex; width=100%; justify-content: center;align-items:center; margin-top:20px;grid-column: span 5'>Not found!!</p>";
@@ -213,16 +223,18 @@ document.addEventListener("DOMContentLoaded", function () {
       .map((product) => {
         return `
           <div class="product__item">
-            <div class="product__img-box">
-              <img class="product_img" style="border-radius:5px;" src="/assets/media/products/${
-                product.image
-              }" alt="${product.title}" width="300" />
-              ${
-                product.rating == 5
-                  ? `<p class="product_img-lable">Top Rated</p>`
-                  : ""
-              }
-            </div>
+            <a href="/primestore/product/${product.id}">
+              <div class="product__img-box">
+                <img class="product_img" style="border-radius:5px;" src="/assets/media/products/${
+                  product.image
+                }" alt="${product.title}" width="300" />
+                ${
+                  product.rating == 5
+                    ? `<p class="product_img-lable">Top Rated</p>`
+                    : ""
+                }
+              </div>
+            </a>
             <div class="product__content-box">
               <a href="#"><h2 class="product-category">${
                 product.category?.categoryName || "Category"
@@ -234,9 +246,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 product.rating
               )}</div>
               <p class="product-price">₹${product.price}.00</p>
-              <a href=""><button class="product__add_btn" data-id="${
-                product.id
-              }">ADD TO CART</button></a>
+              ${
+                cartData.find((p) => p.productId == product.id)
+                  ? `<a href="/primestore/cart/${userId}"><button class="goto_cartBtn" data-id=${product.id}>GO TO CART</button></a>`
+                  : `<button class="product__add_btn" data-id=${product.id}>ADD TO CART</button>`
+              }
             </div>
           </div>
         `;
@@ -246,10 +260,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   productContainer?.addEventListener("click", async (e) => {
     const target = e.target;
-    e.preventDefault();
     if (target.classList.contains("product__add_btn")) {
+      e.preventDefault();
       const productId = target.dataset.id;
-      console.log(userId, productId);
       try {
         const response = await fetch("/api/cartProducts/addProduct", {
           method: "POST",
@@ -273,6 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
           timer: 2000,
           showConfirmButton: false,
         }).then(() => {
+          updateCartCount();
           location.reload();
         });
       } catch (error) {
@@ -285,20 +299,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  searchInput?.addEventListener("input", () => {
+  searchInput?.addEventListener("input", async () => {
     const query = searchInput.value.trim().toLowerCase();
     let filtered;
-    if (query == "") {
-      filtered = toprated.filter((product) =>
-        product.title.toLowerCase().includes(query)
-      );
+    if (query === "") {
+      filtered = toprated;
     } else {
       filtered = allProducts.filter((product) =>
         product.title.toLowerCase().includes(query)
       );
     }
-    renderProducts(filtered);
+    await renderProducts(filtered);
   });
-
   fetchAllProducts();
 });

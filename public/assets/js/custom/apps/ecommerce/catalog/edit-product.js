@@ -10,29 +10,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const getProductIdFromUrl = () => {
     const productId =
       document.querySelector("#kt_app_content").dataset.productId;
-    console.log("Product ID:", productId);
     return productId;
   };
 
-  const fetchCategories = async (selectedCategoryID) => {
+  const fetchCategories = async (selectedsubcategoryId) => {
     try {
-      const res = await fetch("/api/category/getAllCategories", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch("/api/subcategory/getAllSubcategories");
       const json = await res.json();
-      const categorySelect = document.getElementById("edit_categoryID");
+      const subcategorySelect = document.getElementById("edit_subcategory");
 
-      categorySelect.innerHTML = `<option value="" disabled>Select an option</option>`;
-      json.data.forEach((cat) => {
+      subcategorySelect.innerHTML = `<option value="" disabled>Select an option</option>`;
+      json.data.forEach((subcategory) => {
         const option = document.createElement("option");
-        option.value = cat.id;
-        option.textContent = cat.categoryName;
-        if (cat.id === selectedCategoryID) {
+        option.value = subcategory.id;
+        option.textContent = subcategory.name;
+        option.setAttribute("data-category-id", subcategory.categoryId);
+        if (subcategory.id === selectedsubcategoryId) {
           option.selected = true;
         }
-        categorySelect.appendChild(option);
+        subcategorySelect.appendChild(option);
       });
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -41,11 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const fetchProductData = async (id) => {
     try {
-      const res = await fetch(`/api/products/getProduct/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(`/api/products/getProduct/${id}`);
       const json = await res.json();
       const product = json.data;
       originalProductData = { ...product };
@@ -55,8 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("edit_description").value = product.description;
       document.getElementById("edit_price").value = product.price;
       document.getElementById("edit_rating").value = product.rating;
-
-      await fetchCategories(product.categoryID); // ensure it's pre-selected
+      await fetchCategories(product.subcategoryId);
 
       if (product.image) {
         imagePreviewWrapper.style.backgroundImage = `url('/assets/media/products/${product.image}')`;
@@ -86,16 +77,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const title = form.querySelector("#edit_title").value.trim();
     const description = form.querySelector("#edit_description").value.trim();
     const price = form.querySelector("#edit_price").value.trim();
-    const categoryID = form.querySelector("#edit_categoryID").value.trim();
+    const subcategoryId = form.querySelector("#edit_subcategory").value.trim();
+    const categoryID =
+      form.querySelector("#edit_subcategory").selectedOptions[0].dataset
+        .categoryId;
     const rating = form.querySelector("#edit_rating").value.trim();
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("price", price);
+    formData.append("subcategoryId", subcategoryId);
     formData.append("categoryID", categoryID);
     formData.append("rating", rating);
-
+    console.log(formData);
     if (imageInput.files.length > 0) {
       // IF new Image uploaded
       const file = imageInput.files[0];
@@ -136,9 +131,6 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
           const res = await fetch(`/api/products/updateProduct/${productId}`, {
             method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
             body: formData,
           });
 
@@ -162,7 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const init = async () => {
     const productId = getProductIdFromUrl();
-    console.log(productId);
     if (!productId) {
       return Swal.fire({ text: "Invalid Product ID", icon: "error" });
     }

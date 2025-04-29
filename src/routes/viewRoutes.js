@@ -154,8 +154,7 @@ router.get(
       scripts: `
       <script src="/assets/js/custom/apps/ecommerce/catalog/save-category.js"></script>`,
       vendor: `
-	    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-	    <script src="/assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>`,
+	    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>`,
     });
   }
 );
@@ -172,8 +171,7 @@ router.get(
       scripts: `
       <script src="assets/js/custom/apps/ecommerce/catalog/edit-product.js"></script>`,
       vendor: `
-	    <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
-	    <script src="assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>`,
+	    <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>`,
     });
   }
 );
@@ -190,8 +188,7 @@ router.get(
       scripts: `
       <script src="/assets/js/custom/apps/ecommerce/catalog/edit-category.js"></script>`,
       vendor: `
-	    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-	    <script src="/assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>`,
+	    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>`,
     });
   }
 );
@@ -219,7 +216,7 @@ router.get("/primestore", verifyToken, authorizeRole("USER"), (req, res) => {
   res.render("pages/users/ecommerce", {
     layout: "layouts/userLayout",
     scripts: `
-    <script src="/assets/js/custom/apps/ecommerce/customers/userHome.js" defer></script>`,
+    <script type="module" src="/assets/js/custom/apps/ecommerce/customers/userHome.js" defer></script>`,
   });
 });
 
@@ -232,8 +229,50 @@ router.get(
       userId: req.params.id,
       layout: "layouts/userLayout",
       scripts: `
-      <script src="/assets/js/custom/apps/ecommerce/customers/userCart.js" defer></script>`,
+      <script type="module" src="/assets/js/custom/apps/ecommerce/customers/userCart.js" defer></script>`,
     });
   }
 );
+
+router.get(
+  "/primestore/product/:id",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/productView", {
+      productId: req.params.id,
+      layout: "layouts/userLayout",
+      scripts: `<script type="module" src="/assets/js/custom/apps/ecommerce/customers/productView.js" defer></script>`,
+    });
+  }
+);
+
+router.get(
+  "/primestore/category/:id",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/categoryProducts", {
+      categoryId: req.params.id,
+      layout: "layouts/userLayout",
+      scripts: `
+      <script type="module" src="/assets/js/custom/apps/ecommerce/customers/categoryProducts.js" defer></script>`,
+    });
+  }
+);
+
+router.get(
+  "/primestore/search",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/searchProducts", {
+      layout: "layouts/userLayout",
+      
+      scripts: `
+      <script type="module" src="/assets/js/custom/apps/ecommerce/customers/searchProducts.js" defer></script>`,
+    });
+  }
+);
+
 export default router;

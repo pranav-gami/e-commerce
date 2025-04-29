@@ -19,26 +19,40 @@ enum Role {
 }
 
 model Products {
-  id          Int           @id @default(autoincrement())
-  title       String        @db.VarChar(255)
-  price       Float
-  description String        @db.VarChar(255)
-  categoryID  Int
-  category    Category      @relation(fields: [categoryID], references: [id], onDelete: Cascade)
-  image       String        @db.VarChar(255)
-  CartProduct CartProduct[]
-  rating      Float         @default(2.0)
+  id            Int           @id @default(autoincrement())
+  title         String        @db.VarChar(255)
+  price         Float
+  description   String        @db.VarChar(255)
+  categoryID    Int
+  category      Category      @relation(fields: [categoryID], references: [id], onDelete: Cascade)
+  image         String        @db.VarChar(255)
+  CartProduct   CartProduct[]
+  rating        Float         @default(2.0)
+  subcategoryId Int?
+  Subcategory   Subcategory?  @relation(fields: [subcategoryId], references: [id])
 
   @@map("product")
 }
 
 model Category {
-  id           Int        @id @default(autoincrement())
-  categoryName String     @unique @db.VarChar(255)
-  image        String     @db.VarChar(255)
+  id           Int           @id @default(autoincrement())
+  categoryName String        @unique @db.VarChar(255)
+  image        String        @db.VarChar(255)
   products     Products[]
+  Subcategory  Subcategory[]
 
   @@map("category")
+}
+
+model Subcategory {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  categoryId Int
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products   Products[]
+
+  @@unique([name, categoryId]) // Prevent duplicate subcategories under same category
+  @@map("subcategory")
 }
 
 model User {
@@ -95,7 +109,7 @@ model Payment {
   orderId       Int      @unique
   order         order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   amount        Int
-  paymentMethod String   @default("COD") //CASH ON DELIVERY
+  paymentMethod String   @default("COD")
   paidAt        DateTime @default(now())
 
   @@map("Payment")

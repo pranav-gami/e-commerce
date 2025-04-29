@@ -8,7 +8,8 @@
     <link rel="shortcut icon" href="/assets/media/logos/favicon.ico" />
     <link rel="stylesheet" href="" />
     <!-- BASIC JS FOR ALL THIS PAGE -->
-    <script src="/assets/js/custom/apps/ecommerce/customers/ecomerceUser.js" defer></script>
+    <script type="module" src="/assets/js/custom/apps/ecommerce/customers/ecomerceUser.js" defer></script>
+    <script type="module" src="/assets/js/custom/utilities/cartProduct/cartUtils.js"></script>
     <!--Custom Javascript (mandatory for this pages)-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <%- typeof scripts !=='undefined' ? scripts : '' %>
@@ -38,15 +39,15 @@
                 <a class="header__logo" href=""><img src="/assets/media/logos/primeStore.png" height="36" width="160"
                         alt="NO" /></a>
                 <div class="header__main-input">
-                    <input type="text" class="header__search-field" placeholder="Search here..." />
+                    <input type="text" class="header__search-field main_search" placeholder="Search here..." />
                     <button class="header__search-btn">
                         <ion-icon name="search-outline search_btn"></ion-icon>
                     </button>
                 </div>
                 <div class="header__main-icons">
                     <button class="header__main-btn cart">
-                        <ion-icon name="bag-handle-outline" role="img"
-                            aria-label="bag handle outline"></ion-icon><span>0</span>
+                        <ion-icon name="bag-handle-outline" role="img" aria-label="bag handle outline"></ion-icon><span
+                            class="cartProductsCount">0</span>
                     </button>
                     <button class="header__main-btn user-profile">
                         <ion-icon class="profile" name="person-outline" role="img"
@@ -58,7 +59,9 @@
                                     </div>
                                 </div>
                                 <div style="justify-self: center; align-items: center; margin-top: 10px;">
-                                    <p class="login_username" style="margin-bottom: 0;">Michael Doe</p>
+                                    <a href="/user/profile">
+                                        <p class="login_username" style="margin-bottom: 0;">Michael Doe</p>
+                                    </a>
                                     <p class="login_useremail">michael@example.com</p>
                                 </div>
                             </div>
@@ -75,13 +78,12 @@
             <div class="container">
                 <ul class="header__menubar-list">
                     <li class="header__menubar-link">
-                        <a href="" class="header__menubar-item">home</a>
+                        <a href="/primestore" class="header__menubar-item">home</a>
                     </li>
                     <li class="header__menubar-link">
                         <a href="" class="header__menubar-item">categories</a>
                         <div class="menubar__dropdown-categories">
                             <ul class="dropdown__cat-list">
-                                <li class="cat_list-title"><a href="">Electronics</a></li>
                                 <li class="cat_list-item"><a href="">Desktop</a></li>
                                 <li class="cat_list-item"><a href="">Laptop</a></li>
                                 <li class="cat_list-item"><a href="">Camera</a></li>

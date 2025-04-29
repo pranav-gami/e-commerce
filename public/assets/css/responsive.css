@@ -406,3 +406,41 @@
         padding: 30px 20px;
     }
 }
+
+@media (max-width: 768px) {
+    .product-img-box {
+        width: 250px;
+        height: 270px;
+    }
+
+    .Indi_product-title {
+        font-size: 1.5rem;
+    }
+
+    .product-subtitle {
+        font-size: 1rem;
+    }
+
+    .price {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-img-box {
+        width: 200px;
+        height: 220px;
+    }
+
+    .Indi_product-title {
+        font-size: 1.3rem;
+    }
+
+    .product-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .price {
+        font-size: 1rem;
+    }
+}

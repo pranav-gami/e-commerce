@@ -1,4 +1,8 @@
 "use strict";
+import {
+  updateCartCount,
+  fetchCartItems,
+} from "../../../utilities/cartProduct/cartUtils.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -78,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
               category.id
             )})</p>
           </div>
-          <a href="/products/category/${
+          <a href="/primestore/category/${
             category.id
           }" class="cat-btn">Show All</a>
         </div>
@@ -86,19 +90,27 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   };
 
-  if (categoryContainer) {
-    fetch("/api/category/getAllCategories")
-      .then((res) => res.json())
-      .then(async (categories) => {
+  const getCategoryData = async () => {
+    const response = await fetch("/api/category/getAllCategories", {
+      method: "GET",
+    });
+    const data = await response.json();
+    return data.data;
+  };
+
+  async function renderCategory() {
+    if (categoryContainer) {
+      const categoryData = await getCategoryData();
+      if (categoryData) {
         const htmlItems = await Promise.all(
-          categories.data.map((cat) => renderCategoryItem(cat))
+          categoryData.map((cat) => renderCategoryItem(cat))
         );
         categoryContainer.innerHTML = htmlItems.join("");
-      })
-      .catch((err) => {
+      } else {
         Swal.fire("Error", "Failed to load categories.", "error");
-        console.error("Failed to load categories", err);
-      });
+        console.error("Failed to load categories", categoryData);
+      }
+    }
   }
 
   //GENERATE STARS CONTROLLER
@@ -131,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const res = await fetch("/api/products/getAllProducts");
       const data = await res.json();
       allProducts = data.data || [];
-      renderProducts(allProducts);
+      await renderProducts(allProducts);
     } catch (err) {
       console.error("Failed to fetch products", err);
       Swal.fire("Error", "Failed to load products.", "error");
@@ -139,31 +151,35 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Render products
-  function renderProducts(products) {
+  async function renderProducts(products) {
+    const cartData = await fetchCartItems();
     if (!products.length) {
       productContainer.innerHTML =
         "<p style='font-size:1.5rem; display:flex; justify-content:center; align-items:center; margin-top:20px;'>Not found!!</p>";
       return;
     }
-
+    const categoryData = await getCategoryData();
     productContainer.innerHTML = products
       .map((product) => {
         return `
       <div class="product__item">
-        <div class="product__img-box">
-          <img class="product_img" style="border-radius:5px;" src="/assets/media/products/${
-            product.image
-          }" alt="${product.title}" width="300" />
-          ${
-            product.discount
-              ? `<p class="product_img-lable">${product.discount}%</p>`
-              : ""
-          }
-        </div>
+        <a href="/primestore/product/${product.id}">
+          <div class="product__img-box">
+            <img class="product_img" style="border-radius:5px;" src="/assets/media/products/${
+              product.image
+            }" alt="${product.title}" width="300" />
+            ${
+              product.discount
+                ? `<p class="product_img-lable">${product.discount}%</p>`
+                : ""
+            }
+          </div>
+        </a>
         <div class="product__content-box">
           <a href="#">
             <h2 class="product-category">${
-              product.category?.categoryName || "Category"
+              categoryData.find((cat) => cat.id == product.categoryID)
+                ?.categoryName
             }</h2>
           </a>
           <a href="#">
@@ -175,9 +191,12 @@ document.addEventListener("DOMContentLoaded", function () {
             product.rating
           )}</div>
           <p class="product-price">₹${product.price}.00</p>
-          <button class="product__add_btn" data-id=${
-            product.id
-          }>ADD TO CART</button>
+          ${
+            cartData.find((p) => p.productId == product.id)
+              ? `<a href="/primestore/cart/${user.id}"><button class="goto_cartBtn" data-id=${product.id}>GO TO CART</button></a>`
+              : `
+            <button class="product__add_btn" data-id=${product.id}>ADD TO CART</button>`
+          }
         </div>
       </div>
     `;
@@ -186,9 +205,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   productContainer?.addEventListener("click", async (e) => {
-    e.preventDefault();
     const target = e.target;
     if (target.classList.contains("product__add_btn")) {
+      e.preventDefault();
       const productId = target.dataset.id;
       try {
         const response = await fetch("/api/cartProducts/addProduct", {
@@ -204,7 +223,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const result = await response.json();
-
         if (!response.ok) {
           throw new Error(result.message || "Failed to add product.");
         }
@@ -212,14 +230,27 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
           title: "Added to Cart",
           text: "Product has been added to your cart!",
-          timer: 2000,
-          showConfirmButton: false,
+          confirmButtonText: "OK",
+          customClass: {
+            confirmButton: "btn btn-primary",
+            popup: "swal2-popup-custom",
+          },
+          buttonsStyling: false,
+        }).then(() => {
+          updateCartCount();
+          window.location.reload();
         });
       } catch (error) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: error.message || "Something went wrong!",
+          confirmButtonText: "OK",
+          customClass: {
+            confirmButton: "btn btn-danger",
+            popup: "swal2-popup-custom",
+          },
+          buttonsStyling: false,
         });
       }
     }
@@ -234,5 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
     renderProducts(filtered);
   });
 
+  renderCategory();
   fetchAllProducts();
 });

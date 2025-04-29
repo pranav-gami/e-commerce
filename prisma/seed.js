@@ -7,6 +7,7 @@ async function main() {
   // CLEARING ALL EXOSTENCE DATA
   await prisma.user.deleteMany();
   await prisma.products.deleteMany();
+  await prisma.subcategory.deleteMany();
   await prisma.cartProduct.deleteMany();
   await prisma.cart.deleteMany();
   await prisma.payment.deleteMany();
@@ -16,6 +17,9 @@ async function main() {
   // RESTARTING ID FROM 1
   await prisma.$executeRawUnsafe(
     `ALTER SEQUENCE "category_id_seq" RESTART WITH 1`
+  );
+  await prisma.$executeRawUnsafe(
+    `ALTER SEQUENCE "subcategory_id_seq" RESTART WITH 1`
   );
   await prisma.$executeRawUnsafe(
     `ALTER SEQUENCE "product_id_seq" RESTART WITH 1`
@@ -43,7 +47,6 @@ async function main() {
       { categoryName: "Stationary", image: "stationary.jpeg" },
       { categoryName: "Cars", image: "car.jpeg" },
       { categoryName: "Bikes", image: "bikes.jpeg" },
-      { categoryName: "Perfumes", image: "perfumes.jpeg" },
       {
         categoryName: "Furniture",
         image: "wood-chair.jpeg",
@@ -59,6 +62,91 @@ async function main() {
     return category.id;
   };
 
+  await prisma.subcategory.createMany({
+    data: [
+      {
+        name: "Mobiles",
+        categoryId: await getCategoryId("Electronics"),
+      },
+      {
+        name: "Laptops",
+        categoryId: await getCategoryId("Electronics"),
+      },
+      {
+        name: "TV",
+        categoryId: await getCategoryId("Electronics"),
+      },
+      {
+        name: "Refrigerator",
+        categoryId: await getCategoryId("Electronics"),
+      },
+      {
+        name: "Mens",
+        categoryId: await getCategoryId("Clothing"),
+      },
+      {
+        name: "Womens",
+        categoryId: await getCategoryId("Clothing"),
+      },
+      {
+        name: "Childrens",
+        categoryId: await getCategoryId("Clothing"),
+      },
+      {
+        name: "Addidas",
+        categoryId: await getCategoryId("Footware"),
+      },
+      {
+        name: "Puma",
+        categoryId: await getCategoryId("Footware"),
+      },
+      {
+        name: "Books",
+        categoryId: await getCategoryId("Stationary"),
+      },
+      {
+        name: "Pens",
+        categoryId: await getCategoryId("Stationary"),
+      },
+      {
+        name: "Audi",
+        categoryId: await getCategoryId("Cars"),
+      },
+      {
+        name: "BMW",
+        categoryId: await getCategoryId("Cars"),
+      },
+      {
+        name: "Hyundai",
+        categoryId: await getCategoryId("Cars"),
+      },
+      {
+        name: "Honda",
+        categoryId: await getCategoryId("Bikes"),
+      },
+      {
+        name: "Bajaj",
+        categoryId: await getCategoryId("Bikes"),
+      },
+      {
+        name: "Chairs",
+        categoryId: await getCategoryId("Furniture"),
+      },
+      {
+        name: "Beds",
+        categoryId: await getCategoryId("Furniture"),
+      },
+    ],
+  });
+
+  // GET SUBCATEHHORY ID
+  const getSubcategoryId = async (name) => {
+    const res = await prisma.subcategory.findFirst({
+      where: { name: name },
+    });
+    return res.id;
+  };
+
   // CREATE PRODUCTS
   await prisma.products.createMany({
     data: [
@@ -68,6 +156,8 @@ async function main() {
         description: "Best book to read.",
         image: "book.jpg",
         categoryID: await getCategoryId("Stationary"),
+        rating: 3,
+        subcategoryId: await getSubcategoryId("Books"),
       },
       {
         title: "HP laptop",
@@ -76,14 +166,16 @@ async function main() {
         image: "laptop.jpg",
         categoryID: await getCategoryId("Electronics"),
         rating: 5,
+        subcategoryId: await getSubcategoryId("Laptops"),
       },
       {
-        title: "Iphone 15",
-        price: 54999,
+        title: "Iphone 15 pro",
+        price: 124999,
         description: "Storage:256",
         image: "Iphone15pro.jpeg",
         categoryID: await getCategoryId("Electronics"),
-        rating: 4.5,
+        rating: 5,
+        subcategoryId: await getSubcategoryId("Mobiles"),
       },
       {
         title: "Tommy-Hilfiger Shirt",
@@ -92,6 +184,7 @@ async function main() {
         image: "Tommy.jpeg",
         categoryID: await getCategoryId("Clothing"),
         rating: 5,
+        subcategoryId: await getSubcategoryId("Mens"),
       },
       {
         title: "Tommy T-shirt",
@@ -100,6 +193,7 @@ async function main() {
         image: "TommyTshirt.jpeg",
         categoryID: await getCategoryId("Clothing"),
         rating: 3.5,
+        subcategoryId: await getSubcategoryId("Mens"),
       },
       {
         title: "Wooden Chair",
@@ -107,7 +201,8 @@ async function main() {
         description: "Original Neem Wooden made",
         image: "Woodchair.jpeg",
         categoryID: await getCategoryId("Furniture"),
-        rating: 4,
+        rating: 4.7,
+        subcategoryId: await getSubcategoryId("Chairs"),
       },
       {
         title: "Double bed",
@@ -115,7 +210,8 @@ async function main() {
         description: "best Quality",
         image: "bed.jpeg",
         categoryID: await getCategoryId("Furniture"),
-        rating: 4,
+        rating: 4.4,
+        subcategoryId: await getSubcategoryId("Beds"),
       },
       {
         title: "Addidas shoes for Men",
@@ -123,7 +219,8 @@ async function main() {
         description: "Premium shoes",
         image: "adiddas.jpg",
         categoryID: await getCategoryId("Footware"),
-        rating: 4,
+        rating: 3.5,
+        subcategoryId: await getSubcategoryId("Addidas"),
       },
       {
         title: "Honda Shine 125",
@@ -131,7 +228,37 @@ async function main() {
         description: "125 cc engine",
         image: "shine.jpeg",
         categoryID: await getCategoryId("Bikes"),
+        rating: 4.5,
+        subcategoryId: await getSubcategoryId("Honda"),
+      },
+      {
+        title: "Splendor",
+        price: 69999,
+        description: "100cc engine,Best Mileage",
+        image: "splendor.jpeg",
+        categoryID: await getCategoryId("Bikes"),
         rating: 4,
+        subcategoryId: await getSubcategoryId("Honda"),
+      },
+
+      {
+        title: "SONY LED TV",
+        price: 69999,
+        description: "High Resolution,42 Inch",
+        image: "1745476167329-LEd.jpeg",
+        categoryID: await getCategoryId("Electronics"),
+        rating: 4.5,
+        subcategoryId: await getSubcategoryId("TV"),
+      },
+
+      {
+        title: "Verna Cart",
+        price: 69999,
+        description: "1400 HP Engine,Black",
+        image: "1745325691102-verna.jpeg",
+        categoryID: await getCategoryId("Cars"),
+        rating: 5,
+        subcategoryId: await getSubcategoryId("Hyundai"),
       },
     ],
   });
@@ -199,6 +326,9 @@ async function main() {
   await prisma.cart.createMany({
     data: [
       {
+        userId: await getUserId("admin123@gmail.com"),
+      },
+      {
         userId: await getUserId("pranav123@gmail.com"),
       },
       {
@@ -209,6 +339,32 @@ async function main() {
       },
     ],
   });
+
+  // const getCartId = async (userId) => {
+  //   const user = await prisma.cart.findUnique({
+  //     where: { userId: userId },
+  //   });
+  //   return user.id;
+  // };
+
+  // await prisma.cartProduct.createMany({
+  //   data: [
+  //     {
+  //       cartId: await getCartId(await getUserId("admin123@gmail.com")),
+  //       productId:,
+  //       quantity:,
+  //     },
+  //     {
+  //       userId: await getUserId("pranav123@gmail.com"),
+  //     },
+  //     {
+  //       userId: await getUserId("darshit123@gmail.com"),
+  //     },
+  //     {
+  //       userId: await getUserId("sagar123@gmail.com"),
+  //     },
+  //   ],
+  // });
 
   console.log("Seeding completed successfully!");
 }

@@ -120,3 +120,38 @@
     <!--end::Content container-->
 </div>
 <!--end::Content-->
+
+<!-- MODAL TO MANAGE SUBCATEGORIES  -->
+<!-- Modal -->
+<div class="modal fade" id="manageSubcategoriesModal" tabindex="-1" aria-labelledby="manageSubcategoriesLabel"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg"
+        style="display: flex; align-items: center; justify-content: center;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title border-bottom-1" style="color: #3a3a3a;">Manage Subcategories</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add New Subcategory -->
+                <form id="addSubcategoryForm" class="d-flex gap-2 mb-3">
+                    <input type="text" class="form-control" id="newSubName" placeholder="Enter new subcategory">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+                <!-- Subcategories List -->
+                <table class="table table-bordered w-100 align-middle">
+                    <thead>
+                        <tr style="color: #3a3a3a; font-size: 16px;">
+                            <th>Sr..</th>
+                            <th>Subcategory Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subcategoryTableBody">
+                        <!-- Dynamically filled -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

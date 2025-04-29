@@ -4561,7 +4561,7 @@ var KTUserMenu = (function () {
         emailElement.href = "";
       }
 
-      const roleElement = document.querySelector(".role");
+      const roleElement = document.querySelector(".header-role");
       if (roleElement) {
         roleElement.textContent = user.role || "ADMIN";
       }

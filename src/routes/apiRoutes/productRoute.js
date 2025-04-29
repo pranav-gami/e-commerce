@@ -29,7 +29,12 @@ router.get("/getAllProducts", verifyToken, showAllProducts);
 
 router.get("/getProduct/:id", validateParamsID, showProductById);
 
-router.get("/getProductByCategoryId/:id",verifyToken, validateParamsID, getProductCount);
+router.get(
+  "/getProductByCategoryId/:id",
+  verifyToken,
+  validateParamsID,
+  getProductCount
+);
 
 router.put(
   "/updateProduct/:id",
