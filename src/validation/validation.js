@@ -51,6 +51,7 @@ const userSchema = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .required(),
+  address: Joi.string().optional(),
 });
 
 export const validateUserData = (req, res, next) => {

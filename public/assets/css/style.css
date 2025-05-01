@@ -1424,6 +1424,7 @@ table thead.custom__table-header th {
     font-family: 'Segoe UI', sans-serif;
     background-color: #fff;
     border-radius: 10px;
+    height: auto;
 }
 
 .summary_title {
@@ -1593,11 +1594,11 @@ table thead.custom__table-header th {
 /*  EMPTY CART DESIGN */
 
 #empty-cart img {
-    max-width: 100px;
-    animation: float 1.5s infinite ease-in-out;
+    max-width: 130px;
+    animation: move 1.5s infinite ease-in-out;
 }
 
-@keyframes float {
+@keyframes move {
 
     0%,
     100% {
@@ -1630,4 +1631,82 @@ table thead.custom__table-header th {
 .emptyCart-btn:hover {
     color: white;
     background-color: #ff4f7c;
+}
+
+/* CHECKOUT PAGE */
+
+.address-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.home-badge {
+    background-color: #e6f4ea;
+    color: #137333;
+    font-size: 12px;
+    border-radius: 15px;
+    padding: 2px 8px;
+    margin-left: 10px;
+}
+
+.text-highlight {
+    color: #ff2e63;
+    font-weight: 500;
+}
+
+.continue-btn {
+    background-color: #ff5c8d;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.edit_button {
+    background-color: #ff2e63;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 2px transparent black;
+}
+
+/*  */
+
+/* Cart Products Section */
+.cart-products-section {
+    border-radius: 8px;
+}
+
+.cart-products-section h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.cart-products-table thead {
+    background-color: #f8f9fa;
+}
+
+.cart-products-table th,
+.cart-products-table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+.cart-products-table th {
+    font-weight: 600;
+    color: #343a40;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.cart-products-table td {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.cart-products-table tbody tr:last-child td {
+    border-bottom: none;
 }

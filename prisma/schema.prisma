@@ -65,6 +65,7 @@ model User {
   cart     Cart?
   city     String  @db.VarChar(50)
   phone    String  @db.VarChar(10)
+  address  String? @db.VarChar(100)
 
   @@map("user")
 }

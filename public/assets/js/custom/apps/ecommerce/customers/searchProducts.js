@@ -52,16 +52,15 @@ document.addEventListener("DOMContentLoaded", function () {
       const categoryData = await getCategory(product.categoryID);
       if (name.includes(searchQuery) || description.includes(searchQuery)) {
         searchedProducts.push(product);
+        categoryData.Subcategory.forEach((sub) => {
+          if (sub.name.toLowerCase().includes(searchQuery)) {
+            suggestedProducts.push(product);
+          }
+        });
       } else if (
         categoryData.categoryName.toLowerCase().includes(searchQuery)
       ) {
-        suggestedProducts.push(product);
-      } else {
-        categoryData.Subcategory.forEach((sub) => {
-          if (sub.name.toLowerCase().includes(searchQuery)) {
-            searchedProducts.push(product);
-          }
-        });
+        searchedProducts.push(product);
       }
     });
 
@@ -136,6 +135,47 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .join("");
   }
+
+  searchedContainer?.addEventListener("click", async (e) => {
+    const target = e.target;
+    if (target.classList.contains("product__add_btn")) {
+      e.preventDefault();
+      const productId = target.dataset.id;
+      try {
+        const response = await fetch("/api/cartProducts/addProduct", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            productId: parseInt(productId),
+            quantity: 1,
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to add product.");
+        }
+        Swal.fire({
+          icon: "success",
+          title: "Added to Cart",
+          text: "Product has been added to your cart!",
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          updateCartCount();
+          location.reload();
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.message || "Something went wrong!",
+        });
+      }
+    }
+  });
 
   if (searchQuery) {
     fetchAllProducts();

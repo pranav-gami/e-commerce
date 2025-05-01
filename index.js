@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "public")));
 
-// SETTINGUP EJS TEMPLARTES
+// SETTINGUP EJS TEMPLATES
 app.set("view engine", "ejs");
 app.use(expressEjsLayouts);
 

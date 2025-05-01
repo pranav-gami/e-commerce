@@ -268,9 +268,21 @@ router.get(
   (req, res) => {
     res.render("pages/users/searchProducts", {
       layout: "layouts/userLayout",
-      
+
       scripts: `
       <script type="module" src="/assets/js/custom/apps/ecommerce/customers/searchProducts.js" defer></script>`,
+    });
+  }
+);
+
+router.get(
+  "/primestore/checkout",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/checkout", {
+      layout: "layouts/userLayout",
+      scripts: `<script type="module" src="/assets/js/custom/apps/ecommerce/customers/checkout.js" defer></script>`,
     });
   }
 );
