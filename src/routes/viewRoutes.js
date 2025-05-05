@@ -287,4 +287,23 @@ router.get(
   }
 );
 
+// router.get(
+//   "/primestore/payment",
+//   verifyToken,
+//   authorizeRole("USER"),
+//   (req, res) => {
+//     res.render("paymentRedirect", {
+//       layout: false,
+//       scripts: ``,
+//     });
+//   }
+// );
+
+// router.get("/sucess", verifyToken, authorizeRole("USER"), (req, res) => {
+//   res.render("success", {
+//     layout: false,
+//     scripts: ``,
+//   });
+// });
+
 export default router;

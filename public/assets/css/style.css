@@ -1510,22 +1510,6 @@ table thead.custom__table-header th {
     background-image: radial-gradient(at top left, #ff4f7c 0%, #fe89a7 100%);
 }
 
-/* .place-order-btn::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: #ff4f7c;
-    transition: width 0.3s ease;
-    z-index: -1;
-}
-
-.place-order-btn:hover::after {
-    width: 100%;
-} */
-
 /* PRODUCT VIEW PAGE */
 
 .product__view {
@@ -1667,7 +1651,7 @@ table thead.custom__table-header th {
 }
 
 .edit_button {
-    background-color: #ff2e63;
+    background-color: #ff6189;
     border: none;
     color: white;
     padding: 8px 15px;
@@ -1709,4 +1693,61 @@ table thead.custom__table-header th {
 
 .cart-products-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* PAYMENT MODAL */
+
+@media (min-width: 768px) {
+    #paymentTab {
+        min-width: 200px;
+    }
+}
+
+.custom-modal-dialog {
+    max-width: 720px;
+    width: 75%;
+    height: auto;
+}
+
+.modal-content {
+    border-radius: 12px;
+    padding: 16px;
+}
+
+/* Payment tab sidebar */
+.payment-tab-list .list-group-item {
+    font-size: 1rem;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+.payment-tab-list .list-group-item.active {
+    background-color: #ff6189;
+    color: #fff;
+    font-weight: 500;
+    border-color: #ff6189;
+}
+
+/* Button consistent */
+.pay-btn {
+    color: white;
+    background-color: #ff6189;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.pay-btn:hover {
+    background-color: #ff2e63;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .payment-tab-list .list-group-item {
+        margin-bottom: 4px;
+    }
 }

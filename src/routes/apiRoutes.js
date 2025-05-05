@@ -8,6 +8,7 @@ import cartRouter from "./apiRoutes/cartRoutes.js";
 import authRouter from "./apiRoutes/authRoutes.js";
 import cartProductRouter from "./apiRoutes/cartProductsRoutes.js";
 import orderRouter from "./apiRoutes/orderPaymentRoutes.js";
+import paymentRouter from "./apiRoutes/paymentsRoutes.js";
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use("/subcategory", subcategoryRouter);
 router.use("/cart", cartRouter);
 router.use("/cartProducts", cartProductRouter);
 router.use("/order", orderRouter);
+router.use("/payment", paymentRouter);
 
 export default router;

@@ -31,6 +31,14 @@ app.use(express.json());
 app.use("/api", apiRouter);
 app.use("/", viewRouter);
 
+app.get('/primestore/search', (req, res) => {
+  res.render('primestore/search');
+});
+
+app.get('/primestore/search', (req, res) => {
+  res.render('primestore/search');
+});
+
 app.get("/health", (req, res) => {
   res.send("server is up and running...");
 });

@@ -199,11 +199,22 @@ export const validateLoginCredentials = (req, res, next) => {
 const orderSchema = Joi.object({
   id: Joi.number().integer(),
   userId: Joi.number().integer(),
+  totalAmount: Joi.number().integer(),
   paymentType: Joi.string().required(),
+  status: Joi.string()
+    .valid("PENDING", "CONFIRMED")
+    .default("PENDING")
+    .optional(),
 });
 
 export const validateOrderCredentials = (req, res, next) => {
-  const { error } = orderSchema.validate(req.body);
+  const { userId, totalAmount, paymentType, status } = req.body;
+  const { error } = orderSchema.validate({
+    userId,
+    totalAmount: parseInt(totalAmount),
+    paymentType,
+    status,
+  });
   if (error) {
     return res
       .status(400)

@@ -64,7 +64,7 @@
                 </div>
             </div>
             <!-- Right: Order Summary -->
-            <div class="col-lg-4">
+            <div class="col-lg-4" style="justify-self: center;">
                 <div class="cart-summary-container bg-white shadow-sm">
                     <h5 class="summary_title">Order Details</h5>
                     <hr />
@@ -94,8 +94,59 @@
                         <span class="final_total">₹00.00</span>
                     </div>
                     <div class="mt-3">
-                        <button class="continue-btn
-                        ">CONTINUE</button>
+                        <button class="continue-btn">
+                            CONTINUE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Method Modal-->
+<div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="paymentMethodModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+        <div class="modal-content shadow-sm">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="paymentMethodModalLabel">Choose Payment Mode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column flex-md-row gap-3 mt-2">
+                <div class="list-group payment-tab-list w-100 w-md-40" id="paymentTab" role="tablist">
+                    <button class="list-group-item list-group-item-action active" id="cod-tab" data-bs-toggle="list"
+                        data-bs-target="#cod" role="tab">
+                        Cash On Delivery
+                    </button>
+                    <button class="list-group-item list-group-item-action" id="upi-tab" data-bs-toggle="list"
+                        data-bs-target="#upi" role="tab">
+                        UPI (Pay via any App)
+                    </button>
+                    <button class="list-group-item list-group-item-action" id="card-tab" data-bs-toggle="list"
+                        data-bs-target="#card" role="tab">
+                        Credit/Debit Card
+                    </button>
+                </div>
+                <div class="tab-content w-100" id="paymentTabContent">
+                    <div class="tab-pane fade show active" id="cod" role="tabpanel" aria-labelledby="cod-tab">
+                        <h6 class="fw-semibold mb-3">Cash On Delivery</h6>
+                        <p class="text-muted">Pay with cash when your order is delivered. No advance payment required.
+                        </p>
+                        <button class="w-100 mt-3 pay-btn" data-method="COD">Pay with Cash on
+                            Delivery</button>
+                    </div>
+                    <div class="tab-pane fade" id="upi" role="tabpanel" aria-labelledby="upi-tab">
+                        <h6 class="fw-semibold mb-3">UPI (Pay via UPI)</h6>
+                        <p class="text-muted">Select UPI app of your choice and scan QR or enter UPI ID to complete
+                            payment securely.</p>
+                        <button class="w-100 mt-3 pay-btn" data-method="UPI">Pay using UPI</button>
+                    </div>
+                    <div class="tab-pane fade" id="card" role="tabpanel" aria-labelledby="card-tab">
+                        <h6 class="fw-semibold mb-3">Credit / Debit Card</h6>
+                        <p class="text-muted">Pay securely Using /Credit or Debit Cards to Connfirm Your Order</p>
+                        <button type="submit" class="w-100 mt-2 pay-btn btn btn-dark" data-method="CARD">Pay using
+                            Card</button>
                     </div>
                 </div>
             </div>

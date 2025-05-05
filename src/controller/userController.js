@@ -92,7 +92,6 @@ export const updateUserAddress = async (req, res) => {
   try {
     const userId = JSON.parse(req.params.id);
     const { address } = req.body;
-    console.log(address);
     const isExist = await prisma.user.findUnique({ where: { id: userId } });
     if (!isExist) {
       return res.status(500).json({
