@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
             2
           )}</span></td>
           <td class="text-center">
-            <div class="input-group quantity-group" style="max-width: 130px; margin: auto;">
+            <div class="input-group quantity-group" style="min-width: 130px; margin: auto;">
               <button class="btn btn-outline-secondary btn-sm decrease" data-index="${index}" data-productid=${
           item.productId
         }>−</button>
@@ -154,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
             parseInt(cartItems[index].quantity)
           );
           renderCartItems(cartItems);
+        } else {
         }
       });
     });

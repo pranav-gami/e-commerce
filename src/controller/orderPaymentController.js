@@ -1,5 +1,6 @@
 import prisma from "../config/prisma.js";
 import { placeOrderService } from "../utils/orderRequest.js";
+import { deleteCartProducts } from "./cartProductController.js";
 
 //ADD PRODUCT-CONTROLLER
 export const placeOrder = async (req, res) => {

@@ -1,3 +1,4 @@
+import { construct } from "ionicons/icons";
 import prisma from "../config/prisma.js";
 import { getProductsFromCart } from "../utils/cartProductsRequest.js";
 //+ PRODUCT TO CART-CONTROLLER
@@ -93,7 +94,37 @@ export const updateCartProductDetails = async (req, res) => {
   }
 };
 
-//DELETE CATEGORY-CONTROLLER
+// CLEAR USER'S CART CONTROLLER
+
+export const deleteCartProducts = async function (req, res) {
+  try {
+    const userId = parseInt(req.params.id);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error("User not Found!");
+    }
+
+    const cart = await prisma.cart.findUnique({ where: { userId: user.id } });
+    if (!cart) {
+      throw new Error("No cart found for this User!");
+    }
+
+    const deletedCartProducts = await prisma.cartProduct.deleteMany({
+      where: { cartId: cart.id },
+    });
+
+    if (deletedCartProducts.count === 0) {
+      throw new Error("No products found in the user's cart to delete.");
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "Cart Deleted SuccsessFully" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+//DELETE CART-PRODUCTS CONTROLLER
 export const deleteCartItems = async (req, res) => {
   try {
     const userId = parseInt(req.params.id);

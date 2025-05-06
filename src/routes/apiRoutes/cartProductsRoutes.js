@@ -6,6 +6,7 @@ import {
   getProductsByUserID,
   updateCartProductDetails,
   deleteCartItems,
+  deleteCartProducts,
 } from "../../controller/cartProductController.js";
 import {
   validateParamsID,
@@ -43,6 +44,15 @@ cartProductRouter.put(
   validateCartProductUpdates,
   updateCartProductDetails
 );
+
+cartProductRouter.delete(
+  "/clearUserCart/:id",
+  verifyToken,
+  // authorizeRole("USER"),
+  validateParamsID,
+  deleteCartProducts
+);
+
 cartProductRouter.delete(
   "/deleteCartProduct/:id",
   verifyToken,

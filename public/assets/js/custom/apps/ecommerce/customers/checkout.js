@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const phoneEle = document.querySelector(".phone");
   const editButton = document.querySelector(".edit_button");
   const editForm = document.querySelector(".edit-form");
-  const addressInput = document.querySelector(".address-input");
-  const cancelButton = document.querySelector(".cancel_button");
+  const addressInputs = document.querySelectorAll(".address-input");
+  const cancelButton = document.querySelector(".cancel_btn");
 
   const discount = 100;
   const platformFee = 20;
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderCartItems(data);
   });
 
-  // Fetch and render user address
+  // Fetch and render user Address
   async function fetchUserAddress() {
     try {
       const res = await fetch(`/api/user/getUser/${user.id}`);
@@ -93,7 +93,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     phoneEle.innerHTML = `Mobile: <strong>${user.phone}</strong>`;
 
     // Fill edit form with current values
-    addressInput.value = userdata.address;
+    const address = userdata.address.split(",");
+    addressInputs[0].value = address[0];
+    addressInputs[1].value = address[1];
+    addressInputs[2].value = address[2];
+    addressInputs[3].value = address[3];
   }
 
   async function updateUserAddress(newAddress) {
@@ -135,17 +139,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const newAddress = addressInput.value.trim();
-    if (!newAddress) {
-      Swal.fire("Warning", "Address is required.", "warning");
+
+    // Select all fields
+    const addressFields = editForm.querySelectorAll(".address-input");
+    const localityInput = addressFields[0].value.trim();
+    const cityInput = addressFields[1].value.trim();
+    const districtInput = addressFields[2].value.trim();
+    const pincodeInput = addressFields[3].value.trim();
+
+    if (!localityInput || !cityInput || !districtInput || !pincodeInput) {
+      Swal.fire("Warning", "All address fields are required.", "warning");
       return;
     }
 
-    const success = await updateUserAddress(newAddress);
+    // Validate pincode is exactly 6 digits
+    if (!/^\d{6}$/.test(pincodeInput)) {
+      Swal.fire("Warning", "Pincode must be exactly 6 digits.", "warning");
+      return;
+    }
+
+    const mergedAddress = `${localityInput}, ${cityInput}, ${districtInput} , PIN:${pincodeInput}`;
+    const success = await updateUserAddress(mergedAddress);
+
     if (success) {
       renderAddress({
         username: user.username,
-        address: newAddress,
+        address: mergedAddress,
       });
       editForm.style.display = "none";
       editButton.style.display = "inline-block";
@@ -183,8 +202,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await res.json();
       if (data.success) {
-        await Swal.fire("Success", "Your order has been placed!", "success");
-        window.location.href = "/primestore";
+        const data = await fetch(`/api/cartProducts/clearUserCart/${user.id}`, {
+          method: "DELETE",
+        });
+        if (data.success) {
+          await Swal.fire("Success", "Your order has been placed!", "success");
+          window.location.href = "/primestore";
+        }
       } else {
         Swal.fire("Error", "Failed to place order. Please try again.", "error");
       }
@@ -249,7 +273,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Stripe redirect error:", error.message);
             Swal.fire("Error", error.message, "error");
           } else {
-            console.log("called");
             await placeOrder(finalTotal, method);
           }
         } else {

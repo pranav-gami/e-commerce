@@ -52,13 +52,30 @@
                     <!-- Hidden edit form -->
                     <form class="edit-form mt-3" style="display: none;">
                         <div class="mb-2">
-                            <label class="form-label">Address</label>
-                            <textarea class="form-control address-input" rows="2"
-                                required>Bharti aashram, near railway station, Sarkhej, Ahmedabad, Gujarat - 382210</textarea>
+                            <label class="form-label">Locality / Town <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control address-input" required
+                                placeholder="e.g.  C-705,PNTC">
+                        </div>
+                        <div class="mb-2 row">
+                            <div class="col-md-4 mb-2 mb-md-0">
+                                <label class="form-label">City <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control address-input" required
+                                    placeholder="e.g. Vejalpur">
+                            </div>
+                            <div class="col-md-4 mb-2 mb-md-0">
+                                <label class="form-label">District <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control address-input" required
+                                    placeholder="e.g. Ahemdabad">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Pincode <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control address-input" required pattern="\d{6}"
+                                    maxlength="6" placeholder="e.g. 382219">
+                            </div>
                         </div>
                         <div class="text-end">
-                            <button type="button" class="btn btn-secondary btn-sm me-2 cancel_button">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                            <button type="button" class="cancel_btn">Cancel</button>
+                            <button type="submit" class="submit_btn">Save</button>
                         </div>
                     </form>
                 </div>

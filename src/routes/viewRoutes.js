@@ -306,4 +306,16 @@ router.get(
 //   });
 // });
 
+router.get(
+  "/primestore/my/dashboard",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/userDashboard", {
+      layout: "layouts/userLayout",
+      scripts: ``,
+    });
+  }
+);
+
 export default router;
