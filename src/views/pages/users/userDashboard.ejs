@@ -5,34 +5,98 @@
             <p>Pranav Gami</p>
         </div>
         <nav class="sidebar-nav">
-            <a href="#" data-page="overview" class="active">Overview</a>
-            <a href="#" data-page="orders">Orders</a>
-            <a href="#" data-page="cart">My Cart</a>
-            <a href="#" data-page="profile">Edit Profile</a>
+            <a href="#" data-section="overview" class="active">Overview</a>
+            <a href="#" data-section="orders">Orders & Returns</a>
+            <a href="#" data-section="profile">Edit Profile</a>
+            <button class="logout-btn">Logout</button>
         </nav>
     </aside>
+
     <main class="main-content">
         <header class="main-header">
             <button class="menu-toggle">&#9776;</button>
             <h1 id="page-title">Overview</h1>
         </header>
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+            <div class="user-overview-card">
+                <h3>User Details</h3>
+                <p><strong>Name:</strong> Pranav Gami</p>
+                <p><strong>Email:</strong> pranav123@gmail.com</p>
+                <p><strong>Phone:</strong> 9175433210</p>
+                <p><strong>Role:</strong> USER</p>
+                <p><strong>Active Status:</strong> Active</p>
+                <div class="address-block">
+                    <h4>Address</h4>
+                    <p><strong>Area/Locality:</strong> Bharati Ashram, sarkhej</p>
+                    <p><strong>City:</strong> Ahemdabad</p>
+                    <p><strong>PIN:</strong> 382211</p>
+                </div>
+            </div>
+        </section>
 
-        <section id="content">
-            <p>Welcome to your dashboard! Select an option from the sidebar.</p>
+        <!-- Orders Section -->
+        <section id="orders" class="section">
+            <h2>Your Orders</h2>
+            <div class="order-list">
+                <div class="order-card cancelled">
+                    <div class="order-status">Cancelled</div>
+                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <div class="order-info">
+                        <h4>Redmi Buds 5 Truly Wireless Bluetooth Ear Buds</h4>
+                        <p>Size: Onesize</p>
+                        <p class="order-date">Cancelled on Mon, 5 May</p>
+                    </div>
+                </div>
+
+                <div class="order-card delivered">
+                    <div class="order-status">Delivered</div>
+                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <div class="order-info">
+                        <h4>Red Tape Men Rubber Sliders</h4>
+                        <p>Size: 9</p>
+                        <p class="order-date">Delivered on Sun, 1 Oct 2023</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Profile Section -->
+        <section id="profile" class="section">
+            <h2>Edit Profile</h2>
+            <form class="profile-form" id="profile-form">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" value="Pranav Gami">
+
+                <label for="email">Email</label>
+                <input type="email" id="email" value="pranav123@gmail.com">
+
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" value="9175433210">
+
+                <label for="role">Role</label>
+                <input type="text" id="role" value="USER" disabled>
+
+                <label for="area">Area/Locality</label>
+                <input type="text" id="area" value="Bharati Ashram, sarkhej">
+
+                <label for="city">City</label>
+                <input type="text" id="city" value="Ahemdabad">
+
+                <label for="pin">PIN</label>
+                <input type="text" id="pin" value="382211">
+
+                <button type="submit">Save Changes</button>
+            </form>
         </section>
     </main>
 </div>
-<script>
-    const links = document.querySelectorAll('.sidebar-nav a');
-    const content = document.getElementById('content');
-    const title = document.getElementById('page-title');
 
-    const pages = {
-        overview: "<p>Welcome to your dashboard! Select an option from the sidebar.</p>",
-        orders: "<h2>Your Orders</h2><p>View all your recent orders here.</p>",
-        cart: "<h2>My Cart</h2><p>View items you’ve added to your cart.</p>",
-        profile: "<h2>Edit Profile</h2><p>Update your personal details here.</p>"
-    };
+<script>
+    // Sidebar navigation toggle sections
+    const links = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.section');
+    const pageTitle = document.getElementById('page-title');
 
     links.forEach(link => {
         link.addEventListener('click', e => {
@@ -40,14 +104,28 @@
             links.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
 
-            const page = link.dataset.page;
-            content.innerHTML = pages[page];
-            title.textContent = link.textContent;
+            const sectionId = link.dataset.section;
+            sections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                    pageTitle.textContent = link.textContent;
+                }
+            });
         });
     });
+
+    // Sidebar toggle on mobile
     const toggleBtn = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.sidebar');
     toggleBtn.addEventListener('click', () => {
         sidebar.classList.toggle('open');
+    });
+
+    // Logout Button
+    const logoutBtn = document.querySelector('.logout-btn');
+    logoutBtn.addEventListener('click', () => {
+        alert('Logging out...');
+        // Call logout API or redirect user here
     });
 </script>

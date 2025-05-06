@@ -313,7 +313,8 @@ router.get(
   (req, res) => {
     res.render("pages/users/userDashboard", {
       layout: "layouts/userLayout",
-      scripts: ``,
+      styles: `<link rel="stylesheet" href="/assets/css/userDashboard.css" />`,
+      scripts: `<script type="module" src="/assets/js/custom/apps/ecommerce/customers/userdashboard.js" defer></script>`,
     });
   }
 );
