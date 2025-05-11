@@ -1,10 +1,10 @@
 import { fetchCartItems } from "../../../utilities/cartProduct/cartUtils.js";
+
 const stripe = Stripe(
-  "<%= pk_test_51RKYzCQG00iI7cRU9lHP65WhDkcZTCgX6wEMvMtKO4NTd7s8uGUkLM7c2wMCrM6IMwLa4snURoX6H7r1KENREY2P00AOd0DCAp %>"
+  "pk_test_51RKYzCQG00iI7cRU9lHP65WhDkcZTCgX6wEMvMtKO4NTd7s8uGUkLM7c2wMCrM6IMwLa4snURoX6H7r1KENREY2P00AOd0DCAp"
 );
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // GETTING USER'S DATA
   const user = JSON.parse(localStorage.getItem("user"));
 
   const cartBody = document.getElementById("cart_body");
@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const discount = 100;
   const platformFee = 20;
   let finalTotal;
+
   async function renderCartItems(cartItems) {
     cartBody.innerHTML = "";
     let grandTotal = 0;
@@ -44,10 +45,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const row = document.createElement("tr");
       row.innerHTML = `
-          <td class="text-start">${item.product.title}</td>
-          <td class="text-center">${item.quantity}</td>
-          <td class="text-end">₹${subtotal.toFixed(2)}</td>
-        `;
+        <td class="text-start">${item.product.title}</td>
+        <td class="text-center">${item.quantity}</td>
+        <td class="text-end">₹${subtotal.toFixed(2)}</td>
+      `;
       cartBody.appendChild(row);
     });
 
@@ -65,7 +66,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderCartItems(data);
   });
 
-  // Fetch and render user Address
   async function fetchUserAddress() {
     try {
       const res = await fetch(`/api/user/getUser/${user.id}`);
@@ -73,15 +73,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (data.success) {
         return data.data;
       } else {
-        Swal.fire("Error", "Failed to fetch address.", "error");
+        await Swal.fire({
+          title: "Error",
+          text: "Failed to fetch address.",
+          icon: "error",
+          customClass: "swal2-popup-custom",
+        });
         return null;
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        "Something went wrong while fetching address.",
-        "error"
-      );
+      await Swal.fire({
+        title: "Error",
+        text: "Something went wrong while fetching address.",
+        icon: "error",
+        customClass: "swal2-popup-custom",
+      });
       console.error("Error fetching address:", error);
       return null;
     }
@@ -92,12 +98,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     addressEle.textContent = userdata.address;
     phoneEle.innerHTML = `Mobile: <strong>${user.phone}</strong>`;
 
-    // Fill edit form with current values
     const address = userdata.address.split(",");
-    addressInputs[0].value = address[0];
-    addressInputs[1].value = address[1];
-    addressInputs[2].value = address[2];
-    addressInputs[3].value = address[3];
+    addressInputs[0].value = address[0]?.trim();
+    addressInputs[1].value = address[1]?.trim();
+    addressInputs[2].value = address[2]?.trim();
+    addressInputs[3].value = address[3]?.replace("PIN:", "").trim();
   }
 
   async function updateUserAddress(newAddress) {
@@ -109,24 +114,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
       const data = await res.json();
       if (data.success) {
-        Swal.fire("Success", "Address updated successfully.", "success");
+        await Swal.fire({
+          title: "Success",
+          text: "Address updated successfully.",
+          icon: "success",
+          customClass: "swal2-popup-custom",
+        });
         return true;
       } else {
-        Swal.fire("Error", "Failed to update address.", "error");
+        await Swal.fire({
+          title: "Error",
+          text: "Failed to update address.",
+          icon: "error",
+          customClass: "swal2-popup-custom",
+        });
         return false;
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        "Something went wrong while updating address.",
-        "error"
-      );
+      await Swal.fire({
+        title: "Error",
+        text: "Something went wrong while updating address.",
+        icon: "error",
+        customClass: "swal2-popup-custom",
+      });
       console.error("Error updating address:", error);
       return false;
     }
   }
 
-  // Event Listeners for address form
   editButton.addEventListener("click", () => {
     editForm.style.display = "block";
     editButton.style.display = "none";
@@ -140,7 +155,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Select all fields
     const addressFields = editForm.querySelectorAll(".address-input");
     const localityInput = addressFields[0].value.trim();
     const cityInput = addressFields[1].value.trim();
@@ -148,13 +162,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pincodeInput = addressFields[3].value.trim();
 
     if (!localityInput || !cityInput || !districtInput || !pincodeInput) {
-      Swal.fire("Warning", "All address fields are required.", "warning");
+      await Swal.fire({
+        title: "Warning",
+        text: "All address fields are required.",
+        icon: "warning",
+        customClass: "swal2-popup-custom",
+      });
       return;
     }
 
-    // Validate pincode is exactly 6 digits
     if (!/^\d{6}$/.test(pincodeInput)) {
-      Swal.fire("Warning", "Pincode must be exactly 6 digits.", "warning");
+      await Swal.fire({
+        title: "Warning",
+        text: "Pincode must be exactly 6 digits.",
+        icon: "warning",
+        customClass: "swal2-popup-custom",
+      });
       return;
     }
 
@@ -171,9 +194,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  const stripe = Stripe(
-    "pk_test_51RKYzCQG00iI7cRU9lHP65WhDkcZTCgX6wEMvMtKO4NTd7s8uGUkLM7c2wMCrM6IMwLa4snURoX6H7r1KENREY2P00AOd0DCAp"
-  );
   const continueBtn = document.querySelector(".continue-btn");
   const payButtons = document.querySelectorAll(".pay-btn");
   const paymentModalEl = document.getElementById("paymentMethodModal");
@@ -202,23 +222,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await res.json();
       if (data.success) {
-        const data = await fetch(`/api/cartProducts/clearUserCart/${user.id}`, {
-          method: "DELETE",
-        });
-        if (data.success) {
-          await Swal.fire("Success", "Your order has been placed!", "success");
+        const clearRes = await fetch(
+          `/api/cartProducts/clearUserCart/${user.id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        const clearData = await clearRes.json();
+
+        if (clearData.success) {
+          await Swal.fire({
+            title: "Success",
+            text: "Your order has been placed!",
+            icon: "success",
+            customClass: "swal2-popup-custom",
+          });
           window.location.href = "/primestore";
         }
       } else {
-        Swal.fire("Error", "Failed to place order. Please try again.", "error");
+        await Swal.fire({
+          title: "Error",
+          text: "Failed to place order. Please try again.",
+          icon: "error",
+          customClass: "swal2-popup-custom",
+        });
       }
     } catch (error) {
       console.error("Error placing order:", error);
-      Swal.fire("Error", "Something went wrong. Please try again.", "error");
+      await Swal.fire({
+        title: "Error",
+        text: "Something went wrong. Please try again.",
+        icon: "error",
+        customClass: "swal2-popup-custom",
+      });
     }
   }
 
-  // Initiate Stripe Checkout Session
   async function initiateStripePayment(amount) {
     try {
       const res = await fetch("/api/payment/initiate", {
@@ -256,7 +295,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           icon: "question",
           showCancelButton: true,
           confirmButtonText: "Yes, Confirm",
+          customClass: "swal2-popup-custom",
         });
+
         if (confirmResult.isConfirmed) {
           await placeOrder(finalTotal, "COD");
         }
@@ -271,12 +312,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           if (error) {
             console.error("Stripe redirect error:", error.message);
-            Swal.fire("Error", error.message, "error");
+            await Swal.fire({
+              title: "Error",
+              text: error.message,
+              icon: "error",
+              customClass: "swal2-popup-custom",
+            });
           } else {
             await placeOrder(finalTotal, method);
           }
         } else {
-          Swal.fire("Error", paymentResult.error, "error");
+          await Swal.fire({
+            title: "Error",
+            text: paymentResult.error,
+            icon: "error",
+            customClass: "swal2-popup-custom",
+          });
         }
       }
     });

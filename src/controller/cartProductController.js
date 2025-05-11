@@ -162,6 +162,7 @@ export const deleteCartItems = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Product Removed From Cart!" });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };

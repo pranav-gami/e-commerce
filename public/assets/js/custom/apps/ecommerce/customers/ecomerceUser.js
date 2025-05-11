@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // SETTING UP LOGIN USER'S DETAILS
   const user = JSON.parse(localStorage.getItem("user"));
   const userIcon = document.querySelector(".username-initial");
-  const username = document.querySelector(".login_username");
-  const email = document.querySelector(".login_useremail");
+  const username = document.querySelector(".username");
+  const email = document.querySelector(".useremail");
 
   userIcon.textContent = user.username?.charAt(0).toUpperCase();
   username.textContent = user.username;
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // LOGOUT USER FUNCTIOANALITY
-  const logoutButton = document.querySelector(".logout");
+  const logoutButton = document.querySelector(".logoutBtn");
 
   logoutButton.addEventListener("click", function (e) {
     e.preventDefault();
@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmButtonText: "Yes, sign out",
       cancelButtonText: "Cancel",
       customClass: {
+        customClass: "swal2-popup-custom",
         confirmButton: "btn btn-danger",
         cancelButton: "btn btn-active-light",
       },
@@ -61,7 +62,12 @@ document.addEventListener("DOMContentLoaded", function () {
           })
           .catch((err) => {
             console.error("Logout failed", err);
-            Swal.fire("Oops!", "Logout failed. Try again.", "error");
+            Swal.fire({
+              title: "Oops!",
+              text: "Logout failed. Try again.",
+              icon: "error",
+              customClass: "swal2-popup-custom",
+            });
           });
       }
     });

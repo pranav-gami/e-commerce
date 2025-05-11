@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const userId = parseInt(document.querySelector(".getId").dataset.userId);
 
+  let cartItemsGlobal = [];
+
   async function updateCartQuantity(productId, quantity) {
     try {
       const res = await fetch(`/api/cartProducts/updateCartProduct/${userId}`, {
@@ -29,15 +31,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const data = await res.json();
       if (!data.success) {
-        Swal.fire("Error", "Failed to update product quantity.", "error");
+        Swal.fire({
+          title: "Error",
+          text: "Failed to update product quantity.",
+          icon: "error",
+          customClass: "swal2-popup-custom",
+        });
         console.error("Failed to update quantity");
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        "Something went wrong while updating quantity.",
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        text: "Something Wrong while updateing Qiantity.",
+        icon: "error",
+        customClass: "swal2-popup-custom",
+      });
       console.error("Error updating cart:", error);
     }
   }
@@ -54,17 +62,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const data = await res.json();
       if (!data.success) {
-        Swal.fire("Error", "Failed to delete product from cart.", "error");
+        Swal.fire({
+          title: "Error",
+          text: "Failed to Remove product from Cart!",
+          icon: "error",
+          customClass: "swal2-popup-custom",
+        });
         console.error("Failed to delete cart product");
       } else {
         updateCartCount();
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        "Something went wrong while deleting product.",
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        text: "Something Wrong while deleing Product.",
+        icon: "error",
+        customClass: "swal2-popup-custom",
+      });
       console.error("Error deleting cart product:", error);
     }
   }
@@ -139,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const productId = btn.getAttribute("data-productid");
         cartItems[index].quantity++;
         await updateCartQuantity(productId, cartItems[index].quantity);
-        renderCartItems(cartItems);
+        await syncCartAndProducts();
       });
     });
 
@@ -149,12 +163,25 @@ document.addEventListener("DOMContentLoaded", function () {
         const productId = btn.getAttribute("data-productid");
         if (cartItems[index].quantity > 1) {
           cartItems[index].quantity--;
-          await updateCartQuantity(
-            productId,
-            parseInt(cartItems[index].quantity)
-          );
-          renderCartItems(cartItems);
+          await updateCartQuantity(productId, cartItems[index].quantity);
+          await syncCartAndProducts();
         } else {
+          // Confirm before removing if quantity goes to 0
+          const result = await Swal.fire({
+            title: "Remove Item?",
+            text: "Do you want to remove this item from the cart?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, remove it",
+            cancelButtonText: "Cancel",
+            customClass: "swal2-popup-custom",
+          });
+
+          if (result.isConfirmed) {
+            await deleteCartProduct(parseInt(productId));
+            cartItems.splice(index, 1);
+            await syncCartAndProducts();
+          }
         }
       });
     });
@@ -163,18 +190,33 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.addEventListener("click", async () => {
         const index = btn.getAttribute("data-index");
         const productId = cartItems[index].productId;
-        await deleteCartProduct(productId);
-        cartItems.splice(index, 1);
-        renderCartItems(cartItems);
+
+        const result = await Swal.fire({
+          title: "Remove Item?",
+          text: "Do you want to remove this item from the cart?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, remove it",
+          cancelButtonText: "Cancel",
+          customClass: "swal2-popup-custom",
+        });
+
+        if (result.isConfirmed) {
+          await deleteCartProduct(productId);
+          cartItems.splice(index, 1);
+          await syncCartAndProducts();
+        }
       });
     });
   }
 
-  fetchCartItems().then((data) => {
-    renderCartItems(data);
-  });
+  async function syncCartAndProducts() {
+    cartItemsGlobal = await fetchCartItems();
+    renderCartItems(cartItemsGlobal);
+    await fetchAllProducts(); // sync suggested product buttons
+    updateCartCount();
+  }
 
-  // --- Optional product suggestions and search section (unchanged logic) ---
   function generateRatingStars(rating) {
     let starsHTML = "";
     const fullStars = Math.floor(rating);
@@ -208,53 +250,58 @@ document.addEventListener("DOMContentLoaded", function () {
       toprated = data.data.filter((product) => product.rating >= 4);
       await renderProducts(toprated);
     } catch (err) {
-      Swal.fire("Error", "Failed to fetch product list.", "error");
+      Swal.fire({
+        title: "Error",
+        text: "Failed to fetch Products.",
+        icon: "error",
+        customClass: "swal2-popup-custom",
+      });
       console.error("Failed to fetch products", err);
     }
   }
 
   async function renderProducts(products) {
-    const cartData = await fetchCartItems();
+    const cartData = cartItemsGlobal;
     if (!products.length) {
       productContainer.innerHTML =
-        "<p style='font-size:1.5rem ;display:flex; width=100%; justify-content: center;align-items:center; margin-top:20px;grid-column: span 5'>Not found!!</p>";
+        "<p style='font-size:1.5rem; display:flex; width=100%; justify-content:center; align-items:center; margin-top:20px; grid-column: span 5'>Not found!!</p>";
       return;
     }
     productContainer.innerHTML = products
       .map((product) => {
         return `
-          <div class="product__item">
-            <a href="/primestore/product/${product.id}">
-              <div class="product__img-box">
-                <img class="product_img" style="border-radius:5px;" src="/assets/media/products/${
-                  product.image
-                }" alt="${product.title}" width="300" />
-                ${
-                  product.rating == 5
-                    ? `<p class="product_img-lable">Top Rated</p>`
-                    : ""
-                }
-              </div>
-            </a>
-            <div class="product__content-box">
-              <a href="#"><h2 class="product-category">${
-                product.category?.categoryName || "Category"
-              }</h2></a>
-              <a href="#"><h2 class="product-title text-truncate d-inline-block" style="max-width:150px">${
-                product.title
-              }</h2></a>
-              <div class="showcase__rating">${generateRatingStars(
-                product.rating
-              )}</div>
-              <p class="product-price">₹${product.price}.00</p>
+        <div class="product__item">
+          <a href="/primestore/product/${product.id}">
+            <div class="product__img-box">
+              <img class="product_img" style="border-radius:5px;" src="/assets/media/products/${
+                product.image
+              }" alt="${product.title}" width="300" />
               ${
-                cartData.find((p) => p.productId == product.id)
-                  ? `<a href="/primestore/cart/${userId}"><button class="goto_cartBtn" data-id=${product.id}>GO TO CART</button></a>`
-                  : `<button class="product__add_btn" data-id=${product.id}>ADD TO CART</button>`
+                product.rating == 5
+                  ? `<p class="product_img-lable">Top Rated</p>`
+                  : ""
               }
             </div>
+          </a>
+          <div class="product__content-box">
+            <a href="#"><h2 class="product-category">${
+              product.category?.categoryName || "Category"
+            }</h2></a>
+            <a href="#"><h2 class="product-title text-truncate d-inline-block" style="max-width:150px">${
+              product.title
+            }</h2></a>
+            <div class="showcase__rating">${generateRatingStars(
+              product.rating
+            )}</div>
+            <p class="product-price">₹${product.price}.00</p>
+            ${
+              cartData.find((p) => p.productId == product.id)
+                ? `<a href="/primestore/cart/${userId}"><button class="goto_cartBtn" data-id=${product.id}>GO TO CART</button></a>`
+                : `<button class="product__add_btn" data-id=${product.id}>ADD TO CART</button>`
+            }
           </div>
-        `;
+        </div>
+      `;
       })
       .join("");
   }
@@ -284,11 +331,11 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
           title: "Added to Cart",
           text: "Product has been added to your cart!",
-          timer: 2000,
+          timer: 1500,
           showConfirmButton: false,
-        }).then(() => {
-          updateCartCount();
-          location.reload();
+          customClass: "swal2-popup-custom",
+        }).then(async () => {
+          await syncCartAndProducts();
         });
       } catch (error) {
         Swal.fire({
@@ -297,6 +344,30 @@ document.addEventListener("DOMContentLoaded", function () {
           text: error.message || "Something went wrong!",
         });
       }
+    }
+  });
+
+  const placeOrderBtn = document.querySelector(".place-order-btn");
+
+  placeOrderBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const result = await Swal.fire({
+      title: "Confirm Order?",
+      text: "Are you sure you want to place this order?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, place order",
+      cancelButtonText: "Cancel",
+      customClass: {
+        popup: "swal2-popup-custom",
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-active-light",
+      },
+      buttonsStyling: false,
+    });
+    if (result.isConfirmed) {
+      window.location.href = "/primestore/checkout";
     }
   });
 
@@ -311,6 +382,12 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     }
     await renderProducts(filtered);
+  });
+
+  // INITIAL LOAD
+  fetchCartItems().then((data) => {
+    cartItemsGlobal = data;
+    renderCartItems(cartItemsGlobal);
   });
   fetchAllProducts();
 });

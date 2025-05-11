@@ -1,57 +1,85 @@
 <div class="dashboard">
     <aside class="sidebar">
-        <div class="sidebar-header">
+        <div class="sidebar_header">
             <h2>Account</h2>
-            <p>Pranav Gami</p>
+            <p class="username">Pranav Gami</p>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#" data-section="overview" class="active">Overview</a>
-            <a href="#" data-section="orders">Orders & Returns</a>
-            <a href="#" data-section="profile">Edit Profile</a>
+        <nav class="sidebar_nav">
+            <a href="" data-section="overview" class="active">User Profile</a>
+            <a href="" data-section="orders">Orders & Returns</a>
+            <a href="" data-section="profile">Edit Profile</a>
             <button class="logout-btn">Logout</button>
         </nav>
     </aside>
-
     <main class="main-content">
         <header class="main-header">
-            <button class="menu-toggle">&#9776;</button>
-            <h1 id="page-title">Overview</h1>
+            <button class="menu_toggle">&#9776;</button>
+            <h1 class="page_title">User Profile</h1>
         </header>
-        <!-- Overview Section -->
         <section id="overview" class="section active">
             <div class="user-overview-card">
-                <h3>User Details</h3>
-                <p><strong>Name:</strong> Pranav Gami</p>
-                <p><strong>Email:</strong> pranav123@gmail.com</p>
-                <p><strong>Phone:</strong> 9175433210</p>
-                <p><strong>Role:</strong> USER</p>
-                <p><strong>Active Status:</strong> Active</p>
-                <div class="address-block">
-                    <h4>Address</h4>
-                    <p><strong>Area/Locality:</strong> Bharati Ashram, sarkhej</p>
-                    <p><strong>City:</strong> Ahemdabad</p>
-                    <p><strong>PIN:</strong> 382211</p>
+                <div class="user-section">
+                    <h3 class="section-title">User Details</h3>
+                    <div class="detail-item">
+                        <span class="label">Name:</span>
+                        <span class="value user-name">Pranav Gami</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Email:</span>
+                        <span class="value user-email">pranav123@gmail.com</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Phone:</span>
+                        <span class="value user-phone">9175433210</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Role:</span>
+                        <span class="value user-role">USER</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Active Status:</span>
+                        <span class="value user-status active">Active</span>
+                    </div>
+                </div>
+                <div class="address-section">
+                    <h3 class="section-title">Address</h3>
+                    <div class="detail-item">
+                        <span class="label">Area/Locality:</span>
+                        <span class="value user_area">Bharati-Ashram</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">City:</span>
+                        <span class="value user_city">Sarkhrj</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">District:</span>
+                        <span class="value user_district">Ahemdabad</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">PIN:</span>
+                        <span class="value user_pin">382211</span>
+                    </div>
                 </div>
             </div>
+            <div style="display: flex; justify-content: center; align-items: center; margin-top: 25px;">
+                <button class="profile_Edit_Btn">Edit Profile</button>
+            </div>
         </section>
-
         <!-- Orders Section -->
         <section id="orders" class="section">
-            <h2>Your Orders</h2>
             <div class="order-list">
                 <div class="order-card cancelled">
                     <div class="order-status">Cancelled</div>
-                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <img src="" alt="Product Image">
                     <div class="order-info">
                         <h4>Redmi Buds 5 Truly Wireless Bluetooth Ear Buds</h4>
                         <p>Size: Onesize</p>
                         <p class="order-date">Cancelled on Mon, 5 May</p>
                     </div>
                 </div>
-
                 <div class="order-card delivered">
                     <div class="order-status">Delivered</div>
-                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <img src="" alt="Product Image">
                     <div class="order-info">
                         <h4>Red Tape Men Rubber Sliders</h4>
                         <p>Size: 9</p>
@@ -60,72 +88,30 @@
                 </div>
             </div>
         </section>
-
         <!-- Edit Profile Section -->
         <section id="profile" class="section">
-            <h2>Edit Profile</h2>
             <form class="profile-form" id="profile-form">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" value="Pranav Gami">
-
                 <label for="email">Email</label>
                 <input type="email" id="email" value="pranav123@gmail.com">
-
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" value="9175433210">
-
                 <label for="role">Role</label>
                 <input type="text" id="role" value="USER" disabled>
-
                 <label for="area">Area/Locality</label>
-                <input type="text" id="area" value="Bharati Ashram, sarkhej">
-
+                <input type="text" id="area" value="Bharati Ashram">
                 <label for="city">City</label>
-                <input type="text" id="city" value="Ahemdabad">
-
+                <input type="text" id="city" value="Sarkhej">
+                <label for="district">District</label>
+                <input type="text" id="district" value="Ahemdabad">
                 <label for="pin">PIN</label>
                 <input type="text" id="pin" value="382211">
-
-                <button type="submit">Save Changes</button>
+                <div class="btn_group">
+                    <button type="submit" class="save_button">Save</button>
+                    <button type="submit" class="cancel_button">Cancel</button>
+                </div>
             </form>
         </section>
     </main>
 </div>
-
-<script>
-    // Sidebar navigation toggle sections
-    const links = document.querySelectorAll('.sidebar-nav a');
-    const sections = document.querySelectorAll('.section');
-    const pageTitle = document.getElementById('page-title');
-
-    links.forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            links.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            const sectionId = link.dataset.section;
-            sections.forEach(section => {
-                section.classList.remove('active');
-                if (section.id === sectionId) {
-                    section.classList.add('active');
-                    pageTitle.textContent = link.textContent;
-                }
-            });
-        });
-    });
-
-    // Sidebar toggle on mobile
-    const toggleBtn = document.querySelector('.menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-    });
-
-    // Logout Button
-    const logoutBtn = document.querySelector('.logout-btn');
-    logoutBtn.addEventListener('click', () => {
-        alert('Logging out...');
-        // Call logout API or redirect user here
-    });
-</script>

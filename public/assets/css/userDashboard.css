@@ -1,55 +1,64 @@
 /* Layout */
 .dashboard {
     display: flex;
-    min-height: 100vh;
+    height: auto;
     padding: 0 20px;
     margin-bottom: 20px;
-    font-family: 'Segoe UI', sans-serif;
 }
 
 .sidebar {
+    background-color: #d7d7d7;
     width: 250px;
-    padding: 25px;
     border: 1px solid #ddd;
 }
 
-.sidebar-header h2 {
-    margin-bottom: 5px;
-    font-size: 22px;
+.sidebar_header {
+    padding: 25px;
+    padding-bottom: 10px;
+    background-color: #ff9cad;
 }
 
-.sidebar-header p {
+.sidebar_header h2 {
+    margin-bottom: 5px;
+    font-size: 25px;
+}
+
+.sidebar_header p {
     font-size: 14px;
     color: #666;
 }
 
-.sidebar-nav a,
-.sidebar-nav button {
+.sidebar_nav {
+    padding: 25px 10px;
+}
+
+.sidebar_nav a,
+.sidebar_nav button {
     font-size: 18px;
     display: block;
-    padding: 10px;
+    padding: 10px 20px;
     color: #333;
     text-decoration: none;
     border: none;
     background: none;
     text-align: left;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-.sidebar-nav a.active {
+.sidebar_nav a.active {
     color: #f8899b;
     font-weight: 500;
-    background-color: #e5f3ff;
+    background-color: #bcbcbc;
 }
 
 .logout-btn {
     color: #f8899b;
-    margin-top: 20px;
 }
 
 .main-content {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
     border: 1px solid #ddd;
 }
 
@@ -59,7 +68,7 @@
     justify-content: space-between;
 }
 
-.menu-toggle {
+.menu_toggle {
     display: none;
     font-size: 24px;
     background: none;
@@ -76,30 +85,93 @@
 }
 
 /* Overview Section */
-.user-overview-card {
+
+.page_title {
     width: 100%;
-    padding: 20px;
-    background: #f8f8f8;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.user-overview-card h3 {
-    margin-bottom: 15px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #ddd;
-}
-
-.user-overview-card p {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.address-block h4 {
-    margin-top: 15px;
+    font-size: 30px;
+    color: #333;
     padding-bottom: 10px;
-
+    border-bottom: 1px solid #555;
 }
+
+.user-overview-card {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    gap: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-overview-card {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-section,
+.address-section {
+    flex: 1 1 300px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.user-section:hover,
+.address-section:hover {
+    background-color: #f1f5ff;
+}
+
+.section-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f8899b;
+    color: #f8899b;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.label {
+    font-weight: 600;
+    color: #333;
+}
+
+.value {
+    font-weight: 500;
+    color: #555;
+    text-align: right;
+}
+
+.profile_Edit_Btn {
+    padding: 12px 40px;
+    background: #f8899b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.profile_Edit_Btn:hover {
+    background-color: #f9788e;
+    transform: translateY(-3px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .user-overview-card {
+        flex-direction: column;
+    }
+}
+
 
 /* Orders Section */
 .order-list {
@@ -110,6 +182,7 @@
 }
 
 .order-card {
+    position: relative;
     display: flex;
     align-items: center;
     background: #fff;
@@ -126,8 +199,8 @@
     color: white;
     font-weight: bold;
     position: absolute;
-    top: 8px;
-    left: 8px;
+    bottom: 20px;
+    right: 20px;
 }
 
 .order-card img {
@@ -187,8 +260,16 @@
     border: 1px solid #ccc;
 }
 
-.profile-form button {
+.btn_group {
+    display: flex;
+    align-items: center;
     margin-top: 20px;
+    gap: 20px;
+}
+
+
+.profile-form button {
+    min-width: 100px;
     padding: 10px 20px;
     background: #f8899b;
     color: white;

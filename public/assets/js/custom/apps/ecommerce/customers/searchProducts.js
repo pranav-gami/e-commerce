@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: userId,
+            userId: user.id,
             productId: parseInt(productId),
             quantity: 1,
           }),
@@ -163,6 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
           text: "Product has been added to your cart!",
           timer: 2000,
           showConfirmButton: false,
+          customClass: "swal2-popup-custom",
         }).then(() => {
           updateCartCount();
           location.reload();
@@ -172,6 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "error",
           title: "Oops...",
           text: error.message || "Something went wrong!",
+          customClass: "swal2-popup-custom",
         });
       }
     }

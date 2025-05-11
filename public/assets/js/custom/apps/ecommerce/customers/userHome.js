@@ -230,9 +230,8 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
           title: "Added to Cart",
           text: "Product has been added to your cart!",
-          confirmButtonText: "OK",
+          showConfirmButton: false,
           customClass: {
-            confirmButton: "btn btn-primary",
             popup: "swal2-popup-custom",
           },
           buttonsStyling: false,

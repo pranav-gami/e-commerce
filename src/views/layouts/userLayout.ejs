@@ -53,25 +53,30 @@
                         <ion-icon name="bag-handle-outline" role="img" aria-label="bag handle outline"></ion-icon><span
                             class="cartProductsCount">0</span>
                     </button>
-                    <button class="header__main-btn user-profile">
-                        <ion-icon class="profile" name="person-outline" role="img"
-                            aria-label="person outline"></ion-icon>
-                        <div class="profile__data">
-                            <div class="profile__data-details">
-                                <div class="symbol-circle">
-                                    <div class="fs-3 bg-light-warning text-warning username-initial">M
+                    <button class="header__main-btn user-profile header__actions">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <div class="user-dropdown shadow" id="userDropdown">
+                            <div class="dropdown-header d-flex align-items-center p-3 border-bottom">
+                                <div class="symbol symbol-70px symbol-circle px-3">
+                                    <div class="symbol-label fs-3 bg-light-warning text-warning username-initial">
+                                        M
                                     </div>
                                 </div>
-                                <div style="justify-self: center; align-items: center; margin-top: 10px;">
-                                    <a href="/user/profile">
-                                        <p class="login_username" style="margin-bottom: 0;">Michael Doe</p>
+                                <div class="user_details">
+                                    <a href="/primestore/my/dashboard">
+                                        <div class="fw-semibold username">Dejan Lovren</div>
                                     </a>
-                                    <p class="login_useremail">michael@example.com</p>
+                                    <div class="text-muted small useremail">dejan@example.com</div>
                                 </div>
                             </div>
-                            <div class="profile__data-btns">
-                                <a href="/user/profile">My Profile</a>
-                                <a href="/user/login" class="logout">Sign Out</a>
+                            <div class="dropdown-body py-2">
+                                <a href="/primestore/my/dashboard" class="dropdown-item px-3 py-1"><i
+                                        class="bi bi-person-circle"></i>My
+                                    Profile</a>
+                                <a href="/primestore/my/dashboard" class="dropdown-item px-3 py-1"><i
+                                        class="bi bi-sliders"></i>Orders</a>
+                                <a href="" class="dropdown-item text-danger px-3 py-2 logoutBtn border-top py-2"><i
+                                        class="bi bi-box-arrow-right"></i>Sign Out</a>
                             </div>
                         </div>
                     </button>
