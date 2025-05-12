@@ -37,13 +37,12 @@ var KTSigninUser = (function () {
 
       let errorMessage = document.body.dataset.errorMessage;
       let err;
-      console.log(errorMessage);
       if (errorMessage == "only_user") {
         err = "Only User can access this Pages!!";
       } else if (errorMessage == "only_admin") {
         err = "Only Admin can access this Pages!!";
       }
-      if (errorMessage == "login_required") {
+      if (errorMessage == "Login") {
         err = "You must Login to access this Page!";
       }
       if (errorMessage !== "undefined" && errorMessage.trim() !== "") {

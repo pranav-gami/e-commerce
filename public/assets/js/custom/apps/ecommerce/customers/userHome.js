@@ -154,8 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function renderProducts(products) {
     const cartData = await fetchCartItems();
     if (!products.length) {
-      productContainer.innerHTML =
-        "<p style='font-size:1.5rem; display:flex; justify-content:center; align-items:center; margin-top:20px;'>Not found!!</p>";
+      productContainer.innerHTML = "<p class='not_found_text'>Not found!!</p>";
       return;
     }
     const categoryData = await getCategoryData();

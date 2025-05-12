@@ -38,29 +38,57 @@ export const showUserById = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const userID = parseInt(req.params.id);
-    const isExist = await prisma.user.findUnique({ where: { id: userID } });
-    if (!isExist) {
-      return res.status(500).json({
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userID },
+    });
+    if (!existingUser) {
+      return res.status(404).json({
         success: false,
-        message: "User you are trying to Update is not Found!!",
+        message: "User you are trying to update is not found.",
       });
     }
+
     const { username, email, password, role, city, phone, address } = req.body;
-    const user = await prisma.user.update({
+
+    // Build only fields that are present
+    const dataToUpdate = {};
+
+    if (username !== undefined) dataToUpdate.username = username;
+    if (email !== undefined) dataToUpdate.email = email;
+    if (role !== undefined) dataToUpdate.role = role;
+    if (city !== undefined) dataToUpdate.city = city;
+    if (phone !== undefined) dataToUpdate.phone = phone;
+    if (address !== undefined) dataToUpdate.address = address;
+
+    if (password !== undefined && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 5);
+      dataToUpdate.password = hashedPassword;
+    }
+
+    // If no fields provided to update
+    if (Object.keys(dataToUpdate).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No valid fields provided to update.",
+      });
+    }
+
+    const updatedUser = await prisma.user.update({
       where: { id: userID },
-      data: {
-        username,
-        email,
-        password: await bcrypt.hash(password, 5),
-        role,
-        city,
-        phone,
-        address: address ? address : "",
-      },
+      data: dataToUpdate,
     });
-    res.status(200).json({ success: true, data: user });
+
+    return res.status(200).json({
+      success: true,
+      message: "User updated successfully.",
+      data: updatedUser,
+    });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
   }
 };
 

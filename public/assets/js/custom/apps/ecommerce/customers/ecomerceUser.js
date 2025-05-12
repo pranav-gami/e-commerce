@@ -21,55 +21,57 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // LOGOUT USER FUNCTIOANALITY
-  const logoutButton = document.querySelector(".logoutBtn");
+  const logoutButton = document.querySelectorAll(".logoutBtn");
 
-  logoutButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    Swal.fire({
-      text: "Are you sure you want to sign out?",
-      icon: "warning",
-      showCancelButton: true,
-      buttonsStyling: false,
-      confirmButtonText: "Yes, sign out",
-      cancelButtonText: "Cancel",
-      customClass: {
-        customClass: "swal2-popup-custom",
-        confirmButton: "btn btn-danger",
-        cancelButton: "btn btn-active-light",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch("/api/auth/logout", {
-          method: "POST",
-          credentials: "include",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            const userId = user.id;
-            fetch(`/api/user/updateStatus/${userId}`, {
-              method: "PUT",
-            })
-              .then((res) => res.json())
-              .then((statusData) => {
-                console.log("User status updated:", statusData);
-              })
-              .catch((err) => {
-                console.error("Status update failed:", err);
-              });
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            window.location.href = "/user/login";
+  logoutButton.forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      Swal.fire({
+        text: "Are you sure you want to sign out?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, sign out",
+        cancelButtonText: "Cancel",
+        customClass: {
+          customClass: "swal2-popup-custom",
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-active-light",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch("/api/auth/logout", {
+            method: "POST",
+            credentials: "include",
           })
-          .catch((err) => {
-            console.error("Logout failed", err);
-            Swal.fire({
-              title: "Oops!",
-              text: "Logout failed. Try again.",
-              icon: "error",
-              customClass: "swal2-popup-custom",
+            .then((res) => res.json())
+            .then((data) => {
+              const userId = user.id;
+              fetch(`/api/user/updateStatus/${userId}`, {
+                method: "PUT",
+              })
+                .then((res) => res.json())
+                .then((statusData) => {
+                  console.log("User status updated:", statusData);
+                })
+                .catch((err) => {
+                  console.error("Status update failed:", err);
+                });
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              window.location.href = "/user/login";
+            })
+            .catch((err) => {
+              console.error("Logout failed", err);
+              Swal.fire({
+                title: "Oops!",
+                text: "Logout failed. Try again.",
+                icon: "error",
+                customClass: "swal2-popup-custom",
+              });
             });
-          });
-      }
+        }
+      });
     });
   });
 
@@ -82,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (data.success) {
         renderHeaderMenu(data.data);
         renderMobileMenu(data.data);
+        renderSidebarMenu(data.data);
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -119,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderMobileMenu(categories) {
     const mobileMenu = document.querySelector(".mobile_menu-category");
     mobileMenu.innerHTML = "";
-    // Add Home Button(It don't Subcategories)
     const homeLi = document.createElement("li");
     homeLi.classList.add("menu__list-item");
     homeLi.innerHTML = `<button class="mob_menu-btn menu__title" href="/primestore">Home</button>`;
@@ -149,6 +151,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
       mobileMenu.appendChild(catLi);
     });
+  }
+
+  function renderSidebarMenu(categories) {
+    const sidebarMenu = document.querySelector(".sidebar__category-list");
+
+    if (sidebarMenu) {
+      sidebarMenu.innerHTML = "";
+      categories.forEach((cat) => {
+        const catLi = document.createElement("li");
+        catLi.classList.add("sidebar__list-item");
+
+        // Generate subcategories HTML
+        const subListHTML = cat.Subcategory.map(
+          (sub) => `
+            <li class="hidden__list-item">
+                <a class="hidden__list-link" href="/primestore/category/${cat.id}">
+                    <p class="list-text">${sub.name}</p>
+                </a>
+            </li>
+        `
+        ).join("");
+
+        catLi.innerHTML = `
+            <button class="sidebar__hidden-menu" data-accordian-btn>
+                <div class="menu__link">
+                    <img src="/assets/media/categories/${cat.image}" alt="" height="20" width="20" class="menu__title-img" />
+                    <p class="menu__title">${cat.categoryName}</p>
+                </div>
+                <div>
+                    <ion-icon name="add-outline" class="add-icon" role="img" aria-label="add outline"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon" role="img" aria-label="remove outline"></ion-icon>
+                </div>
+            </button>
+            <ul class="hidden__list" data-accordian-menu>
+                ${subListHTML}
+            </ul>
+        `;
+
+        sidebarMenu.appendChild(catLi);
+      });
+    }
   }
 
   // MOBILE NAVIGATION

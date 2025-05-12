@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     container.innerHTML = "";
 
     if (!products.length) {
-      container.innerHTML = `<p style='font-size:1.5rem; display:flex; justify-content:center; align-items:center; margin-top:20px;'>${emptyMessage}</p>`;
+      container.innerHTML = `<p class='not_found_text''>${emptyMessage}</p>`;
       return;
     }
 

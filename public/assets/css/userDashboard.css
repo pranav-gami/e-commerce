@@ -4,10 +4,11 @@
     height: auto;
     padding: 0 20px;
     margin-bottom: 20px;
+    min-height: 90vh;
 }
 
 .sidebar {
-    background-color: #d7d7d7;
+    background-color: #efefef;
     width: 250px;
     border: 1px solid #ddd;
 }
@@ -15,7 +16,7 @@
 .sidebar_header {
     padding: 25px;
     padding-bottom: 10px;
-    background-color: #ff9cad;
+    background-color: #f9a9b6;
 }
 
 .sidebar_header h2 {
@@ -47,8 +48,8 @@
 }
 
 .sidebar_nav a.active {
-    color: #f8899b;
-    font-weight: 500;
+    color: #111;
+    font-weight: bold;
     background-color: #bcbcbc;
 }
 
@@ -60,6 +61,7 @@
     flex: 1;
     padding: 30px;
     border: 1px solid #ddd;
+    background-color: #fdfdfd;
 }
 
 .main-header {
@@ -172,7 +174,6 @@
     }
 }
 
-
 /* Orders Section */
 .order-list {
     display: flex;
@@ -193,14 +194,14 @@
 }
 
 .order-status {
-    font-size: 12px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    font-size: 18px;
     padding: 4px 8px;
     border-radius: 4px;
     color: white;
-    font-weight: bold;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+    font-weight: 500;
 }
 
 .order-card img {
@@ -230,11 +231,40 @@
 }
 
 .order-card.delivered .order-status {
-    background: #0ab39c;
+    color: #0ab39c;
 }
 
 .order-card.cancelled .order-status {
-    background: #ab404b;
+    color: #ab404b;
+}
+
+
+.order-card.pending .order-status {
+    color: #f0ad4e;
+}
+
+/* Action Buttons */
+.order-actions {
+    margin-top: 10px;
+}
+
+.order-actions button {
+    padding: 6px 12px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.cancel-order-btn {
+    background-color: #d66873;
+    color: white;
+}
+
+.track-order-btn {
+    background-color: #11e49a;
+    color: white;
 }
 
 /* Edit Profile Form */

@@ -286,24 +286,29 @@ router.get(
   }
 );
 
-// router.get(
-//   "/primestore/payment",
-//   verifyToken,
-//   authorizeRole("USER"),
-//   (req, res) => {
-//     res.render("paymentRedirect", {
-//       layout: false,
-//       scripts: ``,
-//     });
-//   }
-// );
+router.get(
+  "/primestore/success",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/paymentSuccess", {
+      layout: false,
+      scripts: ``,
+    });
+  }
+);
 
-// router.get("/sucess", verifyToken, authorizeRole("USER"), (req, res) => {
-//   res.render("success", {
-//     layout: false,
-//     scripts: ``,
-//   });
-// });
+router.get(
+  "/primestore/fail",
+  verifyToken,
+  authorizeRole("USER"),
+  (req, res) => {
+    res.render("pages/users/paymentFail", {
+      layout: false,
+      scripts: ``,
+    });
+  }
+);
 
 router.get(
   "/primestore/my/dashboard",

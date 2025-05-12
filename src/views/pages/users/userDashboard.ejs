@@ -6,9 +6,9 @@
         </div>
         <nav class="sidebar_nav">
             <a href="" data-section="overview" class="active">User Profile</a>
-            <a href="" data-section="orders">Orders & Returns</a>
+            <a href="" data-section="orders">Orders Details</a>
             <a href="" data-section="profile">Edit Profile</a>
-            <button class="logout-btn">Logout</button>
+            <button class="logout-btn logoutBtn">Logout</button>
         </nav>
     </aside>
     <main class="main-content">
@@ -22,23 +22,19 @@
                     <h3 class="section-title">User Details</h3>
                     <div class="detail-item">
                         <span class="label">Name:</span>
-                        <span class="value user-name">Pranav Gami</span>
+                        <span class="value user_name">Pranav Gami</span>
                     </div>
                     <div class="detail-item">
                         <span class="label">Email:</span>
-                        <span class="value user-email">pranav123@gmail.com</span>
+                        <span class="value user_email">pranav123@gmail.com</span>
                     </div>
                     <div class="detail-item">
                         <span class="label">Phone:</span>
-                        <span class="value user-phone">9175433210</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Role:</span>
-                        <span class="value user-role">USER</span>
+                        <span class="value user_phone">9175433210</span>
                     </div>
                     <div class="detail-item">
                         <span class="label">Active Status:</span>
-                        <span class="value user-status active">Active</span>
+                        <span class="value user_status active">Active</span>
                     </div>
                 </div>
                 <div class="address-section">
@@ -86,6 +82,19 @@
                         <p class="order-date">Delivered on Sun, 1 Oct 2023</p>
                     </div>
                 </div>
+                <div class="order-card pending">
+                    <div class="order-status">Pending</div>
+                    <img src="" alt="Product Image">
+                    <div class="order-info">
+                        <h4>Boat Rockerz 255 Pro+ Wireless Earphones</h4>
+                        <p>Size: Onesize</p>
+                        <p class="order-date">Expected by Thu, 15 May</p>
+                        <div class="order-actions">
+                            <button class="cancel-order-btn">Cancel</button>
+                            <button class="track-order-btn">Track Order</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <!-- Edit Profile Section -->
@@ -97,8 +106,6 @@
                 <input type="email" id="email" value="pranav123@gmail.com">
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" value="9175433210">
-                <label for="role">Role</label>
-                <input type="text" id="role" value="USER" disabled>
                 <label for="area">Area/Locality</label>
                 <input type="text" id="area" value="Bharati Ashram">
                 <label for="city">City</label>
@@ -109,7 +116,7 @@
                 <input type="text" id="pin" value="382211">
                 <div class="btn_group">
                     <button type="submit" class="save_button">Save</button>
-                    <button type="submit" class="cancel_button">Cancel</button>
+                    <button type="button" class="cancel_button">Cancel</button>
                 </div>
             </form>
         </section>

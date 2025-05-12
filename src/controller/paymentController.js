@@ -25,8 +25,8 @@ export const initiatePayment = async (req, res) => {
         },
       ],
       mode: "payment",
-      success_url: "http://localhost:3000/primestore?success=true",
-      cancel_url: "http://localhost:3000/primestore/checkout?canceled=true",
+      success_url: "http://localhost:3000/primestore/success?success=true",
+      cancel_url: "http://localhost:3000/primestore/fail?canceled=true",
     });
 
     res.json({ sessionId: session.id });

@@ -68,7 +68,7 @@ model User {
   address  String? @db.VarChar(100)
 
   @@map("user")
-}
+} 
 
 model Cart {
   id          Int           @id @default(autoincrement())
