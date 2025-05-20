@@ -40,168 +40,171 @@
     <header>
         <div class="header__main">
             <div class="container">
-                <a class="header__logo" href=""><img src="/assets/media/logos/primeStore.png" height="36" width="160"
-                        alt="NO" /></a>
-                <div class="header__main-input">
-                    <input type="text" class="header__search-field main_search" placeholder="Search here..." />
-                    <button class="header__search-btn">
-                        <ion-icon name="search-outline search_btn"></ion-icon>
-                    </button>
-                </div>
-                <div class="header__main-icons">
-                    <button class="header__main-btn cart">
-                        <ion-icon name="bag-handle-outline" role="img" aria-label="bag handle outline"></ion-icon><span
-                            class="cartProductsCount">0</span>
-                    </button>
-                    <button class="header__main-btn user-profile header__actions">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <div class="user-dropdown shadow" id="userDropdown">
-                            <div class="dropdown-header d-flex align-items-center p-3 border-bottom">
-                                <div class="symbol symbol-70px symbol-circle px-3">
-                                    <div class="symbol-label fs-3 bg-light-warning text-warning username-initial">
-                                        M
+                <a class="header__logo" href="/primestore"><img src="/assets/media/logos/header_logo.png" height="30"
+                        width="170" alt="NO" /></a>
+                <% if (showheader) { %>
+                    <div class="header__main-input">
+                        <input type="text" class="header__search-field main_search" placeholder="Search here..." />
+                        <button class="header__search-btn">
+                            <ion-icon name="search-outline search_btn"></ion-icon>
+                        </button>
+                    </div>
+                    <% } %>
+                        <div class="header__main-icons">
+                            <button class="header__main-btn cart">
+                                <ion-icon name="bag-handle-outline" role="img"
+                                    aria-label="bag handle outline"></ion-icon><span class="cartProductsCount">0</span>
+                            </button>
+                            <button class="header__main-btn user-profile header__actions">
+                                <ion-icon name="person-outline"></ion-icon>
+                                <div class="user-dropdown shadow" id="userDropdown">
+                                    <div class="dropdown-header d-flex align-items-center p-2 border-bottom">
+                                        <div class="symbol symbol-70px">
+                                            <img src="/assets/media/defaultuser.jpeg" class="main_hedaer-image" alt="">
+                                        </div>
+                                        <div class="user_details">
+                                            <a href="/primestore/my/dashboard">
+                                                <div class="fw-semibold username">Dejan Lovren</div>
+                                            </a>
+                                            <div class="text-muted small useremail">dejan@example.com</div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-body py-2">
+                                        <a href="/primestore/my/dashboard" class="dropdown-item px-3 py-1"></i>My
+                                            Profile</a>
+                                        <a href="/primestore/my/dashboard" class="dropdown-item px-3 py-1">Orders</a>
+                                        <a href=""
+                                            class="dropdown-item text-danger px-3 py-2 logoutBtn border-top py-1">Sign
+                                            Out</a>
                                     </div>
                                 </div>
-                                <div class="user_details">
-                                    <a href="/primestore/my/dashboard">
-                                        <div class="fw-semibold username">Dejan Lovren</div>
-                                    </a>
-                                    <div class="text-muted small useremail">dejan@example.com</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-body py-2">
-                                <a href="/primestore/my/dashboard" class="dropdown-item px-3 py-1"><i
-                                        class="bi bi-person-circle"></i>My
-                                    Profile</a>
-                                <a href="/primestore/my/dashboard" class="dropdown-item px-3 py-1"><i
-                                        class="bi bi-sliders"></i>Orders</a>
-                                <a href="" class="dropdown-item text-danger px-3 py-2 logoutBtn border-top py-2"><i
-                                        class="bi bi-box-arrow-right"></i>Sign Out</a>
-                            </div>
+                            </button>
                         </div>
-                    </button>
+            </div>
+        </div>
+        <% if (showheader) { %>
+            <nav class="header__menubar">
+                <div class="container">
+                    <ul class="header__menubar-list">
+                        <li class="header__menubar-link">
+                            <a href="/primestore" class="header__menubar-item">home</a>
+                        </li>
+                        <li class="header__menubar-link">
+                            <a href="" class="header__menubar-item">categories</a>
+                            <ul class="dropdown_list">
+                                <li class="dropdown_item"><a href="">Desktop</a></li>
+                                <li class="dropdown_item"><a href="">Laptops</a></li>
+                            </ul>
+                        </li>
+                        <li class="header__menubar-link">
+                            <a href="" class="header__menubar-item">men's</a>
+                            <ul class="dropdown_list">
+                                <li class="dropdown_item"><a href="">Shirts</a></li>
+                                <li class="dropdown_item"><a href="">Jeans</a></li>
+                            </ul>
+                        </li>
+                        <li class="header__menubar-link">
+                            <a href="" class="header__menubar-item">women's</a>
+                            <ul class="dropdown_list">
+                                <li class="dropdown_item"><a href="">Dreshes</a></li>
+                                <li class="dropdown_item"><a href="">frocks</a></li>
+                            </ul>
+                        </li>
+                        <li class="header__menubar-link">
+                            <a href="" class="header__menubar-item">jewellery</a>
+                            <ul class="dropdown_list">
+                                <li class="dropdown_item"><a href="">Rings</a></li>
+                                <li class="dropdown_item"><a href="">bracelets</a></li>
+                            </ul>
+                        </li>
+                        <li class="header__menubar-link">
+                            <a href="" class="header__menubar-item">perfume</a>
+                            <ul class="dropdown_list">
+                                <li class="dropdown_item"><a href="">Denver</a></li>
+                                <li class="dropdown_item"><a href="">perfume</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-        <nav class="header__menubar">
-            <div class="container">
-                <ul class="header__menubar-list">
-                    <li class="header__menubar-link">
-                        <a href="/primestore" class="header__menubar-item">home</a>
-                    </li>
-                    <li class="header__menubar-link">
-                        <a href="" class="header__menubar-item">categories</a>
-                        <ul class="dropdown_list">
-                            <li class="dropdown_item"><a href="">Desktop</a></li>
-                            <li class="dropdown_item"><a href="">Laptops</a></li>
-                        </ul>
-                    </li>
-                    <li class="header__menubar-link">
-                        <a href="" class="header__menubar-item">men's</a>
-                        <ul class="dropdown_list">
-                            <li class="dropdown_item"><a href="">Shirts</a></li>
-                            <li class="dropdown_item"><a href="">Jeans</a></li>
-                        </ul>
-                    </li>
-                    <li class="header__menubar-link">
-                        <a href="" class="header__menubar-item">women's</a>
-                        <ul class="dropdown_list">
-                            <li class="dropdown_item"><a href="">Dreshes</a></li>
-                            <li class="dropdown_item"><a href="">frocks</a></li>
-                        </ul>
-                    </li>
-                    <li class="header__menubar-link">
-                        <a href="" class="header__menubar-item">jewellery</a>
-                        <ul class="dropdown_list">
-                            <li class="dropdown_item"><a href="">Rings</a></li>
-                            <li class="dropdown_item"><a href="">bracelets</a></li>
-                        </ul>
-                    </li>
-                    <li class="header__menubar-link">
-                        <a href="" class="header__menubar-item">perfume</a>
-                        <ul class="dropdown_list">
-                            <li class="dropdown_item"><a href="">Denver</a></li>
-                            <li class="dropdown_item"><a href="">perfume</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="mobile__navigation">
-            <button class="mobile_btn" mobile-menu-open><ion-icon name="menu-outline"></ion-icon></button>
-            <button class="mobile_btn"><ion-icon name="home-outline"></ion-icon></button>
-            <button class="mobile_btn cart"><ion-icon name="bag-handle-outline"></ion-icon><span>0</span></button>
-            <button class="mobile_btn user-profile"><ion-icon name="person-outline"></ion-icon></button>
-        </div>
-        <nav class="mobile__menubar" mobile-menu>
-            <div class="mobile_menu-top">
-                <h3 class="mob_menu-title">Menu</h3>
-                <button class="mob_menucls-btn"><ion-icon name="close-outline"></ion-icon></button>
-            </div>
-            <ul class="mobile_menu-category">
-                <li class="menu__list-item"><button class="mob_menu-btn menu__title" href="">Home</button></li>
-                <li class="menu__list-item">
-                    <button class="mob_menu-btn" data-accordian-btn>
-                        <p class="menu__title">Men's</p>
-                        <div>
-                            <ion-icon name="add-outline" class="add_icon" role="img"
-                                aria-label="add outline"></ion-icon>
-                            <ion-icon name="remove-outline" class="remove_icon" role="img"
-                                aria-label="remove outline"></ion-icon>
-                        </div>
-                    </button>
-                    <ul class="menu_hidden_list" data-accordian-menu>
-                        <li class="menu_hid-item"><a href="">Shirts</a></li>
-                        <li class="menu_hid-item"><a href="">Jeans</a></li>
+            </nav>
+            <% } %>
+                <div class="mobile__navigation">
+                    <button class="mobile_btn" mobile-menu-open><ion-icon name="menu-outline"></ion-icon></button>
+                    <button class="mobile_btn"><ion-icon name="home-outline"></ion-icon></button>
+                    <button class="mobile_btn cart"><ion-icon
+                            name="bag-handle-outline"></ion-icon><span>0</span></button>
+                    <button class="mobile_btn user-profile"><ion-icon name="person-outline"></ion-icon></button>
+                </div>
+                <nav class="mobile__menubar" mobile-menu>
+                    <div class="mobile_menu-top">
+                        <h3 class="mob_menu-title">Menu</h3>
+                        <button class="mob_menucls-btn"><ion-icon name="close-outline"></ion-icon></button>
+                    </div>
+                    <ul class="mobile_menu-category">
+                        <li class="menu__list-item"><button class="mob_menu-btn menu__title" href="">Home</button>
+                        </li>
+                        <li class="menu__list-item">
+                            <button class="mob_menu-btn" data-accordian-btn>
+                                <p class="menu__title">Men's</p>
+                                <div>
+                                    <ion-icon name="add-outline" class="add_icon" role="img"
+                                        aria-label="add outline"></ion-icon>
+                                    <ion-icon name="remove-outline" class="remove_icon" role="img"
+                                        aria-label="remove outline"></ion-icon>
+                                </div>
+                            </button>
+                            <ul class="menu_hidden_list" data-accordian-menu>
+                                <li class="menu_hid-item"><a href="">Shirts</a></li>
+                                <li class="menu_hid-item"><a href="">Jeans</a></li>
+                            </ul>
+                        </li>
+                        <li class="menu__list-item">
+                            <button class="mob_menu-btn" data-accordian-btn>
+                                <p class="menu__title">Women's</p>
+                                <div>
+                                    <ion-icon name="add-outline" class="add_icon" role="img"
+                                        aria-label="add outline"></ion-icon>
+                                    <ion-icon name="remove-outline" class="remove_icon" role="img"
+                                        aria-label="remove outline"></ion-icon>
+                                </div>
+                            </button>
+                            <ul class="menu_hidden_list" data-accordian-menu>
+                                <li class="menu_hid-item"><a href="">Dreshes</a></li>
+                                <li class="menu_hid-item"><a href="">frocks</a></li>
+                            </ul>
+                        </li>
+                        <li class="menu__list-item">
+                            <button class="mob_menu-btn" data-accordian-btn>
+                                <p class="menu__title">Jewelley</p>
+                                <div>
+                                    <ion-icon name="add-outline" class="add_icon" role="img"
+                                        aria-label="add outline"></ion-icon>
+                                    <ion-icon name="remove-outline" class="remove_icon" role="img"
+                                        aria-label="remove outline"></ion-icon>
+                                </div>
+                            </button>
+                            <ul class="menu_hidden_list" data-accordian-menu>
+                                <li class="menu_hid-item"><a href="">Rings</a></li>
+                                <li class="menu_hid-item"><a href="">bracelets</a></li>
+                            </ul>
+                        </li>
+                        <li class="menu__list-item">
+                            <button class="mob_menu-btn" data-accordian-btn>
+                                <p class="menu__title">Perfumes</p>
+                                <div>
+                                    <ion-icon name="add-outline" class="add_icon" role="img"
+                                        aria-label="add outline"></ion-icon>
+                                    <ion-icon name="remove-outline" class="remove_icon" role="img"
+                                        aria-label="remove outline"></ion-icon>
+                                </div>
+                            </button>
+                            <ul class="menu_hidden_list" data-accordian-menu>
+                                <li class="menu_hid-item"><a href="">Denver</a></li>
+                                <li class="menu_hid-item"><a href="">perfume</a></li>
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-                <li class="menu__list-item">
-                    <button class="mob_menu-btn" data-accordian-btn>
-                        <p class="menu__title">Women's</p>
-                        <div>
-                            <ion-icon name="add-outline" class="add_icon" role="img"
-                                aria-label="add outline"></ion-icon>
-                            <ion-icon name="remove-outline" class="remove_icon" role="img"
-                                aria-label="remove outline"></ion-icon>
-                        </div>
-                    </button>
-                    <ul class="menu_hidden_list" data-accordian-menu>
-                        <li class="menu_hid-item"><a href="">Dreshes</a></li>
-                        <li class="menu_hid-item"><a href="">frocks</a></li>
-                    </ul>
-                </li>
-                <li class="menu__list-item">
-                    <button class="mob_menu-btn" data-accordian-btn>
-                        <p class="menu__title">Jewelley</p>
-                        <div>
-                            <ion-icon name="add-outline" class="add_icon" role="img"
-                                aria-label="add outline"></ion-icon>
-                            <ion-icon name="remove-outline" class="remove_icon" role="img"
-                                aria-label="remove outline"></ion-icon>
-                        </div>
-                    </button>
-                    <ul class="menu_hidden_list" data-accordian-menu>
-                        <li class="menu_hid-item"><a href="">Rings</a></li>
-                        <li class="menu_hid-item"><a href="">bracelets</a></li>
-                    </ul>
-                </li>
-                <li class="menu__list-item">
-                    <button class="mob_menu-btn" data-accordian-btn>
-                        <p class="menu__title">Perfumes</p>
-                        <div>
-                            <ion-icon name="add-outline" class="add_icon" role="img"
-                                aria-label="add outline"></ion-icon>
-                            <ion-icon name="remove-outline" class="remove_icon" role="img"
-                                aria-label="remove outline"></ion-icon>
-                        </div>
-                    </button>
-                    <ul class="menu_hidden_list" data-accordian-menu>
-                        <li class="menu_hid-item"><a href="">Denver</a></li>
-                        <li class="menu_hid-item"><a href="">perfume</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+                </nav>
     </header>
     <!-- MAIN SECTION -->
     <%- body %>

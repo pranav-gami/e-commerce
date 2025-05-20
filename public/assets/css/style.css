@@ -235,12 +235,14 @@ button {
 
 .header__main .container {
     display: flex;
+    justify-content: space-between;
     align-content: center;
     gap: 80px;
 }
 
 .header__logo {
-    padding: 5px 4px 4px 4px;
+    padding: 4px 4px 0px 4px;
+    padding-bottom: 0 !important;
 }
 
 .header__main-input {
@@ -285,15 +287,14 @@ button {
 
 .dropdown-header {
     display: flex;
-    flex-direction: column;
+    gap: 10px;
     justify-content: flex-start;
-    align-items: center;
 }
 
 .user_details {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    text-align: start;
 }
 
 .username {
@@ -304,11 +305,20 @@ button {
     color: #414141;
 }
 
-.symbol-circle {
+.useremail:hover {
+    color: rgb(62, 135, 219);
+}
+
+/* .symbol-circle {
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    background-color: rgb(236, 236, 166);
+} */
+
+.main_hedaer-image {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
 }
 
 .user-dropdown {
@@ -333,13 +343,13 @@ button {
     visibility: visible;
 }
 
-.dropdown-avatar {
+/* .dropdown-avatar {
     width: 45px;
     height: 45px;
     border-radius: 10%;
     object-fit: cover;
     border: 1px solid #999999;
-}
+} */
 
 .user-dropdown i {
     padding-right: 15px;
@@ -352,10 +362,12 @@ button {
 
 .dropdown-item {
     display: block;
+    text-align: start;
+    padding-left: 20px;
     font-size: 16px;
     text-decoration: none;
     color: #565656;
-    transition: background 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .dropdown-item:hover {
@@ -393,6 +405,7 @@ button {
     position: relative;
     font-size: 32px;
     padding: 5px;
+    padding-bottom: 0px !important;
     color: #454545;
     border: none;
     cursor: pointer;
@@ -972,9 +985,8 @@ button {
 .sidebar__category {
     background: white;
     border: 1px solid #ededed;
-    padding: 20px;
+    padding: 20px 15px;
     border-radius: 10px;
-    margin-bottom: 30px;
 }
 
 .sidebar__category-top {
@@ -996,6 +1008,10 @@ button {
     font-size: 22px;
     font-weight: 600;
     display: none;
+}
+
+.sidebar__category-list {
+    padding-left: 10px !important;
 }
 
 .sidebar__hidden-menu {
@@ -1132,7 +1148,8 @@ button {
 }
 
 .product__box {
-    min-width: calc(100% - 15px);
+    width: 100%;
+    min-width: calc(75% - 15px);
 }
 
 .product__features {
@@ -1154,6 +1171,24 @@ button {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 30px;
+}
+
+.home__product-menu {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+
+.home__product-menu .product__img-box {
+    position: relative;
+    opacity: 1;
+    overflow: hidden;
+    padding: 5px;
+    height: 180px;
+    width: 90%;
+    justify-self: center;
+    align-self: center;
 }
 
 .not_found_text {
@@ -1206,7 +1241,9 @@ button {
     overflow: hidden;
     padding: 5px;
     height: 200px;
-    width: 210px;
+    width: 90%;
+    justify-self: center;
+    align-self: center;
 }
 
 .product__img-box img {

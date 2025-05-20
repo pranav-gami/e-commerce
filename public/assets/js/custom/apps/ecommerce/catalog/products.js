@@ -4,6 +4,7 @@ var KTAppEcommerceProducts = (function () {
   let tableElement;
   let dataTable;
   let allProducts = [];
+  let categories = [];
 
   // GENERATE RATINGS STARS
   function generateRatingStars(rating) {
@@ -56,6 +57,11 @@ var KTAppEcommerceProducts = (function () {
     return starsHTML;
   }
 
+  const getCategoryName = function (id) {
+    const cat = categories.find((cat) => cat.id == id);
+    return cat.categoryName;
+  };
+
   // RENDER PRODUCTS
   const renderProductRow = (product) => {
     return `
@@ -98,7 +104,9 @@ var KTAppEcommerceProducts = (function () {
           </div>
         </td>
         <td class="text-center pe-0" data-category="${product.categoryID}">
-          <div class="badge badge-light-primary">${product.categoryID}</div>
+          <div class="fw-bold ms-3 text-truncate d-inline-block" style="max-width:100px">${getCategoryName(
+            product.categoryID
+          )}</div>
         </td>
         <td class="text-end">
           <a href="" class="btn btn-sm btn-light btn-active-light-primary"
@@ -276,7 +284,8 @@ var KTAppEcommerceProducts = (function () {
         "[data-kt-ecommerce-product-filter='category']"
       );
       select.innerHTML = `<option value="all">All</option>`;
-      result.data.forEach((cat) => {
+      categories = result.data;
+      categories.forEach((cat) => {
         const option = document.createElement("option");
         option.value = cat.id;
         option.textContent = cat.categoryName;
@@ -291,8 +300,8 @@ var KTAppEcommerceProducts = (function () {
     init: function () {
       tableElement = document.querySelector("#kt_ecommerce_products_table");
       if (!tableElement) return;
+      loadCategories();
       loadProducts().then(() => {
-        loadCategories();
         handleCategoryFilter();
       });
     },

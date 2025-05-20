@@ -93,7 +93,7 @@ const KTUserViewDetails = (function () {
           totalElement.textContent = `₹${total.toLocaleString()}`;
         } else {
           tbody.innerHTML =
-            "<h4 class='p-4 pt-5 text-muted'>User's Cart is Empty!</h4>";
+            "<td colspan='4' class='p-4 pt-5 text-muted'><h4 class='text-muted'>User's Cart is Empty!</h4></td>";
         }
       } else {
         Swal.fire("Error", "Failed to fetch cart items", "error");

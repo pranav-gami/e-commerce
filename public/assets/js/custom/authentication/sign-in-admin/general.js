@@ -61,7 +61,7 @@ var KTSigninGeneral = (function () {
             t.setAttribute("data-kt-indicator", "on");
             t.disabled = true;
 
-            fetch("api/auth/admin/login", {
+            fetch("/api/auth/admin/login", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

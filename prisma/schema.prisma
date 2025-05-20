@@ -30,6 +30,7 @@ model Products {
   rating        Float         @default(2.0)
   subcategoryId Int?
   Subcategory   Subcategory?  @relation(fields: [subcategoryId], references: [id])
+  OrderItem     OrderItem[]
 
   @@map("product")
 }
@@ -66,9 +67,21 @@ model User {
   city     String  @db.VarChar(50)
   phone    String  @db.VarChar(10)
   address  String? @db.VarChar(100)
+  Otp      Otp[]
 
   @@map("user")
-} 
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  otp       String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
 
 model Cart {
   id          Int           @id @default(autoincrement())
@@ -94,24 +107,55 @@ model CartProduct {
 }
 
 model order {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   userId      Int
-  cart        Cart     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cart        Cart        @relation(fields: [userId], references: [id], onDelete: Cascade)
   totalamount Int
-  orderDate   DateTime @default(now())
-  status      String   @default("Pending")
+  orderDate   DateTime    @default(now())
   Payment     Payment?
+  items       OrderItem[]
 
   @@map("Order")
 }
 
+enum OrderStatus {
+  PENDING
+  CANCELLED
+  DELIVERED
+  SHIPPED
+}
+
+model OrderItem {
+  id        Int         @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int         @default(1)
+  price     Float
+  title     String
+  image     String
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  order   order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Products @relation(fields: [productId], references: [id])
+
+  @@map("OrderItem")
+}
+
+enum paymentStatus {
+  PENDING
+  PAID
+}
+
 model Payment {
-  id            Int      @id @default(autoincrement())
-  orderId       Int      @unique
-  order         order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id            Int           @id @default(autoincrement())
+  orderId       Int           @unique
+  order         order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   amount        Int
-  paymentMethod String   @default("COD")
-  paidAt        DateTime @default(now())
+  paymentMethod String        @default("COD")
+  status        paymentStatus @default(PENDING)
+  paidAt        DateTime      @default(now())
 
   @@map("Payment")
 }

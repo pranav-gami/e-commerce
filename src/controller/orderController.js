@@ -1,5 +1,5 @@
 import prisma from "../config/prisma.js";
-import { placeOrderService } from "../utils/orderRequest.js";
+import { placeOrderService } from "../service/orderService.js";
 import { deleteCartProducts } from "./cartProductController.js";
 
 //ADD PRODUCT-CONTROLLER
@@ -8,7 +8,6 @@ export const placeOrder = async (req, res) => {
     const order = await placeOrderService(req, res);
     res.status(200).json({ success: true, data: order });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -27,10 +26,17 @@ export const showAllOrders = async (req, res) => {
 export const showOrdersByUserId = async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
-    const orders = await prisma.order.findMany({ where: { userId: userId } });
-    if (orders.length == 0) {
-      throw new Error("Orders not found!!");
+    if (!(await prisma.user.findUnique({ where: { id: userId } }))) {
+      throw new Error("User not Found!");
     }
+
+    const orders = await prisma.order.findMany({
+      where: { userId: userId },
+      include: { items: true, Payment: true },
+      orderBy: {
+        orderDate: "desc",
+      },
+    });
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -38,46 +44,46 @@ export const showOrdersByUserId = async (req, res) => {
 };
 
 //UPDATE ORDER STATUS-CONTROLLER
-export const updateOrderStatus = async (req, res) => {
-  try {
-    const { orderId, status } = req.body;
-    const isExist = await prisma.order.findUnique({ where: { id: orderId } });
-    if (!isExist) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Order not available!!" });
-    }
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { status: status },
-    });
-    res
-      .status(200)
-      .json({ success: true, message: "Order-Status Updated Successfully!!" });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
+// export const updateOrderStatus = async (req, res) => {
+//   try {
+//     const { orderId, status } = req.body;
+//     const isExist = await prisma.order.findUnique({ where: { id: orderId } });
+//     if (!isExist) {
+//       return res
+//         .status(500)
+//         .json({ success: false, message: "Order not available!!" });
+//     }
+//     await prisma.order.update({
+//       where: { id: orderId },
+//       data: { status: status },
+//     });
+//     res
+//       .status(200)
+//       .json({ success: true, message: "Order-Status Updated Successfully!!" });
+//   } catch (error) {
+//     res.status(400).json({ success: false, message: error.message });
+//   }
+// };
 
 // CANCEL-ORDER-CONTROLLER
-export const cancelOrder = async (req, res) => {
+export const deleteOrder = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+    const id = parseInt(req.params.id);
+    console.log("called");
     const isExist = await prisma.order.findUnique({
-      where: { id: userId, status: "pending" },
+      where: { id: id },
     });
     if (!isExist) {
       return res
         .status(500)
         .json({ success: false, message: "Order not Found!!" });
     }
-    await prisma.order.update({
+    await prisma.order.delete({
       where: { id: isExist.id },
-      data: {
-        status: "Cancelled",
-      },
     });
-    res.status(200).json({ success: true, message: "Order cancelled!" });
+    res
+      .status(200)
+      .json({ success: true, message: "Order Deleted Successfully!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

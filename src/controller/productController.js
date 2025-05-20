@@ -1,5 +1,5 @@
 import prisma from "../config/prisma.js";
-import { getProductData } from "../utils/productRequest.js";
+import { getProductData } from "../service/productService.js";
 
 //ADD PRODUCT-CONTROLLER
 export const addProduct = async (req, res) => {

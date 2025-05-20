@@ -6,13 +6,14 @@ var KTAppUserList = (function () {
   let allUsers = [];
 
   const renderUserRow = (user) => {
-    const nameInitial = user.username.charAt(0).toUpperCase();
-    const isActive = user.isActive ? "YES" : "NO";
-    const isActiveBadgeClass = user.isActive
-      ? "badge-light-success"
-      : "badge-light-danger";
+    if (user.role != "ADMIN") {
+      const nameInitial = user.username.charAt(0).toUpperCase();
+      const isActive = user.isActive ? "YES" : "NO";
+      const isActiveBadgeClass = user.isActive
+        ? "badge-light-success"
+        : "badge-light-danger";
 
-    return `
+      return `
       <tr>
         <td>
           <div class="form-check form-check-sm form-check-custom form-check-solid">
@@ -31,16 +32,16 @@ var KTAppUserList = (function () {
             <a href="/admin/users/${
               user.id
             }" class="text-gray-800 text-hover-primary mb-1">${
-      user.username
-    }</a>
+        user.username
+      }</a>
             <span>${user.email}</span>
           </div>
         </td>
-        <td>${user.role}</td>
-        <td class="text-start">
-          <div class="badge badge-light fw-bold">${user.email || "N/A"}</div>
+        <td class="text-end">${user.role}</td>
+        <td class="text-end">
+          <div class="text-muted fs-7 fw-bold">${user.email || "N/A"}</div>
         </td>
-        <td>
+        <td class="text-end">
           <div class="badge ${isActiveBadgeClass} fw-bold">${isActive}</div>
         </td>
         <td class="text-end">
@@ -64,6 +65,7 @@ var KTAppUserList = (function () {
           </div>
         </td>
       </tr>`;
+    }
   };
 
   const renderTable = (users) => {
@@ -125,7 +127,7 @@ var KTAppUserList = (function () {
           },
         }).then((result) => {
           if (result.value) {
-            fetch(`/api/user/deleteUser/${userId}`, {
+            fetch(`/api/user/delete/${userId}`, {
               method: "DELETE",
             }).then((res) => {
               console.log(res);

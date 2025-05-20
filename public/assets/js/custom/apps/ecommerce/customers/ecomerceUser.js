@@ -4,11 +4,9 @@ import { updateCartCount } from "../../../utilities/cartProduct/cartUtils.js";
 document.addEventListener("DOMContentLoaded", function () {
   // SETTING UP LOGIN USER'S DETAILS
   const user = JSON.parse(localStorage.getItem("user"));
-  const userIcon = document.querySelector(".username-initial");
   const username = document.querySelector(".username");
   const email = document.querySelector(".useremail");
 
-  userIcon.textContent = user.username?.charAt(0).toUpperCase();
   username.textContent = user.username;
   email.textContent = user.email;
 
@@ -93,30 +91,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function renderHeaderMenu(categories) {
     const headerMenu = document.querySelector(".header__menubar-list");
-    headerMenu.innerHTML = "";
+    if (headerMenu) {
+      headerMenu.innerHTML = "";
+      // Add Home Link
+      const homeLi = document.createElement("li");
+      homeLi.classList.add("header__menubar-link");
+      homeLi.innerHTML = `<a href="/primestore" class="header__menubar-item">Home</a>`;
+      headerMenu.appendChild(homeLi);
 
-    // Add Home Link
-    const homeLi = document.createElement("li");
-    homeLi.classList.add("header__menubar-link");
-    homeLi.innerHTML = `<a href="/primestore" class="header__menubar-item">Home</a>`;
-    headerMenu.appendChild(homeLi);
-
-    categories.forEach((cat) => {
-      const catLi = document.createElement("li");
-      catLi.classList.add("header__menubar-link");
-      // RENDERING SUBCATEGORY
-      const categoryHTML = `
-            <a href="" class="header__menubar-item">${cat.categoryName}</a>
-            <ul class="dropdown_list">
-                  ${cat.Subcategory.map(
-                    (sub) =>
-                      `<li class="dropdown_item"><a href="/primestore/category/${cat.id}">${sub.name}</a></li>`
-                  ).join("")}
-            </ul>
+      categories.forEach((cat) => {
+        const catLi = document.createElement("li");
+        catLi.classList.add("header__menubar-link");
+        // RENDERING SUBCATEGORY
+        const categoryHTML = `
+        <a href="" class="header__menubar-item">${cat.categoryName}</a>
+        <ul class="dropdown_list">
+        ${cat.Subcategory.map(
+          (sub) =>
+            `<li class="dropdown_item"><a href="/primestore/category/${cat.id}">${sub.name}</a></li>`
+        ).join("")}
+        </ul>
         `;
-      catLi.innerHTML = categoryHTML;
-      headerMenu.appendChild(catLi);
-    });
+        catLi.innerHTML = categoryHTML;
+        headerMenu.appendChild(catLi);
+      });
+    }
   }
 
   function renderMobileMenu(categories) {
@@ -261,16 +260,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  searchInput.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleSearch();
-    }
-  });
+  if (searchInput) {
+    searchInput.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleSearch();
+      }
+    });
 
-  searchButton.addEventListener("click", function () {
-    handleSearch();
-  });
+    searchButton.addEventListener("click", function () {
+      handleSearch();
+    });
+  }
 
   fetchCategories().then(() => {
     mobileCategoryLisners();

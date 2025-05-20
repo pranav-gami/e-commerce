@@ -1,3 +1,4 @@
+import { image } from "ionicons/icons";
 import Joi from "joi";
 
 //PARAMETER ID VALIDATION
@@ -201,19 +202,14 @@ const orderSchema = Joi.object({
   userId: Joi.number().integer(),
   totalAmount: Joi.number().integer(),
   paymentType: Joi.string().required(),
-  status: Joi.string()
-    .valid("PENDING", "CONFIRMED")
-    .default("PENDING")
-    .optional(),
 });
 
 export const validateOrderCredentials = (req, res, next) => {
-  const { userId, totalAmount, paymentType, status } = req.body;
+  const { userId, totalAmount, paymentType } = req.body;
   const { error } = orderSchema.validate({
     userId,
     totalAmount: parseInt(totalAmount),
     paymentType,
-    status,
   });
   if (error) {
     return res
@@ -233,6 +229,49 @@ export const validateUpdateCredentials = (req, res, next) => {
   if (error) {
     return res
       .status(400)
+      .json({ success: false, message: error.details[0].message });
+  }
+  next();
+};
+
+// VALIDATE PAYMENT CREDENTTOALS
+
+const paymentSchema = Joi.object({
+  orderId: Joi.number().positive().required(),
+  amount: Joi.number().required(),
+  status: Joi.string().valid("PENDING", "PAID").default("PENDING").optional(),
+  paymentMethod: Joi.string().valid("CARD", "COD").default("COD").optional(),
+});
+
+export const validatePaymentCredentials = (req, res, next) => {
+  const { error } = paymentSchema.validate(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: error.details[0].message });
+  }
+  next();
+};
+
+const orderItemSchema = Joi.object({
+  orderId: Joi.number().positive().required(),
+  productId: Joi.number().positive().required(),
+  quantity: Joi.number().positive().required(),
+  price: Joi.number().positive().required(),
+  title: Joi.string().required(),
+  status: Joi.string()
+    .valid("PENDING", "DELIVERED", "CANCELLED", "SHIPPED")
+    .default("PENDING")
+    .optional(),
+  image: Joi.string().optional(),
+  paymentMethod: Joi.string().valid("CARD", "COD").default("COD").optional(),
+});
+
+export const validateOrderItemCredentials = (req, res, next) => {
+  const { error } = orderItemSchema.validate(req.body);
+  if (error) {
+    return res
+      .status(400)  
       .json({ success: false, message: error.details[0].message });
   }
   next();

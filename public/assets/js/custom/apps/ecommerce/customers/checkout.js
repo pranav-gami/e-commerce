@@ -209,6 +209,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     paymentIntentId = null
   ) {
     try {
+      // 1. Place the order
       const res = await fetch("/api/order/placeOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -221,29 +222,73 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       const data = await res.json();
-      if (data.success) {
-        const clearRes = await fetch(
-          `/api/cartProducts/clearUserCart/${user.id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        const clearData = await clearRes.json();
+      console.log(data);
 
-        if (clearData.success) {
-          await Swal.fire({
-            title: "Success",
-            text: "Your order has been placed!",
-            icon: "success",
-            customClass: "swal2-popup-custom",
-          });
-          window.location.href = "/primestore";
-        }
-      } else {
+      if (!data.success) {
         await Swal.fire({
           title: "Error",
           text: "Failed to place order. Please try again.",
           icon: "error",
+          customClass: "swal2-popup-custom",
+        });
+        return;
+      }
+
+      const orderId = data.data.id;
+      const userCartProducts = await fetchCartItems();
+      for (const item of userCartProducts) {
+        const addItemRes = await fetch("/api/orderitem/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: orderId,
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.product.price,
+            title: item.product.title,
+            image: item.product.image,
+            status: "PENDING",
+          }),
+        });
+
+        const addItemData = await addItemRes.json();
+        if (!addItemData.success) {
+          console.error(
+            `Failed to add order item for product ID: ${item.product.title}`
+          );
+          await Swal.fire({
+            title: "Error",
+            text: "Failed to save order items. Please contact support.",
+            icon: "error",
+            customClass: "swal2-popup-custom",
+          });
+          return;
+        }
+      }
+
+      // 3. Clear cart
+      const clearRes = await fetch(
+        `/api/cartProducts/clearUserCart/${user.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const clearData = await clearRes.json();
+
+      if (clearData.success) {
+        await Swal.fire({
+          title: "Success",
+          text: "Your order has been placed!",
+          icon: "success",
+          customClass: "swal2-popup-custom",
+        });
+        window.location.href = "/primestore/success";
+      } else {
+        await Swal.fire({
+          title: "Error",
+          text: "Order placed but failed to clear cart. Please refresh manually.",
+          icon: "warning",
           customClass: "swal2-popup-custom",
         });
       }
@@ -260,10 +305,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function initiateStripePayment(amount) {
     try {
-      const res = await fetch("/api/payment/initiate", {
+      const res = await fetch("/api/stripepayment/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({ amount, userId: user.id }),
       });
 
       const data = await res.json();
@@ -285,7 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   payButtons.forEach((btn) => {
     btn.addEventListener("click", async () => {
-      const method = btn.dataset.method; // COD / UPI / CARD
+      const method = btn.dataset.method;
       paymentModal.hide();
 
       if (method === "COD") {

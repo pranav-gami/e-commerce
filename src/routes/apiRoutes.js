@@ -7,8 +7,10 @@ import userRouter from "./apiRoutes/userRoute.js";
 import cartRouter from "./apiRoutes/cartRoutes.js";
 import authRouter from "./apiRoutes/authRoutes.js";
 import cartProductRouter from "./apiRoutes/cartProductsRoutes.js";
-import orderRouter from "./apiRoutes/orderPaymentRoutes.js";
-import paymentRouter from "./apiRoutes/paymentsRoutes.js";
+import orderRouter from "./apiRoutes/orderRoutes.js";
+import stripeRouter from "./apiRoutes/stripePaymentsRoutes.js";
+import paymentRouter from "./apiRoutes/paymentRoutes.js";
+import orderItemRouter from "./apiRoutes/orderItemsRoutes.js";
 
 const router = Router();
 
@@ -20,6 +22,8 @@ router.use("/subcategory", subcategoryRouter);
 router.use("/cart", cartRouter);
 router.use("/cartProducts", cartProductRouter);
 router.use("/order", orderRouter);
+router.use("/stripepayment", stripeRouter);
 router.use("/payment", paymentRouter);
+router.use("/orderitem", orderItemRouter);
 
 export default router;

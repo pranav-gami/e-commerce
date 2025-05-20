@@ -8,20 +8,31 @@ var KTSigninUser = (function () {
       form = document.querySelector("#kt_sign_in_form");
       submitButton = document.querySelector("#kt_sign_in_submit");
 
-      validator = FormValidation.formValidation(form, {
+      const validator = FormValidation.formValidation(form, {
         fields: {
           email: {
             validators: {
+              notEmpty: {
+                message: "Email address is required",
+              },
               regexp: {
                 regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: "Please enter a valid email address",
               },
-              notEmpty: { message: "Email address is required" },
             },
           },
           password: {
             validators: {
-              notEmpty: { message: "Password is required" },
+              notEmpty: {
+                message: "Password is required",
+              },
+              regexp: {
+                // At least 8 characters, one uppercase, one lowercase, one digit, one special char
+                regexp:
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{8,}$/,
+                message:
+                  "Password must be at least 8 characters and include upper, lower, digit, and special character",
+              },
             },
           },
         },
@@ -31,6 +42,21 @@ var KTSigninUser = (function () {
             rowSelector: ".fv-row",
             eleInvalidClass: "",
             eleValidClass: "",
+            messagePlacement: function (field, element) {
+              // Custom placement for password field error
+              if (field === "password") {
+                const container = document.getElementById(
+                  "password-error-container"
+                );
+                container.innerHTML = ""; // Clear any existing messages
+
+                const div = document.createElement("div");
+                div.className =
+                  "fv-plugins-message-container invalid-feedback d-block";
+                container.appendChild(div);
+                return div;
+              }
+            },
           }),
         },
       });

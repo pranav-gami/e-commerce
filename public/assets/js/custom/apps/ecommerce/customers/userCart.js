@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
           title: "Added to Cart",
           text: "Product has been added to your cart!",
-          timer: 1500,
+          timer: 1000,
           showConfirmButton: false,
           customClass: "swal2-popup-custom",
         }).then(async () => {

@@ -1,5 +1,5 @@
 import prisma from "../config/prisma.js";
-import { createUser, getUserData } from "../utils/userRequest.js";
+import { createUser, getUserData } from "../service/userService.js";
 import bcrypt from "bcrypt";
 
 //ADD USER-CONTROLLER
@@ -38,7 +38,6 @@ export const showUserById = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const userID = parseInt(req.params.id);
-
     const existingUser = await prisma.user.findUnique({
       where: { id: userID },
     });
@@ -51,7 +50,6 @@ export const updateUser = async (req, res) => {
 
     const { username, email, password, role, city, phone, address } = req.body;
 
-    // Build only fields that are present
     const dataToUpdate = {};
 
     if (username !== undefined) dataToUpdate.username = username;
@@ -85,10 +83,47 @@ export const updateUser = async (req, res) => {
       data: updatedUser,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
-      message: error.message || "Internal server error",
+      message: error.message,
     });
+  }
+};
+
+// UPDATE-PASSWORD CONTROLLER
+
+export const updatePassword = async (req, res) => {
+  try {
+    const { userId, newPassword } = req.body;
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    let hashedPassword;
+    if (newPassword !== undefined && newPassword.trim() !== "") {
+      hashedPassword = await bcrypt.hash(newPassword, 5);
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "PAssword updated successfully.",
+      data: updatedUser,
+    });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 

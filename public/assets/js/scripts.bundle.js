@@ -4602,9 +4602,9 @@ const KTThemeSidebarSwitcher = (() => {
 
     // Update logo based on theme
     if (theme === "dark") {
-      logoImg.src = "assets/media/logos/e-com-dark.png";
+      logoImg.src = "/assets/media/logos/e-com-dark.png";
     } else if (theme === "light") {
-      logoImg.src = "assets/media/logos/e-com-light.png"; // Make sure this exists
+      logoImg.src = "/assets/media/logos/e-com-light.png"; // Make sure this exists
     }
   };
 
@@ -4783,7 +4783,7 @@ var KTLogoutGeneral = (function () {
               .then((res) => res.json())
               .then((data) => {
                 const user = JSON.parse(localStorage.getItem("user"));
-                const userId = user.id;
+                const userId = user._id;
                 fetch(`http://localhost:3000/api/user/updateStatus/${userId}`, {
                   method: "PUT",
                 })

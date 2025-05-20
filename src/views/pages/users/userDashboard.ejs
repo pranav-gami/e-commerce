@@ -1,124 +1,227 @@
-<div class="dashboard">
-    <aside class="sidebar">
-        <div class="sidebar_header">
-            <h2>Account</h2>
-            <p class="username">Pranav Gami</p>
-        </div>
-        <nav class="sidebar_nav">
-            <a href="" data-section="overview" class="active">User Profile</a>
-            <a href="" data-section="orders">Orders Details</a>
-            <a href="" data-section="profile">Edit Profile</a>
-            <button class="logout-btn logoutBtn">Logout</button>
-        </nav>
-    </aside>
-    <main class="main-content">
-        <header class="main-header">
-            <button class="menu_toggle">&#9776;</button>
-            <h1 class="page_title">User Profile</h1>
-        </header>
-        <section id="overview" class="section active">
-            <div class="user-overview-card">
-                <div class="user-section">
-                    <h3 class="section-title">User Details</h3>
-                    <div class="detail-item">
-                        <span class="label">Name:</span>
-                        <span class="value user_name">Pranav Gami</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Email:</span>
-                        <span class="value user_email">pranav123@gmail.com</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Phone:</span>
-                        <span class="value user_phone">9175433210</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Active Status:</span>
-                        <span class="value user_status active">Active</span>
+<body>
+    <div class="dashboard">
+        <main class="main-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <h1 class="profile-title">User profile</h1>
+                <button id="editProfileBtn" class="edit-btn">Edit Profile</button>
+            </div>
+            <!-- Profile Content -->
+            <div class="profile-content">
+                <div class="profile-sidebar">
+                    <div class="user-avatar-wrapper">
+                        <div class="user-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Avatar">
+                        </div>
+                        <h2 class="user-name profile_username">Jannie Regel</h2>
+                        <h2 class="user-email profile_email">jannie123@gmail.com</h2>
+                        <h2 class="user-role profile_role">USER</h2>
                     </div>
                 </div>
-                <div class="address-section">
-                    <h3 class="section-title">Address</h3>
-                    <div class="detail-item">
-                        <span class="label">Area/Locality:</span>
-                        <span class="value user_area">Bharati-Ashram</span>
+                <div class="profile-main">
+                    <div class="info-card">
+                        <div class="info-card-header">User profile</div>
+                        <div class="info-card-body">
+                            <div class="info-item">
+                                <span class="info-label">Username:</span>
+                                <span class="info-value profile_username">John Doe</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Email ID :</span>
+                                <span class="info-value profile_email">johndoe11@gmail.com</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Role:</span>
+                                <span class="info-value profile_role">User</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Phone number:</span>
+                                <span class="info-value profile_phone">98635 73566</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="detail-item">
-                        <span class="label">City:</span>
-                        <span class="value user_city">Sarkhrj</span>
+
+                    <div class="info-card">
+                        <div class="info-card-header">Address Details</div>
+                        <div class="info-card-body">
+                            <div class="info-item">
+                                <span class="info-label">Area/Locality :</span>
+                                <span class="info-value profile_area">PNTC BUILDING</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">City</span>
+                                <span class="info-value profile_city">Vejalpur</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">District:</span>
+                                <span class="info-value  profile_district">Ahmedabad</label>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Pincode :</span>
+                                <span class="info-value profile_pincode">382201</span>
+                            </div>
+                            <div class="" style="width: 100%; margin-top: 20px;">
+                                <p class="" style="color: rgb(255, 97, 97);">Your order Will be Delivered to this above
+                                    Address
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="detail-item">
-                        <span class="label">District:</span>
-                        <span class="value user_district">Ahemdabad</span>
+
+                    <div class="action-buttons hidden" id="actionButtons">
+                        <button id="cancelBtn" class="cancel-btn cancel_edit">Cancel</button>
+                        <button id="saveBtn" class="save-btn edit_submit">Save Changes</button>
                     </div>
-                    <div class="detail-item">
-                        <span class="label">PIN:</span>
-                        <span class="value user_pin">382211</span>
-                    </div>
+
                 </div>
             </div>
-            <div style="display: flex; justify-content: center; align-items: center; margin-top: 25px;">
-                <button class="profile_Edit_Btn">Edit Profile</button>
-            </div>
-        </section>
-        <!-- Orders Section -->
-        <section id="orders" class="section">
-            <div class="order-list">
-                <div class="order-card cancelled">
-                    <div class="order-status">Cancelled</div>
-                    <img src="" alt="Product Image">
-                    <div class="order-info">
-                        <h4>Redmi Buds 5 Truly Wireless Bluetooth Ear Buds</h4>
-                        <p>Size: Onesize</p>
-                        <p class="order-date">Cancelled on Mon, 5 May</p>
-                    </div>
+
+            <!-- Orders Section -->
+            <div class="users_orders">
+                <div class="profile-tabs">
+                    <div class="profile-tab">User's Orders</div>
                 </div>
-                <div class="order-card delivered">
-                    <div class="order-status">Delivered</div>
-                    <img src="" alt="Product Image">
-                    <div class="order-info">
-                        <h4>Red Tape Men Rubber Sliders</h4>
-                        <p>Size: 9</p>
-                        <p class="order-date">Delivered on Sun, 1 Oct 2023</p>
+                <div class="orders-container">
+
+                    <div class="order-card">
+                        <!-- Main Order Header -->
+                        <div class="order-main-header">
+                            <div class="order-main-info">
+                                <div class="order-number">Order #1234567</div>
+                                <div class="order-total">₹1,299</div>
+                            </div>
+                            <div class="order-date-main">Placed on 18 May 2025</div>
+                        </div>
+
+                        <!-- Toggle Button for Items -->
+                        <button class="toggle-items-btn" onclick="toggleItems(this)">
+                            <span>2 Items</span>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+
+                        <!-- Order Items Container -->
+                        <div class="order-items">
+                            <!-- Order Item 1 -->
+                            <div class="order-item">
+                                <div class="order-status-header">
+                                    <div class="order-status">
+                                        <div class="status-icon pending-icon">⋯</div>
+                                        <span class="status-text status-pending">Pending</span>
+                                    </div>
+                                    <div class="order-date">Expected delivery by 25 May</div>
+                                </div>
+                                <div class="order-product">
+                                    <div class="product-image">
+                                        <img src="" alt="T-shirt">
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-brand">WROGN</div>
+                                        <div class="product-name">Men Black Solid Cotton T-shirt</div>
+                                        <div class="product-qty">Qty: 1</div>
+                                        <div class="product-size">Subtotal: ₹1000</div>
+                                    </div>
+                                </div>
+                                <div class="order-info">
+                                    Your order has been confirmed and will be shipped soon
+                                </div>
+                                <div class="order-actions">
+                                    <div>
+                                        <button class="track-button">Track Order</button>
+                                        <button class="cancel-button">Cancel Item</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Item 2 -->
+                            <div class="order-item">
+                                <div class="order-status-header">
+                                    <div class="order-status">
+                                        <div class="status-icon delivered-icon">✓</div>
+                                        <span class="status-text status-delivered">Delivered</span>
+                                    </div>
+                                    <div class="order-date">On 15 May 2025</div>
+                                </div>
+                                <div class="order-product">
+                                    <div class="product-image">
+                                        <img src="" alt="Sneakers">
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-brand">Puma</div>
+                                        <div class="product-name">Men White Sneakers</div>
+                                        <div class="product-size">Size: 10</div>
+                                        <div class="product-qty">Qty: 1</div>
+                                    </div>
+                                </div>
+                                <div class="order-info">
+                                    Exchange/Return window closes on 29 May 2025
+                                </div>
+                                <div class="order-actions">
+                                    <div class="rating-section">
+                                        <div class="rating-stars">
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                            <span class="star">☆</span>
+                                        </div>
+                                        <span class="review-text">Rate & Review to earn Credits</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="order-card pending">
-                    <div class="order-status">Pending</div>
-                    <img src="" alt="Product Image">
-                    <div class="order-info">
-                        <h4>Boat Rockerz 255 Pro+ Wireless Earphones</h4>
-                        <p>Size: Onesize</p>
-                        <p class="order-date">Expected by Thu, 15 May</p>
-                        <div class="order-actions">
-                            <button class="cancel-order-btn">Cancel</button>
-                            <button class="track-order-btn">Track Order</button>
+                    <!-- Order Card with Cancelled Item -->
+                    <div class="order-card">
+                        <!-- Main Order Header -->
+                        <div class="order-main-header">
+                            <div class="order-main-info">
+                                <div class="order-number">Order #1234568</div>
+                                <div class="order-total">₹799</div>
+                            </div>
+                            <div class="order-date-main">Placed on 10 May 2025</div>
+                        </div>
+
+                        <!-- Toggle Button -->
+                        <button class="toggle-items-btn" onclick="toggleItems(this)">
+                            <span>1 Item</span>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+
+                        <!-- Order Items Container -->
+                        <div class="order-items">
+                            <!-- Order Item -->
+                            <div class="order-item">
+                                <div class="order-status-header">
+                                    <div class="order-status">
+                                        <div class="status-icon cancelled-icon">✕</div>
+                                        <span class="status-text status-cancelled">Cancelled</span>
+                                    </div>
+                                    <div class="order-date">On 12 May as per your request</div>
+                                </div>
+                                <div class="order-product">
+                                    <div class="product-image">
+                                        <img src="" alt="Earbuds">
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-brand">Redmi</div>
+                                        <div class="product-name">Buds 5 Truly Wireless Bluetooth Ear Buds</div>
+                                        <div class="product-size">Size: Onesize</div>
+                                        <div class="product-qty">Qty: 1</div>
+                                    </div>
+                                    <div class="payment-details">
+                                        <h6 class="" style="padding-bottom: 3px; border-bottom: 1px solid #464646;">
+                                            PAYMENT
+                                            DETAILS</6>
+                                            <div class="payment-type">COD</div>
+                                            <div class="payment-status">Pending</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Edit Profile Section -->
-        <section id="profile" class="section">
-            <form class="profile-form" id="profile-form">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" value="Pranav Gami">
-                <label for="email">Email</label>
-                <input type="email" id="email" value="pranav123@gmail.com">
-                <label for="phone">Phone</label>
-                <input type="tel" id="phone" value="9175433210">
-                <label for="area">Area/Locality</label>
-                <input type="text" id="area" value="Bharati Ashram">
-                <label for="city">City</label>
-                <input type="text" id="city" value="Sarkhej">
-                <label for="district">District</label>
-                <input type="text" id="district" value="Ahemdabad">
-                <label for="pin">PIN</label>
-                <input type="text" id="pin" value="382211">
-                <div class="btn_group">
-                    <button type="submit" class="save_button">Save</button>
-                    <button type="button" class="cancel_button">Cancel</button>
-                </div>
-            </form>
-        </section>
-    </main>
-</div>
+        </main>
+    </div>
+</body>

@@ -1,5 +1,5 @@
 import prisma from "../config/prisma.js";
-import { getCartData } from "../utils/cartRequest.js";
+import { getCartData } from "../service/cartService.js";
 
 //ADD CARTDATA-CONTROLLER
 export const addCart = async (req, res) => {

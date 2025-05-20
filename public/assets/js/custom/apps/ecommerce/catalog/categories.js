@@ -126,7 +126,7 @@ var KTAppEcommerceCategories = (function () {
             </div>
           </td>
           <td class="text-center">
-            <div class="badge badge-light-success">${productCount}</div>
+            <div class="text-muted fs-7 fw-bold">${productCount}</div>
           </td>
           <td class="text-end">
             <a href="#" class="btn btn-sm btn-light btn-active-light-primary"

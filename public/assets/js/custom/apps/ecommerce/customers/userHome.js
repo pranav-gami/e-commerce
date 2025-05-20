@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return starsHTML;
   }
 
-  const productContainer = document.querySelector(".product__menu");
+  const productContainer = document.querySelector(".home__product-menu");
   const searchInput = document.querySelector(".product_search-field");
   let allProducts = [];
 
@@ -229,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
           title: "Added to Cart",
           text: "Product has been added to your cart!",
+          timer: 1000,
           showConfirmButton: false,
           customClass: {
             popup: "swal2-popup-custom",

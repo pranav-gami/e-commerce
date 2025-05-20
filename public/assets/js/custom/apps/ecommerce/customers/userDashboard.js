@@ -1,240 +1,541 @@
-document.addEventListener("DOMContentLoaded", () => {
-  let user = JSON.parse(localStorage.getItem("user"));
+"use strict";
 
-  const links = document.querySelectorAll(".sidebar_nav a");
-  const sections = document.querySelectorAll(".section");
-  const pageTitle = document.querySelector(".page_title");
-  const toggleBtn = document.querySelector(".menu_toggle");
-  const sidebar = document.querySelector(".sidebar");
-  const editProfileBtn = document.querySelector(".profile_Edit_Btn");
-  const profileForm = document.getElementById("profile-form");
+var KTUserDashboard = (function () {
+  let user = null;
+  let originalValues = {};
 
-  const activateSection = (sectionId) => {
-    links.forEach((link) => {
-      link.classList.toggle("active", link.dataset.section === sectionId);
-    });
-
-    sections.forEach((section) => {
-      section.classList.toggle("active", section.id === sectionId);
-    });
-
-    const activeLink = Array.from(links).find(
-      (link) => link.dataset.section === sectionId
-    );
-    if (activeLink) {
-      pageTitle.textContent = activeLink.textContent;
-    }
-
-    sidebar.classList.remove("open");
+  const statusIconClass = {
+    PENDING: "pending-icon",
+    DELIVERED: "delivered-icon",
+    CANCELLED: "cancelled-icon",
+    SHIPPED: "shipped-icon",
   };
 
-  links.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const sectionId = link.dataset.section;
-      activateSection(sectionId);
+  const statusTextClass = {
+    PENDING: "status-pending",
+    DELIVERED: "status-delivered",
+    CANCELLED: "status-cancelled",
+    SHIPPED: "status-shipped",
+  };
+
+  const formatDate = (isoDateStr) => {
+    const date = new Date(isoDateStr);
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
     });
-  });
+  };
 
-  toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-  });
+  const populateUserProfile = () => {
+    if (!user) return;
 
-  if (editProfileBtn) {
-    editProfileBtn.addEventListener("click", () => {
-      activateSection("profile");
-    });
-  }
-
-  // FETCH USER'S DETIALS
-  const loadUserDashboardData = async () => {
-    try {
-      const response = await fetch(`/api/user/getUser/${user.id}`, {
-        method: "GET",
+    const updateAll = (selector, value) => {
+      document.querySelectorAll(selector).forEach((el) => {
+        el.textContent = value || "";
       });
-      if (!response.ok) throw new Error("Failed to fetch user data.");
+    };
 
-      const data = await response.json();
-      populateUserDetails(data.data);
-      // populateOrders(data.orders); // Fetch + populate orders
-    } catch (error) {
-      Swal.fire("Error", "Failed to load user data.", "error");
-    }
+    updateAll(".profile_username", user.username);
+    updateAll(".profile_email", user.email);
+    updateAll(".profile_role", user.role?.toUpperCase() || "USER");
+
+    const avatar = document.querySelector(".user-avatar img");
+    if (avatar) avatar.src = user.image || "/assets/media/defaultuser.jpeg";
+
+    const updateInfo = (selector, value) => {
+      const element = document.querySelector(selector);
+      if (element) element.textContent = value || "";
+    };
+
+    const addressParts = user.address?.split(",") || [];
+    updateInfo(".profile_phone", user.phone);
+    updateInfo(".profile_area", addressParts[0]?.trim());
+    updateInfo(".profile_city", addressParts[1]?.trim());
+    updateInfo(".profile_district", addressParts[2]?.trim());
+    updateInfo(".profile_pincode", addressParts[3]?.replace("PIN:", "").trim());
   };
 
-  const populateUserDetails = (user) => {
-    document.querySelector(".user_name").textContent = user.username;
-    document.querySelector(".user_email").textContent = user.email;
-    document.querySelector(".user_phone").textContent = user.phone;
-    document.querySelector(".user_status").textContent = user.isActive
-      ? "Active"
-      : "Inactive";
-    document
-      .querySelector(".user_status")
-      .classList.toggle("active", user.isActive);
+  const enableEditMode = () => {
+    const infoValues = document.querySelectorAll(".info-value");
+    infoValues.forEach((el) => {
+      const fieldName = el.classList[1]?.replace("profile_", "");
+      originalValues[fieldName] = el.textContent.trim();
 
-    const address = user.address ? user.address.split(",") : [];
-    const area = address[0]?.trim() || "";
-    const city = address[1]?.trim() || "";
-    const district = address[2]?.trim() || "";
-    const pin = address[3]?.replace("PIN:", "").trim() || "";
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = originalValues[fieldName];
+      input.setAttribute("data-field", fieldName);
 
-    document.querySelector(".user_area").textContent = area;
-    document.querySelector(".user_city").textContent = city;
-    document.querySelector(".user_district").textContent = district;
-    document.querySelector(".user_pin").textContent = pin;
+      el.textContent = "";
+      el.appendChild(input);
 
-    document.getElementById("name").value = user.username;
-    document.getElementById("email").value = user.email;
-    document.getElementById("phone").value = user.phone;
-    document.getElementById("area").value = area;
-    document.getElementById("city").value = city;
-    document.getElementById("district").value = district;
-    document.getElementById("pin").value = pin;
+      // Inserting error Container
+      const error = document.createElement("div");
+      error.className = "error-message text-danger";
+      el.appendChild(error);
+    });
+
+    document.getElementById("actionButtons").classList.remove("hidden");
+    document.getElementById("editProfileBtn").classList.add("hidden");
   };
 
-  //  FETCH & DISPLAY ORDERS
-  // const populateOrders = async (ordersFromUserApi = null) => {
+  const cancelEditMode = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "Cancel Editing?",
+      text: "Are you sure you want to discard changes?",
+      showCancelButton: true,
+      width: "500px",
+      confirmButtonText: "Yes, cancel",
+      cancelButtonText: "No, keep editing",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const infoValues = document.querySelectorAll(".info-value");
+        infoValues.forEach((el) => {
+          const fieldName = el.classList[1]?.replace("profile_", "");
+          el.textContent = originalValues[fieldName];
+        });
+
+        document.getElementById("actionButtons").classList.add("hidden");
+        document.getElementById("editProfileBtn").classList.remove("hidden");
+      }
+    });
+  };
+
+  // const saveProfileUpdates = async () => {
+  //   const infoValues = document.querySelectorAll(".info-value");
+  //   const updatedUser = {};
+  //   const updateUserData = {};
+
+  //   infoValues.forEach((el) => {
+  //     const input = el.querySelector("input");
+  //     const fieldName = el.classList[1]?.replace("profile_", "");
+  //     if (input && fieldName) {
+  //       const newValue = input.value.trim();
+  //       updatedUser[fieldName] = newValue;
+  //       updateUserData[fieldName] = newValue;
+  //     }
+  //   });
+
+  //   if (
+  //     updatedUser.area &&
+  //     updatedUser.city &&
+  //     updatedUser.district &&
+  //     updatedUser.pincode
+  //   ) {
+  //     updatedUser.address = `${updatedUser.area}, ${updatedUser.city}, ${updatedUser.district}, PIN: ${updatedUser.pincode}`;
+  //     updateUserData.address = updatedUser.address;
+  //   }
+
+  //   delete updatedUser.area;
+  //   delete updatedUser.district;
+  //   delete updatedUser.pincode;
+
+  //   updatedUser.role = user.role;
+  //   updateUserData.role = user.role;
+  //   updateUserData.id = user.id;
+
+  //   const result = await Swal.fire({
+  //     icon: "question",
+  //     title: "Save Changes?",
+  //     text: "Do you want to save these profile changes?",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Yes, save",
+  //     cancelButtonText: "No, cancel",
+  //     reverseButtons: true,
+  //   });
+
+  //   if (!result.isConfirmed) return;
+
   //   try {
-  //     let orders = ordersFromUserApi;
+  //     const response = await fetch(`/api/user/updateUser/${user.id}`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(updatedUser),
+  //     });
 
-  //     if (!orders) {
-  //       const res = await fetch(`/api/order/getOrdersByUser/${user.id}`);
-  //       if (!res.ok) throw new Error("Failed to fetch orders");
-  //       const data = await res.json();
-  //       orders = data.orders;
-  //     }
+  //     if (!response.ok) throw new Error(await response.text());
 
-  //     const orderList = document.querySelector(".order-list");
-  //     orderList.innerHTML = "";
-
-  //     if (!orders || orders.length === 0) {
-  //       orderList.innerHTML = "<p>No orders found.</p>";
-  //       return;
-  //     }
-
-  //     orders.forEach((order) => {
-  //       // If multiple products per order, loop products
-  //       order.products.forEach((product) => {
-  //         const orderCard = document.createElement("div");
-  //         orderCard.classList.add("order-card", order.status.toLowerCase());
-
-  //         const statusText =
-  //           order.status === "Delivered"
-  //             ? "Delivered on " + new Date(order.orderDate).toLocaleDateString()
-  //             : order.status === "Cancelled"
-  //             ? "Cancelled on " + new Date(order.orderDate).toLocaleDateString()
-  //             : "Ordered on " + new Date(order.orderDate).toLocaleDateString();
-
-  //         orderCard.innerHTML = `
-  //           <div class="order-status">${order.status}</div>
-  //           <img src="${product.image}" alt="Product Image">
-  //           <div class="order-info">
-  //             <h4>${product.title}</h4>
-  //             <p>Price: ₹${product.price}</p>
-  //             <p class="order-date">${statusText}</p>
-  //           </div>
-  //         `;
-  //         orderList.appendChild(orderCard);
+  //     infoValues.forEach((el) => {
+  //       const fieldName = el.classList[1]?.replace("profile_", "");
+  //       const value = updateUserData[fieldName] || "";
+  //       el.textContent = value;
+  //       document.querySelectorAll(`.profile_${fieldName}`).forEach((e) => {
+  //         e.textContent = value;
   //       });
   //     });
-  //   } catch (err) {
-  //     console.error(err);
-  //     Swal.fire("Error", "Failed to load orders.", "error");
+
+  //     localStorage.setItem("user", JSON.stringify(updateUserData));
+  //     Swal.fire("Profile Updated", "Your profile has been updated.", "success");
+
+  //     document.getElementById("actionButtons").classList.add("hidden");
+  //     document.getElementById("editProfileBtn").classList.remove("hidden");
+  //   } catch (error) {
+  //     console.error(error);
+  //     Swal.fire("Error", error.message, "error");
   //   }
   // };
 
-  //  EDIT PROFILE: VALIDATION & UPDATE OR CANCEL
-  profileForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const saveProfileUpdates = async () => {
+    const infoValues = document.querySelectorAll(".info-value");
+    const updatedUser = {};
+    const updateUserData = {};
+    let isValid = true;
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const area = document.getElementById("area").value.trim();
-    const city = document.getElementById("city").value.trim();
-    const district = document.getElementById("district").value.trim();
-    const pin = document.getElementById("pin").value.trim();
-
-    // Simple validation
-    if (!name || !email || !phone || !area || !city || !district || !pin) {
-      return Swal.fire(
-        "Validation Error",
-        "All fields are required.",
-        "warning"
-      );
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
-    const pinRegex = /^[0-9]{6}$/;
-
-    if (!emailRegex.test(email)) {
-      return Swal.fire("Validation Error", "Enter a valid email.", "warning");
-    }
-
-    if (!phoneRegex.test(phone)) {
-      return Swal.fire(
-        "Validation Error",
-        "Phone must be 10 digits.",
-        "warning"
-      );
-    }
-
-    if (!pinRegex.test(pin)) {
-      return Swal.fire("Validation Error", "PIN must be 6 digits.", "warning");
-    }
-
-    const fullAddress = `${area}, ${city}, ${district}, PIN: ${pin}`;
-
-    // Confirm update
-    const result = await Swal.fire({
-      title: "Confirm Update",
-      text: "Are you sure you want to save these changes?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, save it!",
+    infoValues.forEach((el) => {
+      const errorContainer = el.querySelector(".error-message");
+      if (errorContainer) errorContainer.textContent = "";
     });
 
-    if (result.isConfirmed) {
-      try {
-        const res = await fetch(`/api/user/updateUser/${user.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: name,
-            email: email,
-            phone: phone,
-            address: fullAddress,
-          }),
+    infoValues.forEach((el) => {
+      const input = el.querySelector("input");
+      const fieldName = el.classList[1]?.replace("profile_", "");
+      const errorContainer = el.querySelector(".error-message");
+
+      if (input && fieldName) {
+        const newValue = input.value.trim();
+        const fieldLabel =
+          fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+
+        if (!newValue) {
+          if (errorContainer)
+            errorContainer.textContent = `${fieldLabel} is required`;
+          isValid = false;
+          return;
+        }
+
+        // Validate no commas in address fields
+        if (
+          ["area", "city", "district", "pincode"].includes(fieldName) &&
+          newValue.includes(",")
+        ) {
+          if (errorContainer)
+            errorContainer.textContent = `${fieldLabel} should not contain commas`;
+          isValid = false;
+          return;
+        }
+
+        if (
+          fieldName === "email" &&
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)
+        ) {
+          if (errorContainer)
+            errorContainer.textContent = `Invalid emailId format !`;
+          isValid = false;
+          return;
+        }
+
+        // Validate phone
+        if (fieldName === "phone" && !/^\d{10}$/.test(newValue)) {
+          if (errorContainer)
+            errorContainer.textContent = `Phone must contains only 10 digits`;
+          isValid = false;
+          return;
+        }
+
+        if (fieldName === "pincode" && !/^\d{6}$/.test(newValue)) {
+          if (errorContainer)
+            errorContainer.textContent = `PIN must have 6 digits`;
+          isValid = false;
+          return;
+        }
+
+        updatedUser[fieldName] = newValue;
+        updateUserData[fieldName] = newValue;
+      }
+    });
+
+    // Final address validation
+    const { area, city, district, pincode } = updatedUser;
+    if (area && city && district && pincode) {
+      updatedUser.address = `${area}, ${city}, ${district}, PIN: ${pincode}`;
+      updateUserData.address = updatedUser.address;
+    }
+
+    if (!isValid) return; // Stop if validation failed
+
+    // Clean up temporary fields
+    delete updatedUser.area;
+    delete updatedUser.district;
+    delete updatedUser.pincode;
+
+    updatedUser.role = user.role;
+    updateUserData.role = user.role;
+    updateUserData.id = user.id;
+
+    const result = await Swal.fire({
+      icon: "question",
+      title: "Save Changes?",
+      text: "Do you want to save these profile changes?",
+      showCancelButton: true,
+      confirmButtonText: "Yes, save",
+      cancelButtonText: "No, cancel",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const response = await fetch(`/api/user/updateUser/${user.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedUser),
+      });
+
+      if (!response.ok) throw new Error(await response.text());
+
+      infoValues.forEach((el) => {
+        const fieldName = el.classList[1]?.replace("profile_", "");
+        const value = updateUserData[fieldName] || "";
+        el.textContent = value;
+        document.querySelectorAll(`.profile_${fieldName}`).forEach((e) => {
+          e.textContent = value;
+        });
+      });
+
+      localStorage.setItem("user", JSON.stringify(updateUserData));
+      Swal.fire("Profile Updated", "Your profile has been updated.", "success");
+
+      document.getElementById("actionButtons").classList.add("hidden");
+      document.getElementById("editProfileBtn").classList.remove("hidden");
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
+  const setupCancelOrderButtons = () => {
+    const cancelButtons = document.querySelectorAll(".cancel_order");
+
+    cancelButtons.forEach((button) => {
+      button.addEventListener("click", async function () {
+        const itemId = this.dataset.id;
+        if (!itemId) return;
+
+        const confirmCancel = await Swal.fire({
+          title: "Cancel Item?",
+          text: "Are you sure you want to cancel this item?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, cancel",
         });
 
-        if (!res.ok) throw new Error("Failed to update profile.");
-        const updatedData = await res.json();
+        if (!confirmCancel.isConfirmed) return;
 
-        // Update localStorage with new user data
-        localStorage.setItem("user", JSON.stringify(updatedData.data));
-        user = updatedData.data;
-        Swal.fire("Updated!", "Your profile has been updated.", "success");
+        try {
+          const response = await fetch(`/api/orderitem/cancel/${itemId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
-        loadUserDashboardData();
-        activateSection("overview");
-      } catch (err) {
-        console.error(err);
-        Swal.fire("Error", "Failed to update profile.", "error");
-      }
-    }
-  });
+          if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || "Cancel failed");
+          }
 
-  const cancelBtn = document.querySelector(".cancel_button");
+          // Update the DOM
+          // const orderItemEl = button.closest(".order-item");
+          // if (!orderItemEl) return;
 
-  if (cancelBtn) {
-    cancelBtn.addEventListener("click", () => {
-      activateSection("overview");
+          // const statusText = orderItemEl.querySelector(".status-text");
+          // const statusIcon = orderItemEl.querySelector(".status-icon");
+          // if (statusText) {
+          //   statusText.textContent = "CANCELLED";
+          //   statusText.className = "status-text status-cancelled";
+          // }
+          // if (statusIcon) {
+          //   statusIcon.textContent = "✕";
+          //   statusIcon.className = "status-icon cancelled-icon";
+          // }
+
+          // const infoText = orderItemEl.querySelector(".order-info");
+          // const now = new Date();
+          // infoText.textContent = `Cancelled on ${formatDate(
+          //   now.toISOString()
+          // )} as per your request`;
+
+          // const actions = orderItemEl.querySelector(".order-actions");
+          // if (actions) {
+          //   actions.innerHTML = `
+          //     <div class="order-total">Final Total :<span> ₹${button.dataset.total} </span></div>
+          //   `;
+          // }
+          Swal.fire(
+            "Cancelled!",
+            "This item has been cancelled.",
+            "success"
+          ).then(() => {
+            location.reload();
+          });
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", err.message, "error");
+        }
+      });
     });
-  }
+  };
 
-  loadUserDashboardData();
+  const renderOrders = (orders) => {
+    if (orders.length > 0) {
+      const container = document.querySelector(".orders-container");
+      if (!container) return;
+      container.innerHTML = "";
+
+      orders.forEach((order, i) => {
+        const itemCount = order.items.length;
+        const card = document.createElement("div");
+        card.classList.add("order-card");
+
+        card.innerHTML = `
+                <button class="toggle-items-btn">
+                   <span>Order:${i + 1}
+                   (${itemCount} ${itemCount > 1 ? "Items" : "Item"})</span>
+                   <div class="order-total">Final Total :<span> ₹${
+                     order.totalamount
+                   } </span></div>
+                   <div class="order-date-main">Placed on ${formatDate(
+                     order.orderDate
+                   )}</div>
+                </button>
+                <div class="order-items" style="display: block;"></div>
+            `;
+
+        const itemsContainer = card.querySelector(".order-items");
+
+        order.items.forEach((item) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.classList.add("order-item");
+          const ispending =
+            order.Payment.paymentMethod == "COD"
+              ? "payment_pending"
+              : "payment_success";
+          const ispaid =
+            order.Payment.paymentMethod == "COD" ? "PENDING" : "PAID";
+          const status = item.status;
+          const iconClass = statusIconClass[status] || "pending-icon";
+          const textClass = statusTextClass[status] || "status-pending";
+
+          const isDelivered = status === "DELIVERED";
+          const isCancelled = status === "CANCELLED";
+          const deliveryDate = new Date(item.updatedAt);
+          deliveryDate.setDate(deliveryDate.getDate() + 7);
+
+          const infoText = isDelivered
+            ? "Exchange/Return window closes on " +
+              formatDate(
+                new Date(item.updatedAt).setDate(
+                  new Date(item.updatedAt).getDate() + 14
+                )
+              )
+            : isCancelled
+            ? ""
+            : "Your order has been confirmed and will be shipped soon";
+
+          const dateText = isDelivered
+            ? `On ${formatDate(item.updatedAt)}`
+            : isCancelled
+            ? `On ${formatDate(item.updatedAt)} as per your request`
+            : `Expected delivery by ${formatDate(deliveryDate.toISOString())}`;
+
+          const actions = isDelivered
+            ? `
+          <div class="rating-section">
+                            <span class="review-text">Rate & Review to earn Credits</span>
+            </div>`
+            : isCancelled
+            ? ``
+            : `
+          <div><button class="cancel-button cancel_order" data-id="${item.id}">Cancel Item</button></div>`;
+
+          itemDiv.innerHTML = `
+                    <div class="order-status-header">
+                        <div class="order-status">
+                            <div class="status-icon ${iconClass}">${
+            status === "PENDING"
+              ? "⋯"
+              : status === "DELIVERED"
+              ? "✓"
+              : status === "CANCELLED"
+              ? "✕"
+              : "…"
+          }</div>
+    <span class="status-text ${textClass}">${status}</span>
+                        </div>
+                        <div class="order-date">${dateText}</div>
+                    </div>
+                    <div class="order-product">
+                        <div class="product-image"><img src="/assets/media/products/${
+                          item.image
+                        }" alt="${item.title}"></div>
+                        <div class="product-details">
+                        <div class="product-name">${item.title}</div>
+                            <div class="product-brand">Product Price: ₹${
+                              item.price
+                            }</div>
+                            <div class="product-qty">Qty: ${item.quantity}</div>
+                            <div class="product-size">Subtotal: ₹${
+                              item.quantity * item.price
+                            }</div>
+                        </div>
+                        ${
+                          isCancelled
+                            ? ""
+                            : `<div class="payment-details">
+                              <h6 class="" style="padding-bottom: 5px; font-size:14px; color:#333">Payment Detaills</h6>
+                              <div class="payment-type"><span>Mode od Payment:</span>${order.Payment.paymentMethod}</div>
+                              <div class="payment-status ${ispending}"><span>Payment Status:</span>${ispaid}</div>
+                        </div>`
+                        }
+                    </div>
+                    <div class="order-info">${infoText}</div>
+                    <div class="order-actions">${actions}</div>
+                `;
+
+          itemsContainer.appendChild(itemDiv);
+        });
+
+        container.appendChild(card);
+      });
+      setupCancelOrderButtons();
+    } else {
+      const container = document.querySelector(".orders-container");
+      container.innerHTML = `<div class="not_found">Your order list is empty</div>`;
+    }
+  };
+
+  return {
+    init: function () {
+      user = JSON.parse(localStorage.getItem("user"));
+      if (!user) return;
+
+      populateUserProfile();
+
+      document
+        .getElementById("editProfileBtn")
+        ?.addEventListener("click", enableEditMode);
+      document
+        .getElementById("cancelBtn")
+        ?.addEventListener("click", cancelEditMode);
+      document
+        .getElementById("saveBtn")
+        ?.addEventListener("click", saveProfileUpdates);
+
+      // Fetch and render user's orders
+      fetch(`/api/order/orders/${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) renderOrders(data.data);
+        })
+        .catch((err) => console.error("Failed to load orders", err));
+    },
+  };
+})();
+
+// Initialize on DOM ready
+document.addEventListener("DOMContentLoaded", function () {
+  KTUserDashboard.init();
 });

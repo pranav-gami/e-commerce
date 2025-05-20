@@ -56,6 +56,10 @@
     }
 
     .product__menu {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .home__product-menu {
         grid-template-columns: repeat(3, 1fr);
     }
 
@@ -190,11 +194,10 @@
     .fi__details .fi-title {
         font-size: 0.875rem;
         font-weight: 600;
-        /* max-width: 100%; */
     }
 
     .product__main .product__menu {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 30px;
     }
 
@@ -258,6 +261,14 @@
 
     .cat_content-text {
         font-size: 0.75rem;
+    }
+
+    .product__main .product__menu {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .home__product-menu {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .banner__img-box {
@@ -377,6 +388,14 @@
 
     .product__main .product__menu {
         grid-template-columns: 1fr;
+    }
+
+    .home__product-menu {
+        grid-template-columns: 1fr;
+    }
+
+    .home__product-menu .product__img-box {
+        height: 300px;
     }
 
     .testi__banner-content {

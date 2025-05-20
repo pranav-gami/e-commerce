@@ -1,6 +1,6 @@
 import { construct } from "ionicons/icons";
 import prisma from "../config/prisma.js";
-import { getProductsFromCart } from "../utils/cartProductsRequest.js";
+import { getProductsFromCart } from "../service/cartProductsService.js";
 //+ PRODUCT TO CART-CONTROLLER
 export const addProductToCart = async (req, res) => {
   try {

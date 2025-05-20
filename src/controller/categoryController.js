@@ -1,5 +1,5 @@
 import prisma from "../config/prisma.js";
-import { getCategoryData } from "../utils/categoryRequest.js";
+import { getCategoryData } from "../service/categoryService.js";
 
 //ADD CATEGORY-CONTROLLER
 export const addCategory = async (req, res) => {
